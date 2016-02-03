@@ -35,5 +35,13 @@ public interface UserService extends BaseService<User,String>{
 	 */
 	User login(String mobile, String password) throws ServiceException;
 
+
+	/**
+	 * 根据用户手机查询用户
+	 * @param mobile
+	 * @return
+	 */
+	public User getUserByMobile(String mobile);
+
 	
 }

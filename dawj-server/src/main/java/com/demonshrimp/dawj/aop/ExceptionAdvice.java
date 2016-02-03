@@ -12,7 +12,7 @@ import com.demonshrimp.dawj.exception.ServiceException;
 @Aspect
 @Component
 public class ExceptionAdvice{
-	@Around("com.jpz.dcim.modeling.aop.SystemPointcuts.cutinService()")
+	@Around("com.demonshrimp.dawj.aop.SystemPointcuts.cutinService()")
     public Object doServiceCall(ProceedingJoinPoint pjp) throws Throwable{		
         try{
         	Object retVal = pjp.proceed();
@@ -30,7 +30,7 @@ public class ExceptionAdvice{
         }
     }
 	
-	@Around("com.jpz.dcim.modeling.aop.SystemPointcuts.cutinDao()")
+	@Around("com.demonshrimp.dawj.aop.SystemPointcuts.cutinDao()")
     public Object doDaoCall(ProceedingJoinPoint pjp) throws Throwable{
         try{
         	Object retVal = pjp.proceed();
