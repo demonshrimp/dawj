@@ -1,7 +1,5 @@
 package com.demonshrimp.dawj.service.impl;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +8,6 @@ import com.demonshrimp.dawj.exception.ServiceException;
 import com.demonshrimp.dawj.model.dao.BaseDao;
 import com.demonshrimp.dawj.model.dao.UserDao;
 import com.demonshrimp.dawj.model.entity.User;
-import com.demonshrimp.dawj.model.entity.UserIntegralAccount;
 import com.demonshrimp.dawj.service.UserService;
 
 @Transactional
@@ -27,12 +24,8 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements Us
 
 	@Override
 	public User addUser(User user) throws ServiceException {
+		user.setPoints(0);
 		save(user);
-		UserIntegralAccount integralAccount = new UserIntegralAccount();
-		integralAccount.setPoints((long) 0);
-		integralAccount.setCreateTime(new Date());
-		integralAccount.setUser(user);
-		user.setIntegralAccount(integralAccount);
 		return user;
 	}
 

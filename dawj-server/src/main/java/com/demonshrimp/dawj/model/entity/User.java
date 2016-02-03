@@ -20,7 +20,6 @@ import org.hibernate.annotations.Cascade;
 @Table(name = "user", uniqueConstraints = { @UniqueConstraint(name = "UK_mobile", columnNames = "mobile") })
 public class User extends BaseEntity {
 
-	private UserIntegralAccount integralAccount;
 	private String name;
 	private String mobile;
 	private String qq;
@@ -29,6 +28,7 @@ public class User extends BaseEntity {
 	private String password;
 	private Date birthday;
 	private Date lastLoginTime;
+	private Integer points;
 
 	public User() {
 		super();
@@ -36,15 +36,6 @@ public class User extends BaseEntity {
 
 	public User(String id) {
 		super(id);
-	}
-
-	@OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	public UserIntegralAccount getIntegralAccount() {
-		return integralAccount;
-	}
-
-	public void setIntegralAccount(UserIntegralAccount integralAccount) {
-		this.integralAccount = integralAccount;
 	}
 
 	@Column
@@ -119,6 +110,15 @@ public class User extends BaseEntity {
 
 	public void setLastLoginTime(Date lastLoginTime) {
 		this.lastLoginTime = lastLoginTime;
+	}
+
+	@Column(nullable = false)
+	public Integer getPoints() {
+		return points;
+	}
+
+	public void setPoints(Integer points) {
+		this.points = points;
 	}
 
 	public enum Sex {

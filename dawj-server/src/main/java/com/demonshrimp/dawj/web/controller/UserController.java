@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demonshrimp.dawj.model.entity.User;
-import com.demonshrimp.dawj.model.entity.UserIntegralAccount;
 import com.demonshrimp.dawj.service.UserService;
 
 import pers.ksy.common.annotation.SerializationFilter;
@@ -27,8 +26,7 @@ public class UserController extends BaseController {
 	private UserService userService;
 
 	@RequestMapping(path = "/login", method = RequestMethod.POST)
-	@SerializationFilters(filters = { @SerializationFilter(target = User.class, fields = { "password" }),
-			@SerializationFilter(target = UserIntegralAccount.class, fields = { "user" }) })
+	@SerializationFilters(filters = { @SerializationFilter(target = User.class, fields = { "password" }) })
 	public Object login(@RequestParam String username, @RequestParam String password) {
 		return Result.successResult(userService.login(username, password), null);
 	}
@@ -48,8 +46,7 @@ public class UserController extends BaseController {
 	}
 
 	@RequestMapping(path = "/{userId}", method = RequestMethod.GET)
-	@SerializationFilters(filters = { @SerializationFilter(target = User.class, fields = { "password" }),
-			@SerializationFilter(target = UserIntegralAccount.class, fields = { "user" }) })
+	@SerializationFilters(filters = { @SerializationFilter(target = User.class, fields = { "password" }) })
 	public Object get(@PathVariable String userId) {
 		return Result.successResult(userService.get(userId), null);
 	}
@@ -68,7 +65,7 @@ public class UserController extends BaseController {
 	}
 
 	@RequestMapping(path = "/{userId}", method = RequestMethod.DELETE)
-	public Object delete(@PathVariable String userId) {		
+	public Object delete(@PathVariable String userId) {
 		userService.delete(userId);
 		return Result.successResult("删除成功");
 	}

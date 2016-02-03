@@ -24,7 +24,6 @@
 		<property name="hbm2ddl.auto">update</property>
 
 		<mapping class="com.demonshrimp.dawj.model.entity.User" />
-		<mapping class="com.demonshrimp.dawj.model.entity.UserIntegralAccount" />
 
 	</session-factory>
 
