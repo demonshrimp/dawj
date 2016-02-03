@@ -1,0 +1,7 @@
+/dcim-modeling-server/logs
+/dcim-modeling-server/target
+/.metadata
+/Servers
+/dcim-modeling-server/src/main/resources/META-INF/application-repository.xml
+/dcim-modeling-server/src/test/resources/test-config/application-repository.xml
+
