@@ -1,0 +1,48 @@
+[
+  {
+    "name": "MAIN NAVIGATION",
+    "children": [
+      {
+        "name": "Dashboard",
+        "icon": "fa-files-o",
+        "url": "index.html"
+      },
+      {
+        "name": "用户管理",
+        "icon": "fa-files-o",
+        "children": [
+          {
+            "name": "客户管理",
+            "url": "pages/user/list.html"
+          },
+          {
+            "name": "咨询师管理"
+          },
+          {
+            "name": "站点管理"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "LABELS",
+    "children": [
+      {
+        "name": "Important",
+        "icon": "fa-circle-o text-red",
+        "url": "#"
+      },
+      {
+        "name": "Warning",
+        "icon": "fa-circle-o text-yellow",
+        "url": "#"
+      },
+      {
+        "name": "Information",
+        "icon": "fa-circle-o text-aqua",
+        "url": "#"
+      }
+    ]
+  }
+]
