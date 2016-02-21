@@ -1,12 +1,16 @@
 package com.demonshrimp.dawj.service.impl;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.demonshrimp.dawj.exception.ServiceException;
 import com.demonshrimp.dawj.model.dao.BaseDao;
+import com.demonshrimp.dawj.model.dao.SiteDao;
 import com.demonshrimp.dawj.model.dao.UserDao;
+import com.demonshrimp.dawj.model.entity.Site;
 import com.demonshrimp.dawj.model.entity.User;
 import com.demonshrimp.dawj.service.UserService;
 
@@ -15,7 +19,9 @@ import com.demonshrimp.dawj.service.UserService;
 public class UserServiceImpl extends BaseServiceImpl<User, String> implements UserService {
 
 	@Autowired
-	UserDao userDao;
+	private UserDao userDao;
+	@Autowired
+	private SiteDao siteDao;
 
 	@Override
 	public BaseDao<User, String> getDao() {
@@ -23,7 +29,9 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements Us
 	}
 
 	@Override
-	public User addUser(User user) throws ServiceException {
+	public User addUser(User user, String siteId) throws ServiceException {
+		Site site = siteDao.get(siteId);
+		user.setSite(site);
 		user.setPoints(0);
 		save(user);
 		return user;
@@ -53,5 +61,5 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements Us
 	public User getUserByMobile(String mobile) {
 		return userDao.getByProperty("mobile", mobile);
 	}
-
+	
 }

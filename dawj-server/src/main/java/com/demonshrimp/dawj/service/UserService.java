@@ -1,16 +1,17 @@
 package com.demonshrimp.dawj.service;
 
 import com.demonshrimp.dawj.exception.ServiceException;
+import com.demonshrimp.dawj.model.entity.Site;
 import com.demonshrimp.dawj.model.entity.User;
 
 public interface UserService extends BaseService<User,String>{
 	/**
-	 * 在某机构下新增一个用户
+	 * 在某站点下新增一个用户
 	 * @param user
 	 * @param orgId
 	 * @return
 	 */
-	public User addUser(User user);
+	public User addUser(User user, String siteId);
 	
 	
 	/**
@@ -43,5 +44,5 @@ public interface UserService extends BaseService<User,String>{
 	 */
 	public User getUserByMobile(String mobile);
 
-	
+
 }

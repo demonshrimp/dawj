@@ -53,7 +53,7 @@ public class UserController extends BaseController {
 
 	@RequestMapping(path = "/", method = RequestMethod.POST)
 	public Object save(@RequestBody User user) {
-		user = userService.addUser(user);
+		user = userService.addUser(user, user.getSite().getId());
 		return Result.successResult(user.getId(), "新增成功");
 	}
 

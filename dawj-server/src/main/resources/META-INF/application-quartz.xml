@@ -9,7 +9,7 @@
 	<bean name="eventDueNoticeJob"
 		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
 		<property name="jobClass"
-			value="com.jpz.dcim.modeling.task.quartz.TemplateJob" />
+			value="com.demonshrimp.dawj.task.quartz.TemplateJob" />
 	</bean>
 	<!-- 要调用的工作类 -->
 	<bean id="cronTrigger" lazy-init="true"

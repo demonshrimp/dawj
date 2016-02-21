@@ -2,23 +2,18 @@ package com.demonshrimp.dawj.model.entity;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
-import org.hibernate.annotations.Cascade;
-
 @Entity
 @Table(name = "user", uniqueConstraints = { @UniqueConstraint(name = "UK_mobile", columnNames = "mobile") })
-public class User extends BaseEntity {
+public class User extends BaseSiteEntity {
 
 	private String name;
 	private String mobile;

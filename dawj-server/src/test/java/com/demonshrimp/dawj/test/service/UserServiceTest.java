@@ -5,47 +5,55 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.Date;
 
-import javax.xml.registry.infomodel.Organization;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.demonshrimp.dawj.model.dao.SiteDao;
+import com.demonshrimp.dawj.model.entity.Site;
 import com.demonshrimp.dawj.model.entity.User;
+import com.demonshrimp.dawj.service.SystemService;
 import com.demonshrimp.dawj.service.UserService;
 import com.demonshrimp.dawj.test.BaseTestCase;
 
-public class UserServiceTest extends BaseTestCase{	
+import pers.ksy.common.MD5Util;
+
+public class UserServiceTest extends BaseTestCase {
 	@Autowired
 	UserService service;
-	
-	Organization root;
-	
+	@Autowired
+	SystemService systemService;
+	Site site;
+
 	private String testMobile = "13988888888";
-	
-	
+
 	@Before
-	public void setup(){
+	public void setup() {
 		service.deleteAll();
+		site = new Site();
+		site.setName("test");
+		site.setCity("test");
+		site.setPassword(MD5Util.MD5("123456"));
+		systemService.addSite(site);
 		create3Users();
 	}
-	
-	private void create3Users(){
-		for(int i=0;i<3;i++){
+
+	private void create3Users() {
+		for (int i = 0; i < 3; i++) {
 			User user = new User();
-			user.setMobile("138888888"+i);
-			user.setName("用户_"+i);
+			user.setMobile("138888888" + i);
+			user.setName("用户_" + i);
 			user.setPassword("123456");
 			user.setSex(User.Sex.FEMALE);
 			user.setCreateTime(new Date());
 			user.setLastModifyTime(new Date());
-			service.addUser(user);
+			service.addUser(user, site.getId());
 		}
 	}
-	
-	//唯一约束测试
-	//@Test
-	public void testUKCons(){
+
+	// 唯一约束测试
+	// @Test
+	public void testUKCons() {
 		User user = new User();
 		user.setMobile("1388888880");
 		user.setName("用户_4");
@@ -54,9 +62,9 @@ public class UserServiceTest extends BaseTestCase{
 		user.setCreateTime(new Date());
 		user.setLastModifyTime(new Date());
 		Exception ex = null;
-		try{
-			service.addUser(user);
-		}catch(Exception e){
+		try {
+			service.addUser(user, site.getId());
+		} catch (Exception e) {
 			ex = e;
 		}
 		assertNotNull(ex);
@@ -70,29 +78,28 @@ public class UserServiceTest extends BaseTestCase{
 		user.setSex(User.Sex.FEMALE);
 		user.setCreateTime(new Date());
 		user.setLastModifyTime(new Date());
-		user.setPassword("123456"); 
-		service.addUser(user);
-		
+		user.setPassword("123456");
+		service.addUser(user, site.getId());
+
 		User loaded = service.get(user.getId());
 		assertNotNull(loaded);
-		assertEquals("name",loaded.getName());
+		assertEquals("name", loaded.getName());
 	}
-	
+
 	@Test
-	public void testUpdateUser(){
+	public void testUpdateUser() {
 		User user1 = service.getUserByMobile("1388888880");
 		user1.setName("用户100");
 		service.update(user1);
 		user1 = service.get(user1.getId());
-		assertEquals("用户100",user1.getName());
+		assertEquals("用户100", user1.getName());
 	}
-	
+
 	@Test
-	public void testDeleteUser(){
+	public void testDeleteUser() {
 		User user1 = service.getUserByMobile("1388888880");
 		service.delete(user1);
 		service.get(user1.getId());
 	}
-	
 
 }

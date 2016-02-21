@@ -4,9 +4,15 @@
  * You should not use this file in production.
  * This file is for demo purposes only.
  */
-(function ($, AdminLTE) {
+var App = {
+    Constants: {}
+};
+(function ($, AdminLTE, App) {
 
     "use strict";
+
+
+    App.Constants.API_BASE = "http://localhost:8080/dawj-server/api";
 
     /**
      * List of all the available skins
@@ -381,4 +387,4 @@
         a.append('<span>' + menu.name + '</span>');
         return a;
     }
-})(jQuery, $.AdminLTE);
+})(jQuery, $.AdminLTE, App);
