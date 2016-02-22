@@ -288,6 +288,7 @@ var App = {
      * @returns void
      */
     function setup() {
+        initPageLoader();
         loadSidebarMenus();
         var tmp = get('skin');
         if (tmp && $.inArray(tmp, my_skins))
@@ -345,46 +346,109 @@ var App = {
 
     function loadSidebarMenus() {
         var url = window.location.toString();
-        var prefix = url.indexOf("pages") > 0 ? "../../" : "";
-        jQuery.get(prefix + "data/menus.json", function (datas) {
+        jQuery.get("data/menus.json", function (datas) {
             var sidebarMenu = $("#sidebarMenu");
-            for (var i = 0; i < datas.length; i++) {
-                var menus = datas[i];
-                sidebarMenu.append('<li class="header">' + menus.name + '</li>');
-                for (var j = 0; j < menus.children.length; j++) {
-                    var menu = menus.children[j];
-                    var li = $('<li>');
-                    li.append(buildMenu(menu, prefix));
-                    if (menu.children && menu.children.length > 0) {
-                        li.addClass("treeview");
-                        var ul = $('<ul class="treeview-menu">');
-                        for (var k = 0; k < menu.children.length; k++) {
-                            var subMenu = menu.children[k];
-                            var liSubMenu = $('<li>');
-                            liSubMenu.append(buildMenu(subMenu, prefix));
-                            ul.append(liSubMenu);
-                            if (menu.url != '#' && url.indexOf(subMenu.url) > 0) {
-                                li.addClass("active");
-                                liSubMenu.addClass("active");
-                            }
-                        }
-                        li.append(ul);
-                    }
-                    if (menu.url != '#' && url.indexOf(menu.url) > 0) {
-                        li.addClass("active");
-                    }
-                    sidebarMenu.append(li);
+            traverseTree(datas, function (node, level) {
+                var menu = node;
+                if (level == 0) {
+                    sidebarMenu.append(buildMenuHeader(menu));
+                } else if (level == 1) {
+                    sidebarMenu.append(buildMenu(menu));
+                } else {
+                    var ul = findParentMenuUl(menu);
+                    ul.append(buildMenu(menu));
                 }
-            }
+            });
         });
     }
 
-    function buildMenu(menu, urlPrefix) {
-        var a = $("<a>");
-        a.attr("href", menu.url ? urlPrefix + menu.url : "#");
+    function buildMenuHeader(menu) {
+        return '<li id="sidebar-menu-' + menu.no + '" class="header">' + menu.name + '</li>';
+    }
+
+    function buildMenu(menu) {
+        var li = $('<li id="sidebar-menu-' + menu.no + '" class="treeview">');
+        li.append(buildMenuBtn(menu));
+        return li;
+    }
+
+    function findParentMenuUl(menu) {
+        var parentNo = menu.no.substr(0, menu.no.length - 1);
+        var parentLi = $("#sidebar-menu-" + parentNo);
+        var ul = parentLi.find("ul.treeview-menu");
+        if (ul.length > 0) {
+            ul = $(ul[0]);
+        } else {
+            ul = $('<ul class="treeview-menu">');
+            parentLi.append(ul);
+            var a = $(parentLi[0].children[0]);
+            a.append('<i class="fa fa-angle-left pull-right"></i>');
+        }
+        return ul;
+    }
+
+    function buildMenuBtn(menu) {
+        var a = $('<a>');
+        a.data(menu);
+        var url = menu.url ? menu.url : "";
+        a.attr("href", "#" + url);
         menu.icon = menu.icon ? menu.icon : "fa-circle-o";
         a.append('<i class="fa ' + menu.icon + '"></i>');
         a.append('<span>' + menu.name + '</span>');
         return a;
+    }
+
+
+    function initPageLoader() {
+        var indexUrl = "pages/home/dashboard.html";
+        var url = window.location.toString();
+        var index = url.indexOf("#") + 1;
+        if (index > 0) {
+            indexUrl = url.substr(index);
+        }
+        $(document).ajaxStart(function () {
+            Pace.restart();
+        });
+        loadPage(indexUrl);
+        $("#sidebarMenu").on("click", "a", function () {
+            var url = $(this).attr("href").substr(1);
+            if (url == "") {
+                return;
+            }
+            $(".sidebar-menu .active").removeClass("active");
+            $(this).parents("li").addClass("active");
+            loadPage(url);
+        });
+    }
+
+    function loadPage(url) {
+        $("#wrapperContent").load(url);
+    }
+
+
+    /**
+     *
+     * @param {Array|Object} tree
+     * @param {Function} handle function(child, level){}
+     * @param {int} level
+     * @param {Object} params
+     * default
+     * {
+		 * 	childrenKey: 'children'
+		 * }
+     *
+     */
+    function traverseTree(tree, handle, level, params) {
+        level = level ? level : 0;
+        params = $.extend({
+            childrenKey: 'children'
+        }, params);
+        if (!tree instanceof Array) {
+            tree = [tree];
+        }
+        for (var i = 0; tree && i < tree.length; i++) {
+            handle(tree[i], level);
+            traverseTree(tree[i][params.childrenKey], handle, (level + 1), params);
+        }
     }
 })(jQuery, $.AdminLTE, App);
