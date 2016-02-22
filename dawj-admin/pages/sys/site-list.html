@@ -33,12 +33,46 @@
 </div>
 <!-- /.box-body -->
 <!-- DataTables -->
-<script src="plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script src="plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables/media/js/dataTables.bootstrap.min.js"></script>
+<script src="plugins/datatables/extensions/Buttons/js/dataTables.buttons.min.js"></script>
+<script src="plugins/datatables/extensions/Buttons/js/buttons.bootstrap.min.js"></script>
+<script src="plugins/datatables/extensions/Select/js/dataTables.select.min.js"></script>
+<script src="plugins/datatables/extensions/Editor/js/dataTables.editor.min.js"></script>
+<script src="plugins/datatables/extensions/Editor/js/editor.bootstrap.min.js"></script>
 <!-- page script -->
 <script>
     $(function () {
-        $('#tblUserList').DataTable({
+        var editor = new $.fn.dataTable.Editor( {
+            ajax: "../php/staff.php",
+            table: "#tblUserList",
+            i18n :{
+                create:{
+                    title : '新增站点',
+                    submit : '新增'
+                },
+                edit:{
+                    title : '编辑站点',
+                    submit : '编辑'
+                },
+                remove:{
+                    title:'删除站点',
+                    submit : '删除'
+                }
+            },
+            fields: [ {
+                label: "名称",
+                name: "name"
+            }, {
+                label: "城市",
+                name: "city"
+            }, {
+                label: "访问路径",
+                name: "path",
+                type: "date"
+            } ]
+        } );
+        var table = $('#tblUserList').DataTable({
             "ajax": {
                 "url": App.Constants.API_BASE + "/site/page?pageIndex=0&pageSize=10",
                 "dataSrc": function (result) {
@@ -61,9 +95,6 @@
                 {"data": "createTime"},
                 {"data": "lastModifyTime"}
             ],
-            buttons: [
-                'copy', 'excel', 'pdf'
-            ],
             "paging": true,
             "lengthChange": false,
             "searching": false,
@@ -71,6 +102,16 @@
             "info": true,
             "autoWidth": true
         });
+
+        // Display the buttons
+        new $.fn.dataTable.Buttons( table, [
+            { dom: "测试", extend: "create", editor: editor },
+            { extend: "edit",   editor: editor },
+            { extend: "remove", editor: editor }
+        ] );
+
+        table.buttons().container()
+                .appendTo( $('.col-sm-6:eq(0)', table.table().container() ) );
 
         function getRoot() {
             //获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp

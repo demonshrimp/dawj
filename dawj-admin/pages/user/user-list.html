@@ -1,0 +1,131 @@
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">站点列表</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="tblUserList" class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>站点名称</th>
+                        <th>城市</th>
+                        <th>访问路径</th>
+                        <th>创建时间</th>
+                        <th>最后修改时间</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>站点名称</th>
+                        <th>城市</th>
+                        <th>访问路径</th>
+                        <th>创建时间</th>
+                        <th>最后修改时间</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /.box-body -->
+<!-- DataTables -->
+<script src="plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables/media/js/dataTables.bootstrap.min.js"></script>
+<script src="plugins/datatables/extensions/Buttons/js/dataTables.buttons.min.js"></script>
+<script src="plugins/datatables/extensions/Buttons/js/buttons.bootstrap.min.js"></script>
+<script src="plugins/datatables/extensions/Select/js/dataTables.select.min.js"></script>
+<script src="plugins/datatables/extensions/Editor/js/dataTables.editor.min.js"></script>
+<script src="plugins/datatables/extensions/Editor/js/editor.bootstrap.min.js"></script>
+<!-- page script -->
+<script>
+    $(function () {
+        var editor = new $.fn.dataTable.Editor( {
+            ajax: "../php/staff.php",
+            table: "#tblUserList",
+            i18n :{
+                create:{
+                    title : '新增站点',
+                    submit : '新增'
+                },
+                edit:{
+                    title : '编辑站点',
+                    submit : '编辑'
+                },
+                remove:{
+                    title:'删除站点',
+                    submit : '删除'
+                }
+            },
+            fields: [ {
+                label: "名称",
+                name: "name"
+            }, {
+                label: "城市",
+                name: "city"
+            }, {
+                label: "访问路径",
+                name: "path",
+                type: "date"
+            } ]
+        } );
+        var table = $('#tblUserList').DataTable({
+            "ajax": {
+                "url": App.Constants.API_BASE + "/site/page?pageIndex=0&pageSize=10",
+                "dataSrc": function (result) {
+                    return result.list;
+                }
+            },
+            "columns": [
+                {"data": "name"},
+                {"data": "city"},
+                {
+                    "data": "path",
+                    "render": function (data, type, full, meta) {
+                        if (!data) {
+                            data = '/';
+                        }
+                        var url = getRoot() + data;
+                        return '<a href="' + url + '">' + url + '</a>';
+                    }
+                },
+                {"data": "createTime"},
+                {"data": "lastModifyTime"}
+            ],
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true
+        });
+
+        // Display the buttons
+        new $.fn.dataTable.Buttons( table, [
+            { dom: "测试", extend: "create", editor: editor },
+            { extend: "edit",   editor: editor },
+            { extend: "remove", editor: editor }
+        ] );
+
+        table.buttons().container()
+                .appendTo( $('.col-sm-6:eq(0)', table.table().container() ) );
+
+        function getRoot() {
+            //获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
+            var curWwwPath = window.document.location.href;
+            //获取主机地址之后的目录，如： uimcardprj/share/meun.jsp
+            var pathName = window.document.location.pathname;
+            var pos = curWwwPath.indexOf(pathName);
+            //获取主机地址，如： http://localhost:8083
+            var localhostPaht = curWwwPath.substring(0, pos);
+            //获取带"/"的项目名，如：/uimcardprj
+            var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+            return (localhostPaht + projectName);
+        }
+    });
+</script>
+</body>
+</html>

@@ -6,26 +6,68 @@
       {
         "no": "11",
         "name": "Dashboard",
-        "icon": "fa-files-o",
+        "icon": "fa-dashboard",
         "url": "pages/home/dashboard.html"
       },
       {
         "no": "12",
-        "name": "用户管理",
+        "name": "咨询管理",
         "icon": "fa-files-o",
         "children": [
           {
             "no": "121",
-            "name": "客户管理",
-            "url": "pages/user/list.html"
+            "name": "咨询类目管理",
+            "url": "pages/counseling/counseling-type-list.html"
           },
           {
             "no": "122",
-            "name": "咨询师管理"
+            "name": "咨询师管理",
+            "url": "pages/counseling/counseling-article-list.html"
           },
           {
             "no": "123",
-            "name": "站点管理"
+            "name": "咨询文章管理",
+            "url": "pages/counseling/counselor-list.html"
+          }
+        ]
+      },
+      {
+        "no": "13",
+        "name": "交易管理",
+        "icon": "fa-dollar",
+        "children": [
+          {
+            "no": "131",
+            "name": "订单列表",
+            "url": "pages/transaction/order-list.html"
+          },
+          {
+            "no": "132",
+            "name": "退款管理",
+            "url": "pages/transaction/refund-list.html"
+          }
+        ]
+      },
+      {
+        "no": "14",
+        "name": "用户管理",
+        "icon": "fa-users",
+        "url": "pages/user/list.html"
+      },
+      {
+        "no": "15",
+        "name": "在线答题管理",
+        "icon": "fa-book",
+        "children": [
+          {
+            "no": "151",
+            "name": "题库管理",
+            "url": "pages/test/question-list.html"
+          },
+          {
+            "no": "152",
+            "name": "得分管理",
+            "url": "pages/test/score-set.html"
           }
         ]
       }
@@ -33,13 +75,13 @@
   },
   {
     "no": "2",
-    "name": "LABELS",
+    "name": "系统设置",
     "children": [
       {
         "no": "21",
-        "name": "Important",
-        "icon": "fa-circle-o text-red",
-        "url": "#"
+        "name": "子站管理",
+        "icon": "fa-sitemap",
+        "url": "pages/sys/site-list.html"
       },
       {
         "no": "22",
