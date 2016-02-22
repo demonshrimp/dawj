@@ -11,20 +11,13 @@
                     <tr>
                         <th>站点名称</th>
                         <th>城市</th>
+                        <th>认证状态</th>
                         <th>访问路径</th>
+                        <th>管理路径</th>
                         <th>创建时间</th>
                         <th>最后修改时间</th>
                     </tr>
                     </thead>
-                    <tfoot>
-                    <tr>
-                        <th>站点名称</th>
-                        <th>城市</th>
-                        <th>访问路径</th>
-                        <th>创建时间</th>
-                        <th>最后修改时间</th>
-                    </tr>
-                    </tfoot>
                 </table>
             </div>
         </div>
@@ -42,25 +35,83 @@
 <script src="plugins/datatables/extensions/Editor/js/editor.bootstrap.min.js"></script>
 <!-- page script -->
 <script>
+    // Todo field type plug-in code
+    (function ($, DataTable) {
+
+        if (!DataTable.ext.editorFields) {
+            DataTable.ext.editorFields = {};
+        }
+
+        var Editor = DataTable.Editor;
+        var _fieldTypes = DataTable.ext.editorFields;
+
+        _fieldTypes.todo = {
+            create: function (conf) {
+                var that = this;
+
+                conf._enabled = true;
+
+                // Create the elements to use for the input
+                conf._input = $(
+                        '<div id="' + Editor.safeId(conf.id) + '">' +
+                        '<button class="inputButton" value="0">To do</button>' +
+                        '<button class="inputButton" value="1">Done</button>' +
+                        '</div>');
+
+                // Use the fact that we are called in the Editor instance's scope to call
+                // the API method for setting the value when needed
+                $('button.inputButton', conf._input).click(function () {
+                    if (conf._enabled) {
+                        that.set(conf.name, $(this).attr('value'));
+                    }
+
+                    return false;
+                });
+
+                return conf._input;
+            },
+
+            get: function (conf) {
+                return $('button.selected', conf._input).attr('value');
+            },
+
+            set: function (conf, val) {
+                $('button.selected', conf._input).removeClass('selected');
+                $('button.inputButton[value=' + val + ']', conf._input).addClass('selected');
+            },
+
+            enable: function (conf) {
+                conf._enabled = true;
+                $(conf._input).removeClass('disabled');
+            },
+
+            disable: function (conf) {
+                conf._enabled = false;
+                $(conf._input).addClass('disabled');
+            }
+        };
+
+    })(jQuery, jQuery.fn.dataTable);
     $(function () {
-        var editor = new $.fn.dataTable.Editor( {
+        var editor = new $.fn.dataTable.Editor({
             ajax: "../php/staff.php",
             table: "#tblUserList",
-            i18n :{
-                create:{
-                    title : '新增站点',
-                    submit : '新增'
+            "idSrc": "id",
+            i18n: {
+                create: {
+                    title: '新增站点',
+                    submit: '新增'
                 },
-                edit:{
-                    title : '编辑站点',
-                    submit : '编辑'
+                edit: {
+                    title: '编辑站点',
+                    submit: '编辑'
                 },
-                remove:{
-                    title:'删除站点',
-                    submit : '删除'
+                remove: {
+                    title: '删除站点',
+                    submit: '删除'
                 }
             },
-            fields: [ {
+            fields: [{
                 label: "名称",
                 name: "name"
             }, {
@@ -69,9 +120,16 @@
             }, {
                 label: "访问路径",
                 name: "path",
-                type: "date"
-            } ]
-        } );
+            }, {
+                label: "认证状态",
+                name: "certificated",
+                type: "select",
+                options: [
+                    {label: "未认证", value: "false"},
+                    {label: "已认证", value: "true"}
+                ]
+            }]
+        });
         var table = $('#tblUserList').DataTable({
             "ajax": {
                 "url": App.Constants.API_BASE + "/site/page?pageIndex=0&pageSize=10",
@@ -83,18 +141,33 @@
                 {"data": "name"},
                 {"data": "city"},
                 {
+                    "data": "certificated",
+                    "render": function (data, type, full, meta) {
+                        if (data) {
+                            return '<span></span><i class="fa fa-thumbs-up text-green">已认证</i>';
+                        } else {
+                            return '<span></span><i class="fa fa-thumbs-down text-red">未认证</i>';
+                        }
+                    }
+                },
+                {
                     "data": "path",
                     "render": function (data, type, full, meta) {
-                        if (!data) {
-                            data = '/';
-                        }
                         var url = getRoot() + data;
+                        return '<a href="' + url + '">' + url + '</a>';
+                    }
+                },
+                {
+                    "data": "path",
+                    "render": function (data, type, full, meta) {
+                        var url = getProjectRoot() + "?site=" + data;
                         return '<a href="' + url + '">' + url + '</a>';
                     }
                 },
                 {"data": "createTime"},
                 {"data": "lastModifyTime"}
             ],
+            "select": true,
             "paging": true,
             "lengthChange": false,
             "searching": false,
@@ -104,14 +177,22 @@
         });
 
         // Display the buttons
-        new $.fn.dataTable.Buttons( table, [
-            { dom: "测试", extend: "create", editor: editor },
-            { extend: "edit",   editor: editor },
-            { extend: "remove", editor: editor }
-        ] );
+        new $.fn.dataTable.Buttons(table, [
+            {dom: "测试", extend: "create", editor: editor},
+            {extend: "edit", editor: editor},
+            {extend: "remove", editor: editor}
+        ]);
 
         table.buttons().container()
-                .appendTo( $('.col-sm-6:eq(0)', table.table().container() ) );
+                .appendTo($('.col-sm-6:eq(0)', table.table().container()));
+
+        function getProjectRoot() {
+            var localhostPaht = getRoot();
+            //获取带"/"的项目名，如：/uimcardprj
+            var pathName = window.document.location.pathname;
+            var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+            return (localhostPaht + projectName);
+        }
 
         function getRoot() {
             //获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
@@ -121,9 +202,7 @@
             var pos = curWwwPath.indexOf(pathName);
             //获取主机地址，如： http://localhost:8083
             var localhostPaht = curWwwPath.substring(0, pos);
-            //获取带"/"的项目名，如：/uimcardprj
-            var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-            return (localhostPaht + projectName);
+            return localhostPaht;
         }
     });
 </script>

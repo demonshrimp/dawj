@@ -9,7 +9,7 @@ import javax.persistence.ManyToOne;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class BaseSiteEntity extends BaseEntity {
+public abstract class BaseSiteEntity extends BaseEntity {
 	@ManyToOne(cascade = CascadeType.REFRESH)
 	@JoinColumn(name = "site_id", nullable = true)
 	private Site site;
