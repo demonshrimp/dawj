@@ -55,6 +55,7 @@ public abstract class BaseServiceImpl<T extends BaseEntity, ID extends Serializa
 	}
 
 	public T update(T entity, boolean inclusive, String... fieldNames) {
+		entity.setLastModifyTime(new Date());
 		if (!inclusive) {
 			String[] fields = new String[] { "id", "createTime" };
 			if (null != fieldNames) {
