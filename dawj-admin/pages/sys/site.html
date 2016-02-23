@@ -19,7 +19,7 @@
             </div>
             <div class="form-group">
                 <label>管理密码</label>
-                <input name="password" type="password" class="form-control" id="inputPassword"
+                <input name="password" type="password" class="form-control"
                        placeholder="请输入管理密码 ...">
             </div>
             <div class="form-group">
@@ -54,8 +54,12 @@
                 App.Utils.FormUtil.setData('#formSite', site);
             });
         }
+
+        $('#formSite [name=name]').change(function () {
+            $('#formSite [name=path]').val('/' + $(this).val());
+        });
         var passwordChanged = false;
-        $('#inputPassword').change(function () {
+        $('#formSite [name=password]').change(function () {
             passwordChanged = true;
         });
         $('#formSite').submit(function () {

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demonshrimp.dawj.model.entity.Site;
-import com.demonshrimp.dawj.model.entity.User;
 import com.demonshrimp.dawj.service.SystemService;
 
 import pers.ksy.common.annotation.SerializationFilter;
@@ -26,18 +25,32 @@ public class SiteController extends BaseController {
 	@Autowired
 	private SystemService systemService;
 
+	@RequestMapping(path = "/login", method = RequestMethod.POST)
+	public Object login(String name, String password) {
+		systemService.siteAdminLogin(name, password);
+		return Result.successResult();
+	}
+
 	@RequestMapping(path = "/page", method = RequestMethod.GET)
 	@SerializationFilter(target = Site.class, fields = { "password" })
-	public Object page(String city, String name, int pageIndex, int pageSize) {
-		QueryCondition queryCondition = new QueryConditionImpl(User.class, null);
+	public Object page(String city, String name, int pageIndex, int pageSize, HttpServletRequest request) {
+		QueryCondition queryCondition = new QueryConditionImpl(Site.class, null);
 		if (null != city) {
 			queryCondition.add(Conditions.like("city", city, MatchMode.ANYWHERE));
 		}
 		if (null != name) {
 			queryCondition.add(Conditions.like("name", name, MatchMode.ANYWHERE));
 		}
-
+		System.out.println(request.getParameterNames());
 		return systemService.findByPage(queryCondition, pageIndex, pageSize);
+	}
+
+	@RequestMapping(path = "/list", method = RequestMethod.GET)
+	@SerializationFilter(target = Site.class, fields = { "password" })
+	public Object list() {
+		QueryCondition queryCondition = new QueryConditionImpl(Site.class, null);
+		queryCondition.add(Conditions.ne("id", "root_site"));
+		return systemService.findList(queryCondition);
 	}
 
 	@RequestMapping(path = "/{siteId}", method = RequestMethod.GET)
@@ -50,15 +63,6 @@ public class SiteController extends BaseController {
 	public Object save(@RequestBody Site site) {
 		site = systemService.addSite(site);
 		return Result.successResult(site.getId(), "新增成功");
-	}
-
-	@RequestMapping(path = "/save-sites", method = RequestMethod.POST)
-	public Object saveSites(String[] data, HttpServletRequest request) {
-		// site = systemService.addSite(site);
-		System.out.println(data);
-		System.out.println(request);
-		System.out.println(request.getParameter("data[0][name]"));
-		return Result.successResult("a", "新增成功");
 	}
 
 	@RequestMapping(path = "/{siteId}", method = RequestMethod.PUT)

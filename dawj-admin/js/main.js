@@ -290,7 +290,6 @@ var App = {
      */
     function setup() {
         initPageLoader();
-        loadSidebarMenus();
         var tmp = get('skin');
         if (tmp && $.inArray(tmp, my_skins))
             change_skin(tmp);
@@ -401,30 +400,33 @@ var App = {
 
 
     function initPageLoader() {
-        $(window).hashchange(function () {
-            var hash = location.hash;
-            var page = hash.substr(1);
-            if (page) {
-                $("#wrapperContent").load(page);
+        if($.hashchange) {
+            $(window).hashchange(function () {
+                var hash = location.hash;
+                var page = hash.substr(1);
+                if (page) {
+                    $("#wrapperContent").load(page);
+                }
+            });
+            var indexUrl = "pages/home/dashboard.html";
+            if (window.location.toString().indexOf("#") < 0) {
+                window.location.href = "#" + indexUrl;
+            } else {
+                $(window).hashchange();
             }
-        });
-        var indexUrl = "pages/home/dashboard.html";
-        if (window.location.toString().indexOf("#") < 0) {
-            window.location.href = "#" + indexUrl;
-        } else {
-            $(window).hashchange();
+            $(document).ajaxStart(function () {
+                Pace.restart();
+            });
+            $("#sidebarMenu").on("click", "a", function () {
+                var url = $(this).attr("href").substr(1);
+                if (url == "") {
+                    return;
+                }
+                $(".sidebar-menu .active").removeClass("active");
+                $(this).parents("li").addClass("active");
+            });
+            loadSidebarMenus();
         }
-        $(document).ajaxStart(function () {
-            Pace.restart();
-        });
-        $("#sidebarMenu").on("click", "a", function () {
-            var url = $(this).attr("href").substr(1);
-            if (url == "") {
-                return;
-            }
-            $(".sidebar-menu .active").removeClass("active");
-            $(this).parents("li").addClass("active");
-        });
     }
 
     App.loadPage = function (url) {

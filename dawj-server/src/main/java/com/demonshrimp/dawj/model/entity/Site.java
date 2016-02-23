@@ -6,13 +6,15 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "site", uniqueConstraints = { @UniqueConstraint(name = "UK_site_path", columnNames = "path") })
+@Table(name = "site", uniqueConstraints = { @UniqueConstraint(name = "UK_site_name", columnNames = "name"),
+		@UniqueConstraint(name = "UK_site_path", columnNames = "path") })
 public class Site extends BaseEntity {
 
 	private String name;
 	private String city;
 	private String path;
 	private Boolean certificated;
+	private Status status;
 	private String password;
 
 	public Site() {
@@ -28,9 +30,7 @@ public class Site extends BaseEntity {
 		this.password = password;
 	}
 
-
-
-	@Column(nullable=false)
+	@Column(nullable = false)
 	public String getName() {
 		return name;
 	}
@@ -39,7 +39,7 @@ public class Site extends BaseEntity {
 		this.name = name;
 	}
 
-	@Column(nullable=false)
+	@Column(nullable = false)
 	public String getCity() {
 		return city;
 	}
@@ -48,7 +48,7 @@ public class Site extends BaseEntity {
 		this.city = city;
 	}
 
-	@Column(nullable=false)
+	@Column(nullable = false)
 	public String getPath() {
 		return path;
 	}
@@ -57,7 +57,7 @@ public class Site extends BaseEntity {
 		this.path = path;
 	}
 
-	@Column(nullable=false)
+	@Column(nullable = false)
 	public Boolean getCertificated() {
 		return certificated;
 	}
@@ -66,7 +66,16 @@ public class Site extends BaseEntity {
 		this.certificated = certificated;
 	}
 
-	@Column(nullable=false)
+	@Column(nullable = false)
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
+	@Column(nullable = false)
 	public String getPassword() {
 		return password;
 	}
@@ -75,4 +84,7 @@ public class Site extends BaseEntity {
 		this.password = password;
 	}
 
+	public enum Status {
+		DISABLED, ENABLED
+	}
 }
