@@ -1,5 +1,7 @@
 package com.demonshrimp.dawj.web.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,6 +50,15 @@ public class SiteController extends BaseController {
 	public Object save(@RequestBody Site site) {
 		site = systemService.addSite(site);
 		return Result.successResult(site.getId(), "新增成功");
+	}
+
+	@RequestMapping(path = "/save-sites", method = RequestMethod.POST)
+	public Object saveSites(String[] data, HttpServletRequest request) {
+		// site = systemService.addSite(site);
+		System.out.println(data);
+		System.out.println(request);
+		System.out.println(request.getParameter("data[0][name]"));
+		return Result.successResult("a", "新增成功");
 	}
 
 	@RequestMapping(path = "/{siteId}", method = RequestMethod.PUT)

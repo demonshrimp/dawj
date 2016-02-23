@@ -1,0 +1,84 @@
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">站点信息</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <form role="form" id="formSite" action="javascript:void(0);">
+            <div class="form-group">
+                <label>名称</label>
+                <input name="name" type="text" class="form-control" placeholder="请输入所在站点名称 ...">
+            </div>
+            <div class="form-group">
+                <label>城市</label>
+                <input name="city" type="text" class="form-control" placeholder="请输入所在城市 ...">
+            </div>
+            <div class="form-group">
+                <label>访问路径</label>
+                <input name="path" type="text" class="form-control" placeholder="请输入访问路径（以'/'开头） ...">
+            </div>
+            <div class="form-group">
+                <label>管理密码</label>
+                <input name="password" type="password" class="form-control" id="inputPassword"
+                       placeholder="请输入管理密码 ...">
+            </div>
+            <div class="form-group">
+                <label>认证状态</label>
+                <select class="form-control" name="certificated">
+                    <option value="false">未认证</option>
+                    <option value="true">已认证</option>
+                </select>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+                <a type="button" href="javascript:history.go(-1);" class="btn btn-default">返回</a>
+                <button type="submit" class="btn btn-info pull-right">保存</button>
+            </div>
+        </form>
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- page script -->
+<script>
+    $(function () {
+        var siteId = $.getUrlVar('id');
+        //if siteId!=null update else new
+        if (siteId) {
+            $.get(App.Constants.API_BASE + '/site/' + siteId, function (result) {
+                if (!result.header.success) {
+                    alert(result.header.message);
+                    return;
+                }
+                var site = result.body;
+                site.password = "88888888";
+                App.Utils.FormUtil.setData('#formSite', site);
+            });
+        }
+        var passwordChanged = false;
+        $('#inputPassword').change(function () {
+            passwordChanged = true;
+        });
+        $('#formSite').submit(function () {
+            var site = App.Utils.FormUtil.toJson(this);
+            site.id = siteId;
+            if (passwordChanged) {
+                site.password = App.Utils.StringUtil.md5(site.password);
+            } else {
+                site.password = null;
+            }
+            $.ajax({
+                url: App.Constants.API_BASE + '/site/' + (siteId ? siteId : ''),
+                contentType: "application/json",
+                method: siteId ? 'PUT' : 'POST',
+                data: JSON.stringify(site),
+                dataType: 'json',
+                success: function (result) {
+                    alert(result.header.message);
+                    if (result.header.success) {
+                        App.loadPage('pages/sys/site-list.html');
+                    }
+                }
+            });
+        });
+    });
+</script>

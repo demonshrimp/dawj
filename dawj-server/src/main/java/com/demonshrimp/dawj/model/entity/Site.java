@@ -15,6 +15,21 @@ public class Site extends BaseEntity {
 	private Boolean certificated;
 	private String password;
 
+	public Site() {
+		super();
+	}
+
+	public Site(String name, String city, String path, Boolean certificated, String password) {
+		super();
+		this.name = name;
+		this.city = city;
+		this.path = path;
+		this.certificated = certificated;
+		this.password = password;
+	}
+
+
+
 	@Column(nullable=false)
 	public String getName() {
 		return name;

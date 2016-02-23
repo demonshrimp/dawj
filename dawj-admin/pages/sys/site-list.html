@@ -6,7 +6,7 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-                <table id="tblUserList" class="table table-bordered table-striped">
+                <table id="tblUserList" class="table table-bordered table-hover nowrap">
                     <thead>
                     <tr>
                         <th>站点名称</th>
@@ -16,6 +16,7 @@
                         <th>管理路径</th>
                         <th>创建时间</th>
                         <th>最后修改时间</th>
+                        <th>操作</th>
                     </tr>
                     </thead>
                 </table>
@@ -26,123 +27,37 @@
 </div>
 <!-- /.box-body -->
 <!-- DataTables -->
+<link rel="stylesheet" href="plugins/datatables/media/css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css">
+<link rel="stylesheet" href="plugins/datatables/extensions/Responsive/css/responsive.bootstrap.min.css">
 <script src="plugins/datatables/media/js/jquery.dataTables.min.js"></script>
 <script src="plugins/datatables/media/js/dataTables.bootstrap.min.js"></script>
+<script src="plugins/datatables/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+<script src="plugins/datatables/extensions/Responsive/js/responsive.bootstrap.min.js"></script>
 <script src="plugins/datatables/extensions/Buttons/js/dataTables.buttons.min.js"></script>
 <script src="plugins/datatables/extensions/Buttons/js/buttons.bootstrap.min.js"></script>
 <script src="plugins/datatables/extensions/Select/js/dataTables.select.min.js"></script>
-<script src="plugins/datatables/extensions/Editor/js/dataTables.editor.min.js"></script>
-<script src="plugins/datatables/extensions/Editor/js/editor.bootstrap.min.js"></script>
+<style>
+    table.dataTable tbody tr.selected {
+        background-color: #B0BED9;
+    }
+</style>
 <!-- page script -->
 <script>
-    // Todo field type plug-in code
-    (function ($, DataTable) {
-
-        if (!DataTable.ext.editorFields) {
-            DataTable.ext.editorFields = {};
-        }
-
-        var Editor = DataTable.Editor;
-        var _fieldTypes = DataTable.ext.editorFields;
-
-        _fieldTypes.todo = {
-            create: function (conf) {
-                var that = this;
-
-                conf._enabled = true;
-
-                // Create the elements to use for the input
-                conf._input = $(
-                        '<div id="' + Editor.safeId(conf.id) + '">' +
-                        '<button class="inputButton" value="0">To do</button>' +
-                        '<button class="inputButton" value="1">Done</button>' +
-                        '</div>');
-
-                // Use the fact that we are called in the Editor instance's scope to call
-                // the API method for setting the value when needed
-                $('button.inputButton', conf._input).click(function () {
-                    if (conf._enabled) {
-                        that.set(conf.name, $(this).attr('value'));
-                    }
-
-                    return false;
-                });
-
-                return conf._input;
-            },
-
-            get: function (conf) {
-                return $('button.selected', conf._input).attr('value');
-            },
-
-            set: function (conf, val) {
-                $('button.selected', conf._input).removeClass('selected');
-                $('button.inputButton[value=' + val + ']', conf._input).addClass('selected');
-            },
-
-            enable: function (conf) {
-                conf._enabled = true;
-                $(conf._input).removeClass('disabled');
-            },
-
-            disable: function (conf) {
-                conf._enabled = false;
-                $(conf._input).addClass('disabled');
-            }
-        };
-
-    })(jQuery, jQuery.fn.dataTable);
     $(function () {
-        var editor = new $.fn.dataTable.Editor({
-            ajax: "../php/staff.php",
-            table: "#tblUserList",
-            "idSrc": "id",
-            i18n: {
-                create: {
-                    title: '新增站点',
-                    submit: '新增'
-                },
-                edit: {
-                    title: '编辑站点',
-                    submit: '编辑'
-                },
-                remove: {
-                    title: '删除站点',
-                    submit: '删除'
-                }
-            },
-            fields: [{
-                label: "名称",
-                name: "name"
-            }, {
-                label: "城市",
-                name: "city"
-            }, {
-                label: "访问路径",
-                name: "path",
-            }, {
-                label: "认证状态",
-                name: "certificated",
-                type: "select",
-                options: [
-                    {label: "未认证", value: "false"},
-                    {label: "已认证", value: "true"}
-                ]
-            }]
-        });
         var table = $('#tblUserList').DataTable({
-            "ajax": {
-                "url": App.Constants.API_BASE + "/site/page?pageIndex=0&pageSize=10",
-                "dataSrc": function (result) {
-                    return result.list;
+            'ajax': {
+                url: App.Constants.API_BASE + '/site/page?pageIndex=0&pageSize=10',
+                dataSrc: function (result) {
+                    return result.elements;
                 }
             },
-            "columns": [
-                {"data": "name"},
-                {"data": "city"},
+            columns: [
+                {data: 'name'},
+                {data: 'city'},
                 {
-                    "data": "certificated",
-                    "render": function (data, type, full, meta) {
+                    data: 'certificated',
+                    render: function (data, type, full, meta) {
                         if (data) {
                             return '<span></span><i class="fa fa-thumbs-up text-green">已认证</i>';
                         } else {
@@ -151,59 +66,59 @@
                     }
                 },
                 {
-                    "data": "path",
-                    "render": function (data, type, full, meta) {
-                        var url = getRoot() + data;
+                    data: 'path',
+                    render: function (data, type, full, meta) {
+                        var url = App.Utils.UrlUtil.getRoot() + data;
                         return '<a href="' + url + '">' + url + '</a>';
                     }
                 },
                 {
-                    "data": "path",
-                    "render": function (data, type, full, meta) {
-                        var url = getProjectRoot() + "?site=" + data;
+                    data: 'path',
+                    render: function (data, type, full, meta) {
+                        var url = App.Utils.UrlUtil.getProjectRoot() + '?site=' + data;
                         return '<a href="' + url + '">' + url + '</a>';
                     }
                 },
-                {"data": "createTime"},
-                {"data": "lastModifyTime"}
+                {data: 'createTime'},
+                {data: 'lastModifyTime'},
+                {
+                    data: 'id',
+                    className: 'center',
+                    render: function (data, type, full, meta) {
+                        return App.Utils.DataTablesHelper.buildOperationButtons([{
+                            text: '编辑',
+                            operation: 'edit'
+                        }, {text: '删除', operation: 'remove'}], {id: data});
+                    }
+                }
             ],
-            "select": true,
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": true
+            select: true,
+            paging: true,
+            responsive: true
         });
 
-        // Display the buttons
-        new $.fn.dataTable.Buttons(table, [
-            {dom: "测试", extend: "create", editor: editor},
-            {extend: "edit", editor: editor},
-            {extend: "remove", editor: editor}
-        ]);
+        //init events
+        App.Utils.DataTablesHelper.onOperationButtonClick('#tblUserList', function (data) {
+            switch (data.operation) {
+                case  'edit':
+                    editSite(data);
+                    break;
+                case  'remove':
+                    deleteSite(data);
+                    break;
+            }
+        });
 
-        table.buttons().container()
-                .appendTo($('.col-sm-6:eq(0)', table.table().container()));
-
-        function getProjectRoot() {
-            var localhostPaht = getRoot();
-            //获取带"/"的项目名，如：/uimcardprj
-            var pathName = window.document.location.pathname;
-            var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-            return (localhostPaht + projectName);
+        function editSite(site) {
+            App.loadPage('pages/sys/site.html?id=' + site.id);
         }
 
-        function getRoot() {
-            //获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
-            var curWwwPath = window.document.location.href;
-            //获取主机地址之后的目录，如： uimcardprj/share/meun.jsp
-            var pathName = window.document.location.pathname;
-            var pos = curWwwPath.indexOf(pathName);
-            //获取主机地址，如： http://localhost:8083
-            var localhostPaht = curWwwPath.substring(0, pos);
-            return localhostPaht;
+        function deleteSite(site) {
+            if (confirm('确定要删除这个站点吗？')) {
+                alert('删除成功!');
+            }
         }
+
     });
 </script>
 </body>
