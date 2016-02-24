@@ -16,12 +16,13 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-                <table id="tblUserList" class="table table-bordered table-hover nowrap">
+                <table id="tblUserList" class="table table-bordered table-hover nowrap datatables">
                     <thead>
                     <tr>
                         <th>站点名称</th>
                         <th>城市</th>
                         <th>认证状态</th>
+                        <th>站点状态</th>
                         <th>访问路径</th>
                         <th>管理路径</th>
                         <th>创建时间</th>
@@ -74,6 +75,16 @@
                     }
                 },
                 {
+                    data: 'status',
+                    render: function (data, type, full, meta) {
+                        if (data == 'ENABLED') {
+                            return '<span></span><i class="fa fa-circle-o text-green">正常</i>';
+                        } else {
+                            return '<span></span><i class="fa fa-circle-o text-red">停用</i>';
+                        }
+                    }
+                },
+                {
                     data: 'path',
                     render: function (data, type, full, meta) {
                         var url = App.Utils.UrlUtil.getRoot() + data;
@@ -96,10 +107,17 @@
                         return App.Utils.DataTablesHelper.buildOperationButtons([{
                             text: '编辑',
                             operation: 'edit'
-                        }, {text: '删除', operation: 'remove'}], {id: data});
+                        }, {
+                            text: full.status == 'ENABLED' ? '禁用' : '启用',
+                            operation: 'setStatus'
+                        }, {
+                            text: '删除',
+                            operation: 'remove'
+                        }], full);
                     }
                 }
             ],
+            language: App.Utils.DataTablesHelper.language(),
             select: true,
             paging: true,
             responsive: true
@@ -107,7 +125,7 @@
 
         //init events
         $('#btnRefreshTable').click(function () {
-            table.ajax.reload();
+            refreshTable()
         });
         $('#btnAddSite').click(function () {
             App.loadPage('pages/sys/site.html');
@@ -116,6 +134,9 @@
             switch (data.operation) {
                 case  'edit':
                     editSite(data);
+                    break;
+                case  'setStatus':
+                    setStatus(data);
                     break;
                 case  'remove':
                     deleteSite(data);
@@ -127,10 +148,49 @@
             App.loadPage('pages/sys/site.html?id=' + site.id);
         }
 
+        function setStatus(site) {
+            if (confirm('确定要' + (site.status == 'ENABLED' ? '禁用' : '启用') + '这个站点吗？')) {
+                var newStatus = site.status == 'ENABLED' ? 'DISABLED' : 'ENABLED';
+                $.ajax({
+                    url: App.Constants.API_BASE + '/site/' + site.id + '/set-status',
+                    data: {status: newStatus},
+                    type: 'PUT',
+                    success: function (result) {
+                        alert(result.header.message);
+                        if (result.header.success) {
+                            refreshTable(true);
+                        }
+                    }
+                });
+            }
+        }
+
         function deleteSite(site) {
             if (confirm('确定要删除这个站点吗？')) {
-                alert('删除成功!');
+                $.ajax({
+                    url: App.Constants.API_BASE + '/site/' + site.id,
+                    type: 'DELETE',
+                    success: function (result) {
+                        alert(result.header.message);
+                        if (result.header.success) {
+                            refreshTable(true);
+                        }
+                    }
+                });
             }
+        }
+
+        function refreshTable(retain) {
+            var page = table.page.info().page;
+            table.ajax.reload(function () {
+                console.log(table.page.info().pages, page);
+                if (retain) {
+                    if (table.page.info().pages <= page) {
+                        page--;
+                    }
+                    table.page(page).draw('page');
+                }
+            });
         }
 
     });

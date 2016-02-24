@@ -92,11 +92,12 @@
             increaseArea: '20%' // optional
         });
         $('#formLogin').submit(function () {
-            var    = App.Utils.StringUtil.md5($(this).find('[name=password]').val());
+            var password = App.Utils.StringUtil.md5($(this).find('[name=password]').val());
             $.post(App.Constants.API_BASE + '/site/login', {name: 'admin', password: password}, function (result) {
-                if (result.header.success) {
+                if (!result.header.success) {
                     alert(result.header.message);
                 } else {
+                    window.sessionStorage.setItem(App.Constants.KEY_CURRENT_USER, JSON.stringify(result.body));
                     window.location.href = 'index.html';
                 }
             });

@@ -1,0 +1,58 @@
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">咨询类目信息</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <form role="form" id="formSite" action="javascript:void(0);">
+            <div class="form-group">
+                <label>名称</label>
+                <input name="name" type="text" class="form-control" placeholder="请输入类目名称 ...">
+            </div>
+            <div class="form-group">
+                <label>描述</label>
+                <textarea name="description" class="form-control" rows="3" placeholder="请输入类目描述 ..."></textarea>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+                <a type="button" href="javascript:history.go(-1);" class="btn btn-default">返回</a>
+                <button type="submit" class="btn btn-info pull-right">保存</button>
+            </div>
+        </form>
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- page script -->
+<script>
+    $(function () {
+        var counselingTypeId = $.getUrlVar('id');
+        //if siteId!=null update else new
+        if (counselingTypeId) {
+            $.get(App.Constants.API_BASE + '/counseling-type/' + counselingTypeId, function (result) {
+                if (!result.header.success) {
+                    alert(result.header.message);
+                    return;
+                }
+                var site = result.body;
+                App.Utils.FormUtil.setData('#formSite', site);
+            });
+        }
+        $('#formSite').submit(function () {
+            var counselingType = App.Utils.FormUtil.toJson(this);
+            counselingType.id = counselingTypeId;
+            $.ajax({
+                url: App.Constants.API_BASE + '/counseling-type/' + (counselingTypeId ? counselingTypeId : ''),
+                contentType: "application/json",
+                method: counselingTypeId ? 'PUT' : 'POST',
+                data: JSON.stringify(counselingType),
+                dataType: 'json',
+                success: function (result) {
+                    alert(result.header.message);
+                    if (result.header.success) {
+                        App.loadPage('pages/counseling/counseling-type-list.html');
+                    }
+                }
+            });
+        });
+    });
+</script>

@@ -12,11 +12,15 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-		
+	<!-- filters -->		
 	<filter>
 		<filter-name>cors</filter-name>
 		<filter-class>pers.ksy.common.cors.filter.SimpleCORSFilter</filter-class>
 	</filter>
+	<filter>
+        <filter-name>HttpMethodFilter</filter-name>
+        <filter-class>org.springframework.web.filter.HttpPutFormContentFilter</filter-class>
+    </filter>
 	<!-- servlets -->
 	<servlet>
 		<servlet-name>dispatcher</servlet-name>
@@ -32,6 +36,10 @@
 		<filter-name>cors</filter-name>
 		<url-pattern>/api/*</url-pattern>
 	</filter-mapping>
+    <filter-mapping>
+        <filter-name>HttpMethodFilter</filter-name>
+        <url-pattern>/api/*</url-pattern>
+    </filter-mapping>
 	<!-- servlet mappings -->
 	<servlet-mapping>
 		<servlet-name>dispatcher</servlet-name>

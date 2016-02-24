@@ -1,11 +1,10 @@
-package com.demonshrimp.dawj.web.controller;
+package com.demonshrimp.dawj.web.controller.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demonshrimp.dawj.model.entity.User;
@@ -20,16 +19,10 @@ import pers.ksy.common.orm.QueryCondition;
 import pers.ksy.common.orm.QueryConditionImpl;
 
 @RestController
-@RequestMapping(value = "/user")
-public class UserController extends BaseController {
+@RequestMapping(value = "/admin/user")
+public class UserController extends BaseAdminController {
 	@Autowired
 	private UserService userService;
-
-	@RequestMapping(path = "/login", method = RequestMethod.POST)
-	@SerializationFilters(filters = { @SerializationFilter(target = User.class, fields = { "password" }) })
-	public Object login(@RequestParam String username, @RequestParam String password) {
-		return Result.successResult(userService.login(username, password), null);
-	}
 
 	@RequestMapping(path = "/page", method = RequestMethod.GET)
 	@SerializationFilter(target = User.class, fields = { "password" })

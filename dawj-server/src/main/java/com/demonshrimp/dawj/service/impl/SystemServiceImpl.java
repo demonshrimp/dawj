@@ -38,6 +38,7 @@ public class SystemServiceImpl extends BaseServiceImpl<Site, String> implements 
 	@Override
 	public Site addSite(Site site) {
 		site.setCreateTime(new Date());
+		site.setStatus(Status.ENABLED);
 		siteDao.save(site);
 		return site;
 	}

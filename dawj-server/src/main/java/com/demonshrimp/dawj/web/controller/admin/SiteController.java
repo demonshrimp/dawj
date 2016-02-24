@@ -1,4 +1,4 @@
-package com.demonshrimp.dawj.web.controller;
+package com.demonshrimp.dawj.web.controller.admin;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,15 +20,16 @@ import pers.ksy.common.orm.QueryCondition;
 import pers.ksy.common.orm.QueryConditionImpl;
 
 @RestController
-@RequestMapping(value = "/site")
-public class SiteController extends BaseController {
+@RequestMapping(value = "/admin/site")
+public class SiteController extends BaseAdminController {
 	@Autowired
 	private SystemService systemService;
 
 	@RequestMapping(path = "/login", method = RequestMethod.POST)
 	public Object login(String name, String password) {
-		systemService.siteAdminLogin(name, password);
-		return Result.successResult();
+		Site site = systemService.siteAdminLogin(name, password);
+		setCurrentSite(site);
+		return Result.successResult(site, "");
 	}
 
 	@RequestMapping(path = "/page", method = RequestMethod.GET)
@@ -70,6 +71,18 @@ public class SiteController extends BaseController {
 		site.setId(siteId);
 		systemService.update(site);
 		return Result.successResult("更新成功");
+	}
+
+	@RequestMapping(path = "/{siteId}", method = RequestMethod.DELETE)
+	public Object delete(@PathVariable String siteId) {
+		systemService.deleteById(siteId);
+		return Result.successResult("删除成功");
+	}
+
+	@RequestMapping(path = "/{siteId}/set-status", method = RequestMethod.PUT)
+	public Object setStatus(@PathVariable String siteId, Site.Status status) {
+		systemService.setSiteStatus(siteId, status);
+		return Result.successResult("设置成功");
 	}
 
 }
