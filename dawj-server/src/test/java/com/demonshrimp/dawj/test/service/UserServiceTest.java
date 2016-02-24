@@ -30,6 +30,7 @@ public class UserServiceTest extends BaseTestCase {
 	@Before
 	public void setup() {
 		service.deleteAll();
+		systemService.deleteAll();
 		site = new Site();
 		site.setName("test");
 		site.setCity("test");

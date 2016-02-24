@@ -10,7 +10,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<aspectj.version>1.8.4</aspectj.version>
-		<spring.version>4.2.3.RELEASE</spring.version>
+		<spring.version>4.2.4.RELEASE</spring.version>
+		<spring.security.version>4.0.3.RELEASE</spring.security.version>
 		<hibernate.version>4.3.7.Final</hibernate.version>
 		<hibernate.ogm.version>4.2.0.Final</hibernate.ogm.version>
 		<apache.openjpa.version>2.4.0</apache.openjpa.version>
@@ -29,6 +30,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
@@ -40,7 +46,12 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
-			<version>4.0.3.RELEASE</version>
+			<version>${spring.security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring.security.version}</version>
 		</dependency>
 		<!-- openJPA -->
 		<!-- <dependency> <groupId>org.apache.openjpa</groupId> <artifactId>openjpa</artifactId> 

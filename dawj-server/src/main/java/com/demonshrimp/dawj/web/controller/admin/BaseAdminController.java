@@ -2,17 +2,16 @@ package com.demonshrimp.dawj.web.controller.admin;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.demonshrimp.dawj.model.entity.Site;
 import com.demonshrimp.dawj.web.controller.BaseController;
 
-public abstract class BaseAdminController extends BaseController{
-	@Autowired
-    protected  HttpServletRequest request;
-	
+public abstract class BaseAdminController extends BaseController {
+	protected HttpServletRequest request;
+
 	public static final String KEY_CURRENT_USER = "current-admin";
-	
 
 	public Site getCurrentSite() {
 		return (Site) request.getSession().getAttribute(KEY_CURRENT_USER);
@@ -21,6 +20,12 @@ public abstract class BaseAdminController extends BaseController{
 	public void setCurrentSite(Site site) {
 		this.request.getSession().setAttribute(KEY_CURRENT_USER, site);
 	}
-	
-	
+
+	public HttpServletRequest getRequest() {
+		if (request == null) {
+			request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+		}
+		return request;
+	}
+
 }
