@@ -1,6 +1,12 @@
 package com.demonshrimp.dawj.web.controller.admin;
 
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,4 +68,11 @@ public class UserController extends BaseAdminController {
 		userService.delete(userId);
 		return Result.successResult("删除成功");
 	}
+
+	@RequestMapping(value = "/echo")
+	public String echo(HttpServletRequest request, HttpServletResponse resp) {
+		return "Hello " + ((org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername()
+				+ " - Current Date is : " + new Date() + " - Visit us at : http://arrowgroup.eu";
+	}
+
 }
