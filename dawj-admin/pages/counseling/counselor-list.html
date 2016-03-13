@@ -1,1 +1,138 @@
-咨询师列表
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">咨询类目列表</h3>
+                <div class="box-tools pull-right">
+                    <button id="btnAddCounselingType" type="button" class="btn btn-box-tool" title="新增">
+                        <i class="fa fa-plus"></i>
+                        新增
+                    </button>
+                    <button id="btnRefreshTable" type="button" class="btn btn-box-tool" title="刷新">
+                        <i class="fa fa-refresh"></i>
+                        刷新
+                    </button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="tblUserList" class="table table-bordered table-hover nowrap datatables">
+                    <thead>
+                    <tr>
+                        <th>类目名称</th>
+                        <th>类目描述</th>
+                        <th>创建时间</th>
+                        <th>最后修改时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /.box-body -->
+<!-- DataTables -->
+<link rel="stylesheet" href="plugins/datatables/media/css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css">
+<link rel="stylesheet" href="plugins/datatables/extensions/Responsive/css/responsive.bootstrap.min.css">
+<script src="plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables/media/js/dataTables.bootstrap.min.js"></script>
+<script src="plugins/datatables/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+<script src="plugins/datatables/extensions/Responsive/js/responsive.bootstrap.min.js"></script>
+<script src="plugins/datatables/extensions/Buttons/js/dataTables.buttons.min.js"></script>
+<script src="plugins/datatables/extensions/Buttons/js/buttons.bootstrap.min.js"></script>
+<script src="plugins/datatables/extensions/Select/js/dataTables.select.min.js"></script>
+<style>
+    table.dataTable tbody tr.selected {
+        background-color: #B0BED9;
+    }
+</style>
+<!-- page script -->
+<script>
+    $(function () {
+        var table = $('#tblUserList').DataTable({
+            'ajax': {
+                url: App.Constants.API_BASE + '/counseling-type/list',
+                "dataSrc": ""
+            },
+            columns: [
+                {data: 'name'},
+                {data: 'description'},
+                {data: 'createTime'},
+                {data: 'lastModifyTime'},
+                {
+                    data: 'id',
+                    className: 'center',
+                    render: function (data, type, full, meta) {
+                        return App.Utils.DataTablesHelper.buildOperationButtons([{
+                            text: '编辑',
+                            operation: 'edit'
+                        }, {
+                            text: '删除',
+                            operation: 'remove'
+                        }], full);
+                    }
+                }
+            ],
+            language: App.Utils.DataTablesHelper.language(),
+            select: true,
+            paging: true,
+            responsive: true
+        });
+
+        //init events
+        $('#btnRefreshTable').click(function () {
+            refreshTable()
+        });
+        $('#btnAddCounselingType').click(function () {
+            App.loadPage('pages/counseling/counselor.html');
+        });
+        App.Utils.DataTablesHelper.onOperationButtonClick('#tblUserList', function (data) {
+            switch (data.operation) {
+                case  'edit':
+                    edit(data);
+                    break;
+                case  'remove':
+                    remove(data);
+                    break;
+            }
+        });
+
+        function edit(site) {
+            App.loadPage('pages/sys/site.html?id=' + site.id);
+        }
+
+        function remove(site) {
+            if (confirm('确定要删除这个站点吗？')) {
+                $.ajax({
+                    url: App.Constants.API_BASE + '/site/' + site.id,
+                    type: 'DELETE',
+                    success: function (result) {
+                        alert(result.header.message);
+                        if (result.header.success) {
+                            refreshTable(true);
+                        }
+                    }
+                });
+            }
+        }
+
+        function refreshTable(retain) {
+            var page = table.page.info().page;
+            table.ajax.reload(function () {
+                console.log(table.page.info().pages, page);
+                if (retain) {
+                    if (table.page.info().pages <= page) {
+                        page--;
+                    }
+                    table.page(page).draw('page');
+                }
+            });
+        }
+
+    });
+</script>
+</body>
+</html>

@@ -1,5 +1,7 @@
 package com.demonshrimp.dawj.model.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -16,6 +18,8 @@ public class Site extends BaseEntity {
 	private Boolean certificated;
 	private Status status;
 	private String password;
+	private String token;
+	private Date lastLoginTime;
 
 	public Site() {
 		super();
@@ -83,6 +87,26 @@ public class Site extends BaseEntity {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	@Column
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+	
+	@Column
+	public Date getLastLoginTime() {
+		return lastLoginTime;
+	}
+
+	public void setLastLoginTime(Date lastLoginTime) {
+		this.lastLoginTime = lastLoginTime;
+	}
+
+
 
 	public enum Status {
 		DISABLED, ENABLED

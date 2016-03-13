@@ -280,6 +280,7 @@
      */
     function setup() {
         initPageLoader();
+        setupGlobalAjax();
         var tmp = get('skin');
         if (tmp && $.inArray(tmp, my_skins))
             change_skin(tmp);
@@ -417,6 +418,21 @@
             });
             loadSidebarMenus();
         }
+    }
+
+    function setupGlobalAjax(){
+        var site = App.getCurrentLoginSite();
+        $.ajaxSetup({
+            beforeSend: function(request , settings) {
+                /*if(settings.contentType == "application/json"){
+                    var obj = JSON.parse(settings.data);
+                    obj._stoken = site.token;
+                    settings.data = JSON.stringify(obj);
+                }else{
+                    settings.data._stoken = site.token;
+                }*/
+            }
+        });
     }
 
     function loginCheck() {

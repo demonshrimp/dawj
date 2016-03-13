@@ -28,6 +28,7 @@ public class CounselingTypeController extends BaseAdminController {
 
 	@RequestMapping(path = "/", method = RequestMethod.POST)
 	public Object save(@RequestBody CounselingType counselingType) {
+		counselingType.setSite(getCurrentSite());
 		counselingType = counselingService.addCounselingType(counselingType);
 		return Result.successResult(counselingType.getId(), "新增成功");
 	}

@@ -30,5 +30,12 @@ public interface SystemService extends BaseService<Site,String>{
 	 */
 	void setSiteStatus(String siteId, Status status);
 
+	/**
+	 * 根据令牌获取当前登录用户
+	 * @param token
+	 * @return
+	 */
+	Site getCurrentLoginSite(String token);
+
 	
 }

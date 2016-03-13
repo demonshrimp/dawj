@@ -3,6 +3,7 @@ package com.demonshrimp.dawj.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -80,6 +81,23 @@ public class SystemServiceImpl extends BaseServiceImpl<Site, String> implements 
 		}
 		if (site.getStatus() == Status.DISABLED) {
 			throw new ServiceException("站点已停用");
+		}
+		String token = UUID.randomUUID().toString().replaceAll("-", "");
+		site.setToken(token);
+		site.setLastLoginTime(new Date());
+		siteDao.update(site);
+		return site;
+	}
+	
+	@Override
+	public Site getCurrentLoginSite(String token) {
+		Site site = siteDao.getByProperty("token", token);
+		if (null == site) {
+			throw new ServiceException("令牌无效");
+		}
+		long diffTime = System.currentTimeMillis() - site.getLastLoginTime().getTime();
+		if (diffTime > 1000 * 60 * 60 * 1) {
+			throw new ServiceException("令牌无效");
 		}
 		return site;
 	}

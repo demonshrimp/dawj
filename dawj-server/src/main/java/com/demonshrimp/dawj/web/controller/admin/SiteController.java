@@ -1,6 +1,8 @@
 package com.demonshrimp.dawj.web.controller.admin;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,9 +28,14 @@ public class SiteController extends BaseAdminController {
 	private SystemService systemService;
 
 	@RequestMapping(path = "/login", method = RequestMethod.POST)
-	public Object login(String name, String password) {
+	public Object login(String name, String password, HttpServletResponse response) {
+		// name = "admin";
 		Site site = systemService.siteAdminLogin(name, password);
-		setCurrentSite(site);
+		Cookie cookie = new Cookie(KEY_TOKEN_HEADER, site.getToken());
+		cookie.setMaxAge(15 * 24 * 60 * 60);
+		cookie.setPath("/");
+		response.addCookie(cookie);
+		// setCurrentSite(site);
 		return Result.successResult(site, "");
 	}
 
@@ -50,7 +57,7 @@ public class SiteController extends BaseAdminController {
 	@SerializationFilter(target = Site.class, fields = { "password" })
 	public Object list() {
 		QueryCondition queryCondition = new QueryConditionImpl(Site.class, null);
-		queryCondition.add(Conditions.ne("id", "root_site"));
+		queryCondition.add(Conditions.ne("id", getCurrentSite().getId()));
 		return systemService.findList(queryCondition);
 	}
 
@@ -84,5 +91,4 @@ public class SiteController extends BaseAdminController {
 		systemService.setSiteStatus(siteId, status);
 		return Result.successResult("设置成功");
 	}
-
 }

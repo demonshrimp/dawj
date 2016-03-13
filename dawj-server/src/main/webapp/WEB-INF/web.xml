@@ -21,10 +21,10 @@
 		<filter-name>HttpMethodFilter</filter-name>
 		<filter-class>org.springframework.web.filter.HttpPutFormContentFilter</filter-class>
 	</filter>
-	<filter>
+	<!-- <filter>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-	</filter>
+	</filter> -->
 	<!-- servlets -->
 	<servlet>
 		<servlet-name>dispatcher</servlet-name>
@@ -44,10 +44,10 @@
 		<filter-name>HttpMethodFilter</filter-name>
 		<url-pattern>/api/*</url-pattern>
 	</filter-mapping>
-	<filter-mapping>
+	<!-- <filter-mapping>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/api/*</url-pattern>
-	</filter-mapping>
+	</filter-mapping> -->
 	<!-- servlet mappings -->
 	<servlet-mapping>
 		<servlet-name>dispatcher</servlet-name>

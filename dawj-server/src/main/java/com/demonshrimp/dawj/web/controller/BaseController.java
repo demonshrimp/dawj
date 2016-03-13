@@ -15,7 +15,8 @@ public class BaseController {
 	Log log = LogFactory.getLog(BaseController.class);
 
 	@ExceptionHandler
-	public Result<String> exp(HttpServletRequest request, Exception ex) {		
+	public Result<String> exp(HttpServletRequest request, Exception ex) {
+		ex.printStackTrace();
 		log.error(ex.getMessage(), ex);
 		if (ex instanceof ServiceException) {
 			return Result.errorResult(ex.getMessage());

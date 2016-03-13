@@ -22,12 +22,12 @@
           {
             "no": "122",
             "name": "咨询师管理",
-            "url": "pages/counseling/counseling-article-list.html"
+            "url": "pages/counseling/counselor-list.html"
           },
           {
             "no": "123",
             "name": "咨询文章管理",
-            "url": "pages/counseling/counselor-list.html"
+            "url": "pages/counseling/counseling-article-list.html"
           }
         ]
       },

@@ -56,6 +56,7 @@
 <!-- page script -->
 <script>
     $(function () {
+        $.fn.dataTable.ext.errMode = function(s,h,m){};
         var table = $('#tblUserList').DataTable({
             'ajax': {
                 url: App.Constants.API_BASE + '/site/list',

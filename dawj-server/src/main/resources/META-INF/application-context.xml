@@ -12,7 +12,7 @@
 
 	<import resource="application-repository.xml" />
 	<import resource="application-controller.xml" />
-	<import resource="application-security.xml" />
+	<!-- <import resource="application-security.xml" /> -->
 
 	<context:component-scan base-package="com.demonshrimp.dawj" />
 
