@@ -16,6 +16,10 @@
 	<filter>
 		<filter-name>cors</filter-name>
 		<filter-class>pers.ksy.common.cors.filter.SimpleCORSFilter</filter-class>
+		<init-param>
+			<param-name>allowHeaders</param-name>
+			<param-value>Content-Type,Cache-Control,Pragma,_stoken</param-value>
+		</init-param>
 	</filter>
 	<filter>
 		<filter-name>HttpMethodFilter</filter-name>
@@ -35,6 +39,10 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	<servlet>
+		<servlet-name>fileServlet</servlet-name>
+		<servlet-class>com.demonshrimp.dawj.web.servlet.FileServlet</servlet-class>
+	</servlet>
 	<!-- filter mappings -->
 	<filter-mapping>
 		<filter-name>cors</filter-name>
@@ -52,5 +60,9 @@
 	<servlet-mapping>
 		<servlet-name>dispatcher</servlet-name>
 		<url-pattern>/api/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>fileServlet</servlet-name>
+		<url-pattern>/upload/*</url-pattern>
 	</servlet-mapping>
 </web-app>

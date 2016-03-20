@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import com.demonshrimp.dawj.model.entity.CounselingArticle;
+import com.demonshrimp.dawj.model.entity.Counselor;
+
 import pers.ksy.common.model.Page;
 import pers.ksy.common.orm.Order;
 import pers.ksy.common.orm.QueryCondition;
@@ -247,6 +250,5 @@ public interface BaseService<T,ID extends Serializable> {
 	 * @return
 	 */
 	public int update(QueryCondition qc,Map<String,Object> properties);
-	
 	
 }

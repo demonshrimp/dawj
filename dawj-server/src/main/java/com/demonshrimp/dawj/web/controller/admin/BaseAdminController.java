@@ -1,6 +1,5 @@
 package com.demonshrimp.dawj.web.controller.admin;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +14,10 @@ public abstract class BaseAdminController extends BaseController {
 
 	@Autowired
 	private SystemService systemService;
-	
-	public static final String KEY_TOKEN_HEADER = "_stoken";
-	
+
+	public static final String KEY_TOKEN = "_stoken";
+
 	private static ThreadLocal<Site> siteHolder = new ThreadLocal<Site>();
-	private static ThreadLocal<HttpServletRequest> requestHolder = new ThreadLocal<HttpServletRequest>();
 
 	public Site getCurrentSite() {
 		Site site = siteHolder.get();
@@ -29,23 +27,14 @@ public abstract class BaseAdminController extends BaseController {
 		}
 		return site;
 	}
-	
+
 	protected String getToken() {
-		for (Cookie cookie : getRequest().getCookies()) {
-			if (cookie.getName() == KEY_TOKEN_HEADER) {
-				return cookie.getValue();
-			}
-		}
-		return null;
+		HttpServletRequest request = getRequest();
+		return request.getHeader(KEY_TOKEN);
 	}
 
 	public HttpServletRequest getRequest() {
-		HttpServletRequest request = requestHolder.get();
-		if (request == null) {
-			request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-			requestHolder.set(request);
-		}
-		return request;
+		return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 	}
 
 }

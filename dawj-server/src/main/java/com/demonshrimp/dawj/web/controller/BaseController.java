@@ -19,7 +19,8 @@ public class BaseController {
 		ex.printStackTrace();
 		log.error(ex.getMessage(), ex);
 		if (ex instanceof ServiceException) {
-			return Result.errorResult(ex.getMessage());
+			ServiceException se = (ServiceException) ex;
+			return Result.errorResult(se.getErrorCode(), se.getMessage());
 		}
 		if(ex instanceof DataIntegrityViolationException){
 			Throwable th1 = ex.getCause();

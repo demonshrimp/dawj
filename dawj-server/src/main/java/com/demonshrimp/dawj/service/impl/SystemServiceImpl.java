@@ -88,16 +88,16 @@ public class SystemServiceImpl extends BaseServiceImpl<Site, String> implements 
 		siteDao.update(site);
 		return site;
 	}
-	
+
 	@Override
 	public Site getCurrentLoginSite(String token) {
 		Site site = siteDao.getByProperty("token", token);
 		if (null == site) {
-			throw new ServiceException("令牌无效");
+			throw new ServiceException("令牌无效", "900");
 		}
 		long diffTime = System.currentTimeMillis() - site.getLastLoginTime().getTime();
 		if (diffTime > 1000 * 60 * 60 * 1) {
-			throw new ServiceException("令牌无效");
+			throw new ServiceException("令牌无效", "901");
 		}
 		return site;
 	}

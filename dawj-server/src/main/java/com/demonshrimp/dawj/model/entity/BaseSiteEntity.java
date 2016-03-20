@@ -10,8 +10,6 @@ import javax.persistence.ManyToOne;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class BaseSiteEntity extends BaseEntity {
-	@ManyToOne(cascade = CascadeType.REFRESH)
-	@JoinColumn(name = "site_id", nullable = true)
 	private Site site;
 
 	public BaseSiteEntity() {
@@ -21,7 +19,9 @@ public abstract class BaseSiteEntity extends BaseEntity {
 	public BaseSiteEntity(String id) {
 		super(id);
 	}
-
+	
+	@ManyToOne(cascade = CascadeType.REFRESH)
+	@JoinColumn(name = "site_id", nullable = true)
 	public Site getSite() {
 		return site;
 	}

@@ -17,13 +17,20 @@ import pers.ksy.common.model.Result;
 @RestController
 @RequestMapping(value = "/admin/counseling-type")
 public class CounselingTypeController extends BaseAdminController {
+	
 	@Autowired
 	private CounselingService counselingService;
 
 	@RequestMapping(path = "/list", method = RequestMethod.GET)
-	@SerializationFilter(target = Site.class, fields = { "password" })
+	@SerializationFilter(target = CounselingType.class, fields = { "site" })
 	public Object list() {
-		return counselingService.counselingTypeList(getCurrentSite().getId());
+		return Result.successResult(counselingService.counselingTypeList(getCurrentSite().getId()),null);
+	}
+	
+	@RequestMapping(path = "/{counselingTypeId}", method = RequestMethod.GET)
+	@SerializationFilter(target = CounselingType.class, fields = { "site" })
+	public Object get(@PathVariable String counselingTypeId) {
+		return Result.successResult(counselingService.getCounselingType(counselingTypeId), null);
 	}
 
 	@RequestMapping(path = "/", method = RequestMethod.POST)

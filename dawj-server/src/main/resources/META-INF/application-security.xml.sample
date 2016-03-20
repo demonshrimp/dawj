@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+        
+	<security:http pattern="/api/admin/user/echo" security="none"/>
+	
+	<security:global-method-security
+		secured-annotations="enabled" pre-post-annotations="enabled" />
+
+	<security:http entry-point-ref="restAuthenticationEntryPoint">
+		<security:intercept-url pattern="/api/admin/**" access="ROLE_ADMIN" />
+	</security:http>
+
+	<bean id="digestFilter"
+		class="org.springframework.security.web.authentication.www.DigestAuthenticationFilter">
+		<property name="userDetailsService" ref="inMemoryUserService" />
+		<property name="authenticationEntryPoint" ref="digestEntryPoint" />
+	</bean>
+
+	<bean id="digestEntryPoint"
+		class="com.demonshrimp.dawj.web.security.AjaxDigestAuthenticationEntryPoint">
+		<property name="realmName" value="REST-Realm" />
+		<property name="key" value="testNonce" />
+		<property name="nonceValiditySeconds" value="10000" />
+	</bean>
+
+	<security:authentication-manager alias="authenticationManager">
+		<security:authentication-provider ref="inMemoryAuthenticationProvider" />
+	</security:authentication-manager>
+
+
+	<bean id="inMemoryAuthenticationProvider"
+		class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+		<property name="hideUserNotFoundExceptions" value="false" />
+		<property name="userDetailsService" ref="inMemoryUserService" />
+		<property name="messageSource" ref="messageSource" />
+	</bean>
+
+	<security:user-service id="inMemoryUserService">
+		<security:user name="marcin" password="michalski" authorities="ROLE_USER" />
+	</security:user-service>
+
+
+</beans>

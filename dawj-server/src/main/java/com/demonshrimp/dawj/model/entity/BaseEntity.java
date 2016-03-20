@@ -17,17 +17,9 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class BaseEntity implements Serializable {
-	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "uuid")
+	
 	private String id;
-
-	@Column(name = "create_time", length = 19, nullable = false)
-	@Temporal(TemporalType.TIMESTAMP)
 	private Date createTime;
-
-	@Column(name = "last_modify_time", length = 19)
-	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastModifyTime;
 
 	public BaseEntity() {
@@ -39,6 +31,9 @@ public abstract class BaseEntity implements Serializable {
 		this.id = id;
 	}
 
+	@Id
+	@GeneratedValue(generator = "uuid")
+	@GenericGenerator(name = "uuid", strategy = "uuid")
 	public String getId() {
 		return id;
 	}
@@ -47,6 +42,8 @@ public abstract class BaseEntity implements Serializable {
 		this.id = id;
 	}
 
+	@Column(name = "create_time", length = 19, nullable = false)
+	@Temporal(TemporalType.TIMESTAMP)
 	public Date getCreateTime() {
 		return createTime;
 	}
@@ -54,7 +51,9 @@ public abstract class BaseEntity implements Serializable {
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
-
+	
+	@Column(name = "last_modify_time", length = 19)
+	@Temporal(TemporalType.TIMESTAMP)
 	public Date getLastModifyTime() {
 		return lastModifyTime;
 	}
