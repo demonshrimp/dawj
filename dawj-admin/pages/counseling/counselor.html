@@ -4,13 +4,10 @@
     </div>
     <!-- /.box-header -->
     <div class="box-body">
-        <form role="form" id="formSite" action="javascript:void(0);">
+        <form role="form" id="formCounselor" action="javascript:void(0);">
             <div class="form-group">
                 <label>类别</label>
-                <select id="selectCounselingType" name="type" multiple="multiple" class="form-control">
-                    <option>类目1</option>
-                    <option>类目2</option>
-                    <option>类目3</option>
+                <select id="selectCounselingType" name="counselingTypes[].id" multiple="multiple" class="form-control">
                 </select>
             </div>
             <div class="form-group">
@@ -19,11 +16,26 @@
             </div>
             <div class="form-group">
                 <label>头像</label>
-                <input name="name" type="file" class="form-control" placeholder="请上传咨询师头像 ...">
+                <div class="row">
+                    <div class="col-sm-6" style="max-width: 400px">
+                        <img id="imgCounselorImage" class="img-thumbnail" data-holder-rendered="true" >
+                        <div class="progress progress-striped active" role="progressbar" aria-valuemin="10"
+                             aria-valuemax="100" aria-valuenow="0">
+                            <div id="progressCounselorImage" class="progress-bar progress-bar-success" style="width:0%;"></div>
+                        </div>
+                        <div class="caption" align="center">
+                            <span class="btn btn-primary fileinput-button">
+                            <span>上传</span>
+                            <input type="file" id="fileCounselorImage" name="file" multiple>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <input name="image" type="hidden" />
             </div>
             <div class="form-group">
                 <label>咨询费用</label>
-                <input name="name" type="number" class="form-control" placeholder="请输入咨询师咨询费用 ...">
+                <input name="fees" type="number" class="form-control" placeholder="请输入咨询师咨询费用 ...">
             </div>
             <div class="form-group">
                 <label>认证状态</label>
@@ -34,12 +46,12 @@
             </div>
             <div class="form-group">
                 <label>咨询师介绍</label>
-                <textarea id="editor" name="content" class="form-control textarea" rows="20" cols="80" ></textarea>
+                <textarea id="editor" name="about" class="ueditor" type="text/plain"  style="height:500px;width:100%"></textarea>
             </div>
             <!-- /.box-body -->
             <div class="box-footer">
                 <a type="button" href="javascript:history.go(-1);" class="btn btn-default">返回</a>
-                <button type="submit" class="btn btn-info pull-right">保存</button>
+                <button disabled type="submit" class="btn btn-info pull-right">保存</button>
             </div>
         </form>
     </div>
@@ -48,47 +60,93 @@
 
 <!-- select2 -->
 <link rel="stylesheet" href="plugins/select2/select2.min.css">
-<!-- bootstrap wysihtml5 - text editor -->
-<link rel="stylesheet" href="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
-<!-- CK Editor -->
-<!--<script src="plugins/ckeditor/ckeditor.js"></script>-->
-<!-- Bootstrap WYSIHTML5 -->
-<script src="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+<!-- blueimp-file-upload -->
+<link rel="stylesheet" href="plugins/blueimp-file-upload/css/jquery.fileupload.css">
+<link rel="stylesheet" href="plugins/blueimp-file-upload/css/jquery.fileupload-ui.css">
+<!-- UEditor -->
+<script type="text/javascript" charset="utf-8" src="plugins/UEditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/UEditor/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="plugins/UEditor/lang/zh-cn/zh-cn.js"></script>
+<ueheader></ueheader>
 <!-- select2 -->
 <script src="plugins/select2/select2.min.js"></script>
+<!-- blueimp-file-upload -->
+<script src="plugins/blueimp-file-upload/js/vendor/jquery.ui.widget.js"></script>
+<script src="plugins/blueimp-file-upload/js/jquery.iframe-transport.js"></script>
+<script src="plugins/blueimp-file-upload/js/jquery.fileupload.js"></script>
 <!-- page script -->
 <script>
     $(function () {
+        /************** init views **************/
+        var ue = UE.getEditor('editor');
 
-        //CKEDITOR.replace('editor');
-        $(".textarea").wysihtml5();
-        $("#selectCounselingType").select2();
+        $("#fileCounselorImage").fileupload({
+            url: App.Constants.API_BASE + '/site/file-upload',
+            progressall: function (e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                $('#progressCounselorImage').css(
+                        'width',
+                        progress + '%'
+                );
+            },
+            done: function (e, data) {
+                var info = data.result.body[0];
+                $("#imgCounselorImage").attr('src', info.fullPath);
+                $("#formCounselor [name=image]").val(info.path);
+            }
+        });
 
-        var counselingTypeId = $.getUrlVar('id');
+
+        /************** init datas **************/
+        $.get(App.Constants.API_BASE + '/counseling-type/list', function (result) {
+            if (!result.header.success) {
+                alert(result.header.message);
+                return;
+            }
+            var select = $('#selectCounselingType');
+            console.log(select);
+            var counselingTypes = result.body;
+            select.empty();
+            for(var i=0;i<counselingTypes.length;i++){
+                var option = $('<option>');
+                option.text(counselingTypes[i].name);
+                option.val(counselingTypes[i].id);
+                select.append(option);
+            }
+            $('#formCounselor [type=submit]').removeAttr('disabled');
+        });
+        var counselorId = $.getUrlVar('id');
         //if siteId!=null update else new
-        if (counselingTypeId) {
-            $.get(App.Constants.API_BASE + '/counseling-type/' + counselingTypeId, function (result) {
+        if (counselorId) {
+            $.get(App.Constants.API_BASE + '/counselor/' + counselorId, function (result) {
                 if (!result.header.success) {
                     alert(result.header.message);
                     return;
                 }
-                var site = result.body;
-                App.Utils.FormUtil.setData('#formSite', site);
+                var counselor = result.body;
+                App.Utils.FormUtil.setData('#formCounselor', counselor);
+                $("#imgCounselorImage").attr('src', counselor.fullImage);
+                UE.getEditor('editor').setContent(counselor.about);
             });
         }
-        $('#formSite').submit(function () {
-            var counselingType = App.Utils.FormUtil.toJson(this);
-            counselingType.id = counselingTypeId;
+
+
+
+        /************** init events **************/
+        $('#formCounselor').submit(function () {
+            var counselor = App.Utils.FormUtil.toJson(this);
+            counselor.id = counselorId;
+            counselor.about = UE.getEditor('editor').getContent();
             $.ajax({
-                url: App.Constants.API_BASE + '/counseling-type/' + (counselingTypeId ? counselingTypeId : ''),
+                url: App.Constants.API_BASE + '/counselor/' + (counselorId ? counselorId : ''),
                 contentType: "application/json",
-                method: counselingTypeId ? 'PUT' : 'POST',
-                data: JSON.stringify(counselingType),
+                method: counselorId ? 'PUT' : 'POST',
+                data: JSON.stringify(counselor),
                 dataType: 'json',
                 success: function (result) {
                     alert(result.header.message);
                     if (result.header.success) {
-                        App.loadPage('pages/counseling/counseling-type-list.html');
+                        App.loadPage('pages/counseling/counselor-list.html');
                     }
                 }
             });

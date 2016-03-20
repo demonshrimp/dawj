@@ -2,7 +2,7 @@
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
-                <h3 class="box-title">咨询类目列表</h3>
+                <h3 class="box-title">咨询文章列表</h3>
                 <div class="box-tools pull-right">
                     <button id="btnAddCounselingType" type="button" class="btn btn-box-tool" title="新增">
                         <i class="fa fa-plus"></i>
@@ -16,11 +16,13 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-                <table id="tblUserList" class="table table-bordered table-hover nowrap datatables">
+                <table id="tblCounselingArticleList" class="table table-bordered table-hover nowrap datatables">
                     <thead>
                     <tr>
-                        <th>类目名称</th>
-                        <th>类目描述</th>
+                        <th>标题</th>
+                        <th>图片</th>
+                        <th>类别</th>
+                        <th>标签</th>
                         <th>创建时间</th>
                         <th>最后修改时间</th>
                         <th>操作</th>
@@ -52,14 +54,22 @@
 <!-- page script -->
 <script>
     $(function () {
-        var table = $('#tblUserList').DataTable({
-            'ajax': {
-                url: App.Constants.API_BASE + '/counseling-type/list',
-                "dataSrc": ""
-            },
+        App.Utils.DataTablesHelper.pipeline();
+        var table = $('#tblCounselingArticleList').DataTable({
+            ajax : $.fn.dataTable.pipeline({
+                url: App.Constants.API_BASE + '/counseling-article/page'
+            }),
             columns: [
-                {data: 'name'},
-                {data: 'description'},
+                {data: 'title'},
+                {
+                    data: 'fullImage',
+                    className: 'center',
+                    render: function (data, type, full, meta) {
+                        return '<a href="'+data+'" target="_blank"><img class="img-thumbnail img-preview" src="'+data+'" width="40px"  /></a>'
+                    }
+                },
+                {data: 'counselingType.name'},
+                {data: 'tag'},
                 {data: 'createTime'},
                 {data: 'lastModifyTime'},
                 {
@@ -76,6 +86,8 @@
                     }
                 }
             ],
+            processing: true,
+            serverSide: true,
             language: App.Utils.DataTablesHelper.language(),
             select: true,
             paging: true,
@@ -89,7 +101,7 @@
         $('#btnAddCounselingType').click(function () {
             App.loadPage('pages/counseling/counseling-article.html');
         });
-        App.Utils.DataTablesHelper.onOperationButtonClick('#tblUserList', function (data) {
+        App.Utils.DataTablesHelper.onOperationButtonClick('#tblCounselingArticleList', function (data) {
             switch (data.operation) {
                 case  'edit':
                     edit(data);
@@ -100,14 +112,14 @@
             }
         });
 
-        function edit(site) {
-            App.loadPage('pages/sys/site.html?id=' + site.id);
+        function edit(data) {
+            App.loadPage('pages/counseling/counseling-article.html?id=' + data.id);
         }
 
-        function remove(site) {
+        function remove(data) {
             if (confirm('确定要删除这个站点吗？')) {
                 $.ajax({
-                    url: App.Constants.API_BASE + '/site/' + site.id,
+                    url: App.Constants.API_BASE + '/counseling-article/' + data.id,
                     type: 'DELETE',
                     success: function (result) {
                         alert(result.header.message);

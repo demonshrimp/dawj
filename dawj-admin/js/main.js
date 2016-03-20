@@ -11,7 +11,6 @@ var App = {
 (function ($, AdminLTE, App) {
     "use strict";
 
-
     App.Constants.API_BASE = "http://localhost:8080/dawj-server/api/admin";
 
     App.Constants.KEY_CURRENT_USER = "_ASDdawjus";
@@ -60,11 +59,58 @@ var App = {
             var keys = key.split('.');
             var result = data;
             for (var i = 0; i < keys.length; i++) {
+                var k = keys[i];
+                var isArray = false
+                if (k.indexOf('[]') > 0) {
+                    k = k.substr(0, k.length - 2);
+                    isArray = true;
+                }
                 if (result) {
-                    result = result[keys[i]];
+                    if (isArray) {
+                        var array = [];
+                        for (var j = 0; j < result.length; j++) {
+                            array.push(this.getValue(result[j], key.substr(key.indexOf(keys[i]) + 1)));
+                        }
+                        return array;
+                    } else {
+                        result = result[keys[i]];
+                    }
                 }
             }
             return result;
+        },
+        setValue: function (data, key, value) {
+            var keys = key.split('.');
+            console.log(keys);
+            var obj = data;
+            var lastData = data;
+            for (var i = 0; i < keys.length; i++) {
+                var key = keys[i];
+                if (i == keys.length - 1) {
+                    if ($.isArray(obj[key])) {
+                        obj[key].push(value);
+                    } else {
+                        obj[key] = value;
+                    }
+                    return;
+                }
+                var isArray = false
+                if (key.indexOf('[]') > 0) {
+                    key = key.substr(0, key.length - 2);
+                    isArray = true;
+                }
+                obj = obj[key];
+                if (!obj) {
+                    if (isArray) {
+                        lastData[key] = [{}];
+                        obj = lastData[key][0];
+                    } else {
+                        lastData[key] = {};
+                        obj = lastData[key];
+                    }
+                }
+                lastData = obj;
+            }
         }
     }
 
@@ -72,24 +118,28 @@ var App = {
         toJson: function (form) {
             var serializeObj = {};
             var array = $(form).serializeArray();
-            var str = $(form).serialize();
             $(array).each(function () {
-                if (serializeObj[this.name]) {
-                    if ($.isArray(serializeObj[this.name])) {
-                        serializeObj[this.name].push(this.value);
-                    } else {
-                        serializeObj[this.name] = [serializeObj[this.name], this.value];
-                    }
-                } else {
-                    serializeObj[this.name] = this.value;
-                }
+                App.Utils.ObjectUtil.setValue(serializeObj, this.name, this.value);
+                /*if (serializeObj[this.name]) {
+                 if ($.isArray(serializeObj[this.name])) {
+                 serializeObj[this.name].push(this.value);
+                 } else {
+                 serializeObj[this.name] = [serializeObj[this.name], this.value];
+                 }
+                 } else {
+                 serializeObj[this.name] = this.value;
+                 }*/
             });
             return serializeObj;
         },
         setData: function (form, data) {
             $(form).find('[name]').each(function () {
                 var key = $(this).attr('name');
-                $(this).val(App.Utils.ObjectUtil.getValue(data, key).toString());
+                var value = App.Utils.ObjectUtil.getValue(data, key);
+                if (value && value.toString) {
+                    value = value.toString();
+                }
+                $(this).val(value);
             });
         }
     }
@@ -146,6 +196,126 @@ var App = {
                 "sSortDescending": ": 以降序排列此列"
             }
         },
+        pipeline: function () {
+            //
+            // Pipelining function for DataTables. To be used to the `ajax` option of DataTables
+            //
+            $.fn.dataTable.pipeline = function (opts) {
+                // Configuration options
+                var conf = $.extend({
+                    pages: 0,     // number of pages to cache
+                    url: '',      // script url
+                    data: null,   // function or object with parameters to send to the server
+                                  // matching how `ajax.data` works in DataTables
+                    method: 'GET' // Ajax HTTP method
+                }, opts);
+
+                // Private variables for storing the cache
+                var cacheLower = -1;
+                var cacheUpper = null;
+                var cacheLastRequest = null;
+                var cacheLastJson = null;
+
+                return function (request, drawCallback, settings) {
+                    var ajax = false;
+                    var requestStart = request.start;
+                    var drawStart = request.start;
+                    var requestLength = request.length;
+                    var requestEnd = requestStart + requestLength;
+
+                    if (settings.clearCache) {
+                        // API requested that the cache be cleared
+                        ajax = true;
+                        settings.clearCache = false;
+                    }
+                    else if (cacheLower < 0 || requestStart < cacheLower || requestEnd > cacheUpper) {
+                        // outside cached data - need to make a request
+                        ajax = true;
+                    }
+                    else if (JSON.stringify(request.order) !== JSON.stringify(cacheLastRequest.order) ||
+                        JSON.stringify(request.columns) !== JSON.stringify(cacheLastRequest.columns) ||
+                        JSON.stringify(request.search) !== JSON.stringify(cacheLastRequest.search)
+                    ) {
+                        // properties changed (ordering, columns, searching)
+                        ajax = true;
+                    }
+
+                    // Store the request for checking next time around
+                    cacheLastRequest = $.extend(true, {}, request);
+
+                    if (ajax) {
+                        // Need data from the server
+                        if (requestStart < cacheLower) {
+                            requestStart = requestStart - (requestLength * (conf.pages - 1));
+
+                            if (requestStart < 0) {
+                                requestStart = 0;
+                            }
+                        }
+
+                        cacheLower = requestStart;
+                        cacheUpper = requestStart + (requestLength * conf.pages);
+
+                        request.start = requestStart;
+                        request.length = requestLength * conf.pages;
+
+                        // Provide the same `data` options as DataTables.
+                        if ($.isFunction(conf.data)) {
+                            // As a function it is executed with the data object as an arg
+                            // for manipulation. If an object is returned, it is used as the
+                            // data object to submit
+                            var d = conf.data(request);
+                            if (d) {
+                                $.extend(request, d);
+                            }
+                        }
+                        else if ($.isPlainObject(conf.data)) {
+                            // As an object, the data given extends the default
+                            $.extend(request, conf.data);
+                        }
+
+                        settings.jqXHR = $.ajax({
+                            "type": conf.method,
+                            "url": conf.url,
+                            "data": request,
+                            "dataType": "json",
+                            "cache": false,
+                            "success": function (json) {
+                                var data = {
+                                    "recordsTotal": json.body.total,
+                                    "recordsFiltered": json.body.total,
+                                    "data": json.body.list
+                                }
+                                cacheLastJson = $.extend(true, {}, data);
+
+                                if (cacheLower != drawStart) {
+                                    data.data.splice(0, drawStart - cacheLower);
+                                }
+                                data.data.splice(requestLength, data.data.length);
+
+                                drawCallback(data);
+                            }
+                        });
+                    }
+                    else {
+                        var json = $.extend(true, {}, cacheLastJson);
+                        json.draw = request.draw; // Update the echo for each response
+                        json.data.splice(0, requestStart - cacheLower);
+                        json.data.splice(requestLength, json.data.length);
+
+                        drawCallback(json);
+                    }
+                }
+            };
+
+            // Register an API method that will empty the pipelined data, forcing an Ajax
+            // fetch on the next draw (i.e. `table.clearPipeline().draw()`)
+            $.fn.dataTable.Api.register('clearPipeline()', function () {
+                return this.iterator('table', function (settings) {
+                    settings.clearCache = true;
+                });
+            });
+        }
     };
     App.Utils.UrlUtil = {
         getProjectRoot: function () {

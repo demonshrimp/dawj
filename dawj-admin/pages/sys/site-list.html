@@ -57,6 +57,7 @@
 <script>
     $(function () {
         $.fn.dataTable.ext.errMode = function(s,h,m){};
+        console.log(App.getCurrentLoginSite());
         var table = $('#tblUserList').DataTable({
             'ajax': {
                 url: App.Constants.API_BASE + '/site/list',
@@ -126,7 +127,7 @@
 
         //init events
         $('#btnRefreshTable').click(function () {
-            refreshTable()
+            refreshTable();
         });
         $('#btnAddSite').click(function () {
             App.loadPage('pages/sys/site.html');

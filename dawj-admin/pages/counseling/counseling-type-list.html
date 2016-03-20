@@ -55,7 +55,7 @@
         var table = $('#tblUserList').DataTable({
             'ajax': {
                 url: App.Constants.API_BASE + '/counseling-type/list',
-                "dataSrc": ""
+                "dataSrc": "body"
             },
             columns: [
                 {data: 'name'},

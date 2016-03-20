@@ -332,7 +332,7 @@
         if ($('body').hasClass('sidebar-collapse')) {
             $("[data-layout='sidebar-collapse']").attr('checked', 'checked');
         }
-
+        initCommonEvents();
     }
 
     function loadSidebarMenus() {
@@ -423,7 +423,11 @@
     function setupGlobalAjax(){
         var site = App.getCurrentLoginSite();
         $.ajaxSetup({
+            headers: {
+                '_stoken': App.getCurrentLoginSite().token
+            },
             beforeSend: function(request , settings) {
+                //request.setRequestHeader("dataType","abc");
                 /*if(settings.contentType == "application/json"){
                     var obj = JSON.parse(settings.data);
                     obj._stoken = site.token;
@@ -431,8 +435,26 @@
                 }else{
                     settings.data._stoken = site.token;
                 }*/
+                request.done(function(result){
+                    if(result.header){
+                        if(result.header.errorCode =="900"||result.header.errorCode =="901"){
+                            alert(result.header.message);
+                            window.location.href = 'login.html';
+                        }
+                    }
+                })
             }
         });
+    }
+
+    function initCommonEvents(){
+        /*$(document).on('click','.img-preview',function(){
+            $(this).popover({
+                html: true,
+                template:'<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title">图片预览</h3><div class="popover-content"><img src="'+$(this).attr('src')+'"></div></div>'
+            });
+            $(this).popover('show');
+        })*/
     }
 
     function loginCheck() {
