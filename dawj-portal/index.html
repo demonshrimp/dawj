@@ -1,0 +1,691 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Home</title>
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
+    <link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="keywords" content="心理咨询,咨询,心理,大爱无疆"/>
+    <link href='http://fonts.useso.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/masonry.pkgd.min.js"></script>
+    <link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen"/>
+    <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.css" rel="stylesheet">
+    <style>
+    </style>
+</head>
+<body>
+<!-- header -->
+<div class="header">
+    <div class="header-top">
+        <div class="container">
+            <div class="head-left">
+                <ul class="number">
+                    <li><span><i class="phone"> </i>+0123 456 789</span></li>
+                    <li><a href="mailto:info@example.com"><i class="mail"> </i>hello@address.com</a></li>
+                    <div class="clearfix"></div>
+                </ul>
+            </div>
+            <div class="head-right">
+                <ul>
+                    <li><a href="#"><i class="fb"> </i></a></li>
+                    <li><a href="#"><i class="twt"> </i></a></li>
+                    <li><a href="#"><i class="ttt"> </i></a></li>
+                    <li><a href="#"><i class="ve"> </i></a></li>
+                    <li><a href="#"><i class="in"> </i></a></li>
+                    <li><a href="#"><i class="dib"> </i></a></li>
+                    <li><a href="#"><i class="fli"> </i></a></li>
+                    <li><a href="#"><i class="rss"> </i></a></li>
+                    <div class="clearfix"></div>
+                </ul>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="header-bottom">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html"><img src="images/logo1.png" class="img-responsive" alt=""></a>
+            </div>
+            <div class="head-nav">
+                <span class="menu"> </span>
+                <ul class="cl-effect-3">
+                    <li class="active"><a href="index.html">首页</a></li>
+                    <li><a href=" employeers.html">心理文章 </a></li>
+                    <li><a href=" employeers.html">咨询师 </a></li>
+                    <li><a href=" 404.html">Job Seekers </a></li>
+                    <li><a href=" about.html">关于</a></li>
+                    <li><a href=" contact.html">Contact</a></li>
+                    <div class="clearfix"></div>
+
+                </ul>
+                <!-- script-for-nav -->
+                <script>
+                    $("span.menu").click(function () {
+                        $(".head-nav ul").slideToggle(300, function () {
+                            // Animation complete.
+                        });
+                    });
+                </script>
+                <!-- script-for-nav -->
+            </div>
+            <div class="header-right1">
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html">Sign In</a></li>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<!-- header -->
+<!-- banner -->
+<div class="banner">
+    <div class="container">
+        <!-- banner Slider starts Here -->
+        <script src="js/responsiveslides.min.js"></script>
+        <script>
+            // You can also use "$(window).load(function() {"
+            $(function () {
+                // Slideshow 4
+                $("#slider4").responsiveSlides({
+                    auto: true,
+                    pager: true,
+                    nav: true,
+                    speed: 500,
+                    namespace: "callbacks",
+                    before: function () {
+                        $('.events').append("<li>before event fired.</li>");
+                    },
+                    after: function () {
+                        $('.events').append("<li>after event fired.</li>");
+                    }
+                });
+
+            });
+        </script>
+        <!--//End-slider-script-->
+        <div id="top" class="callbacks_container">
+            <ul class="rslides" id="slider4">
+                <li>
+                    <div class="banner-info">
+                        <h1>Job Searching Just Got So Easy</h1>
+                        <p>Consectetur adipisicing elit, sed do lorem ipsum dolor sit amet, eiusmod tempor incididunt ut
+                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                            laboris nisi ut .</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="banner-info">
+                        <h1>Tempor incididunt ut labore</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                            laboris nisi ut .</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="banner-info">
+                        <h1>Consectetur adipisicing elit</h1>
+                        <p>Eiusmod tempor incididunt lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do ut
+                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                            laboris nisi ut.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="clearfix"></div>
+        <!-- banner Slider Ends Here -->
+    </div>
+</div>
+<!-- our -->
+<!--<div class="our">
+    <div class="container">
+        <h5>our process</h5>
+        <h2>How We Work for you?</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore magna aliqua</p>
+        <div class="our-top">
+            <div class="col-md-4 our-left">
+                <i class="best"></i>
+                <h3>Searching for the best job</h3>
+                <p>Using the outcomes from the job, we will put together a plan for the most effective marketing
+                    strategy to get the best results.</p>
+            </div>
+            <div class="col-md-4 our-left">
+                <i class="resu"></i>
+                <h3>Searching for the best job</h3>
+                <p>Using the outcomes from the job, we will put together a plan for the most effective marketing
+                    strategy to get the best results.</p>
+            </div>
+            <div class="col-md-4 our-left">
+                <i class="interv"></i>
+                <h3>Searching for the best job</h3>
+                <p>Using the outcomes from the job, we will put together a plan for the most effective marketing
+                    strategy to get the best results.</p>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>-->
+<!-- our -->
+
+<!-- Blog -->
+<div class="blog">
+    <div class="container">
+        <div class="blog-top">
+            <a href="#">
+                <h3> 咨询类目
+                    <small>更多<img width="64px" src="images/more_horiz_128px.png"/></small>
+                </h3>
+            </a>
+            <div class="blog-content">
+                <div class="blog-content-left">
+                    <div class="blog-articals">
+                        <div class="blog-artical">
+                            <div class="blog-artical-basicinfo">
+                                <ul>
+                                    <li class="post-date"><p><span>测试的类目1</span><label></label></p></li>
+                                    <div class="clearfix"></div>
+                                </ul>
+                            </div>
+                            <div class="blog-artical-info">
+                                <div class="blog-artical-info-img">
+                                    <a href="single.html"><img src="images/blog1.jpg" title="post-name"></a>
+                                </div>
+                                <div class="blog-artical-info-head">
+                                    <h2><a href="single.html">咨询文章标题</a></h2>
+                                    <ul>
+                                        <li>
+                                            <i class="fa fa-tag"></i>
+                                            <a href="#">Lorem</a>,
+                                            <a href="#">Ipsum</a>,
+                                            <a href="#">printer</a>,
+                                            <a href="#">unknown</a>
+                                        </li>
+                                        <li style="float: right"><i class="fa fa-calendar-check-o"></i>2016-03-25
+                                            22:34:01
+                                        </li>
+                                        <li style="float: right"><i class="fa fa-users"></i> 399</li>
+                                        <div class="clearfix"></div>
+                                    </ul>
+                                </div>
+                                <div class="blog-artical-info-text">
+                                    <p>咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文.<a
+                                            href="#">[...]</a></p>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="blog-artical">
+                            <div class="blog-artical-basicinfo">
+                                <ul>
+                                    <li class="post-date"><p><span>测试的类目1</span><label></label></p></li>
+                                    <div class="clearfix"></div>
+                                </ul>
+                            </div>
+                            <div class="blog-artical-info">
+                                <div class="blog-artical-info-img">
+                                    <a href="single.html"><img src="images/blog2.png" title="post-name"></a>
+                                </div>
+                                <div class="blog-artical-info-head">
+                                    <h2><a href="single.html">咨询文章标题</a></h2>
+                                    <ul>
+                                        <li>
+                                            <i class="fa fa-tag"></i>
+                                            <a href="#">Lorem</a>,
+                                            <a href="#">Ipsum</a>,
+                                            <a href="#">printer</a>,
+                                            <a href="#">unknown</a>
+                                        </li>
+                                        <li style="float: right"><i class="fa fa-calendar-check-o"></i>2016-03-25
+                                            22:34:01
+                                        </li>
+                                        <li style="float: right"><i class="fa fa-users"></i> 399</li>
+                                        <div class="clearfix"></div>
+                                    </ul>
+                                </div>
+                                <div class="blog-artical-info-text">
+                                    <p>咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文.<a
+                                            href="#">[...]</a></p>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="blog-artical">
+                            <div class="blog-artical-basicinfo">
+                                <ul>
+                                    <li class="post-date"><p><span>测试的类目1</span><label></label></p></li>
+                                    <div class="clearfix"></div>
+                                </ul>
+                            </div>
+                            <div class="blog-artical-info">
+                                <div class="blog-artical-info-img">
+                                    <a href="single.html"><img src="images/blog3.png" title="post-name"></a>
+                                </div>
+                                <div class="blog-artical-info-head">
+                                    <h2><a href="single.html">咨询文章标题</a></h2>
+                                    <ul>
+                                        <li>
+                                            <i class="fa fa-tag"></i>
+                                            <a href="#">Lorem</a>,
+                                            <a href="#">Ipsum</a>,
+                                            <a href="#">printer</a>,
+                                            <a href="#">unknown</a>
+                                        </li>
+                                        <li style="float: right"><i class="fa fa-calendar-check-o"></i>2016-03-25
+                                            22:34:01
+                                        </li>
+                                        <li style="float: right"><i class="fa fa-users"></i> 399</li>
+                                        <div class="clearfix"></div>
+                                    </ul>
+                                </div>
+                                <div class="blog-artical-info-text">
+                                    <p>咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文.<a
+                                            href="#">[...]</a></p>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <!--start-blog-pagenate-->
+                    <div class="blog-pagenat">
+                        <ul>
+                            <li><a class="frist" href="#"> <span> </span></a></li>
+                            <li><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">4</a></li>
+                            <li><a class="last" href="#"> <span> </span></a></li>
+                            <div class="clearfix"></div>
+                        </ul>
+                    </div>
+                    <!--//End-blog-pagenate-->
+                </div>
+                <div class="blog-content-right">
+                    <div class="b-search">
+                        <form>
+                            <input type="text" value="Search" onfocus="this.value = '';"
+                                   onblur="if (this.value == '') {this.value = 'Search';}">
+                            <input type="submit" value="">
+                        </form>
+                    </div>
+                    <!--start-twitter-weight-->
+                    <!--<div class="twitter-weights">
+                        <h3>Tweet Widget</h3>
+                        <div class="twitter-weight-grid">
+                            <h4><span> </span>John Doe</h4>
+                            <p>Lorem ipsum dolor sit amet, consectetur elit,labore et dolore magna aliqua. <a href="#">http://t.co/h12k</a>
+                            </p>
+                            <i><a href="#">2 days ago</a></i>
+                        </div>
+                        <div class="twitter-weight-grid">
+                            <h4><span> </span>John Doe</h4>
+                            <p>Lorem ipsum dolor sit amet, consectetur elit,labore et dolore magna aliqua. <a href="#">http://t.co/h12k</a>
+                            </p>
+                            <i><a href="#">2 days ago</a></i>
+                        </div>
+                        <a class="twittbtn" href="#">See all Tweets</a>
+                    </div>-->
+                    <!--//End-twitter-weight-->
+                    <!-- start-tag-weight-->
+                    <div class="b-tag-weight">
+                        <h3>Tags</h3>
+                        <ul>
+                            <li><a href="#">Lorem</a></li>
+                            <li><a href="#">consectetur</a></li>
+                            <li><a href="#">dolore</a></li>
+                            <li><a href="#">aliqua</a></li>
+                            <li><a href="#">sit amet</a></li>
+                            <li><a href="#">ipsum</a></li>
+                            <li><a href="#">Lorem</a></li>
+                            <li><a href="#">consectetur</a></li>
+                            <li><a href="#">dolore</a></li>
+                            <li><a href="#">aliqua</a></li>
+                            <li><a href="#">sit amet</a></li>
+                            <li><a href="#">ipsum</a></li>
+                        </ul>
+                    </div>
+                    <!---- //End-tag-weight---->
+                </div>
+                <div class="clearfix"></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Blog -->
+<div class="portfolios entertain_box  wow fadeInUp" data-wow-delay="0.4s" id="project">
+    <div class="container">
+        <div class="blog-top">
+            <a href="#">
+                <h3> 心理咨询师
+                    <small>更多<img width="64px" src="images/more_horiz_128px.png"/></small>
+                </h3>
+            </a>
+            <div id="portfoliolist">
+                <div class="portfolio app mix_all" data-cat="app" style="display: inline-block; opacity: 1;">
+                    <div class="portfolio-wrapper" style="position: relative">
+                        <a href="images/p11.png" class="b-link-stripe b-animate-go swipebox" title="Image Title">
+                            <img src="images/p1.png"/>
+                            <div class="b-wrapper">
+                                <h2 class="b-animate b-from-left    b-delay03 ">
+                                    <img src="images/add.png" alt=""/>
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="small-text">
+                        <p>咨询师姓名</p>
+                    </div>
+                </div>
+                <div class="portfolio card mix_all" data-cat="card" style="display: inline-block; opacity: 1;">
+                    <div class="portfolio-wrapper">
+                        <a href="images/p21.png" class="b-link-stripe b-animate-go   swipebox" title="Image Title">
+                            <img src="images/p2.png"/>
+                            <div class="b-wrapper">
+                                <h2 class="b-animate b-from-left    b-delay03 ">
+                                    <img src="images/add.png" alt=""/>
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="small-text">
+                        <p>咨询师姓名</p>
+                    </div>
+                </div>
+                <div class="portfolio photo mix_all" data-cat="photo" style="display: inline-block; opacity: 1;">
+                    <div class="portfolio-wrapper">
+                        <a href="images/p31.png" class="b-link-stripe b-animate-go   swipebox" title="Image Title">
+                            <img src="images/p3.png"/>
+                            <div class="b-wrapper">
+                                <h2 class="b-animate b-from-left    b-delay03 ">
+                                    <img src="images/add.png" alt=""/>
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="small-text">
+                        <p>咨询师姓名</p>
+                    </div>
+                </div>
+                <div class="portfolio card mix_all" data-cat="card" style="display: inline-block; opacity: 1;">
+                    <div class="portfolio-wrapper">
+                        <a href="images/p41.png" class="b-link-stripe b-animate-go   swipebox" title="Image Title">
+                            <img src="images/p4.png"/>
+                            <div class="b-wrapper">
+                                <h2 class="b-animate b-from-left    b-delay03 ">
+                                    <img src="images/add.png" alt=""/>
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="small-text">
+                        <p>咨询师姓名</p>
+                    </div>
+                </div>
+                <div class="portfolio photo mix_all" data-cat="photo" style="display: inline-block; opacity: 1;">
+                    <div class="portfolio-wrapper">
+                        <a href="images/p51.png" class="b-link-stripe b-animate-go   swipebox" title="Image Title">
+                            <img src="images/p5.png"/>
+                            <div class="b-wrapper">
+                                <h2 class="b-animate b-from-left    b-delay03 ">
+                                    <img src="images/add.png" alt=""/>
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="small-text">
+                        <p>咨询师姓名</p>
+                    </div>
+                </div>
+                <div class="portfolio app mix_all" data-cat="app" style="display: inline-block; opacity: 1;">
+                    <div class="portfolio-wrapper">
+                        <a href="images/p61.png" class="b-link-stripe b-animate-go  swipebox" title="Image Title">
+                            <img src="images/p6.png"/>
+                            <div class="b-wrapper">
+                                <h2 class="b-animate b-from-left    b-delay03 ">
+                                    <img src="images/add.png" alt=""/>
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="small-text">
+                        <p>咨询师姓名</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="portfolios entertain_box  wow fadeInUp" data-wow-delay="0.4s" id="project">
+    <div class="container">
+        <div class="blog-top">
+            <a href="#">
+                <h3> 心理资讯
+                    <small>更多<img width="64px" src="images/more_horiz_128px.png"/></small>
+                </h3>
+            </a>
+            <div id="portfoliolist">
+                <div class="portfolio app mix_all" data-cat="app" style="display: inline-block; opacity: 1;">
+                    <div class="portfolio-wrapper" style="position: relative">
+                        <a href="images/p11.png" class="b-link-stripe b-animate-go swipebox" title="Image Title">
+                            <img src="images/p1.png"/>
+                            <div class="b-wrapper">
+                                <h2 class="b-animate b-from-left    b-delay03 ">
+                                    <img src="images/add.png" alt=""/>
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="small-text">
+                        <p>咨询师姓名</p>
+                    </div>
+                </div>
+                <div class="portfolio card mix_all" data-cat="card" style="display: inline-block; opacity: 1;">
+                    <div class="portfolio-wrapper">
+                        <a href="images/p21.png" class="b-link-stripe b-animate-go   swipebox" title="Image Title">
+                            <img src="images/p2.png"/>
+                            <div class="b-wrapper">
+                                <h2 class="b-animate b-from-left    b-delay03 ">
+                                    <img src="images/add.png" alt=""/>
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="small-text">
+                        <p>咨询师姓名</p>
+                    </div>
+                </div>
+                <div class="portfolio photo mix_all" data-cat="photo" style="display: inline-block; opacity: 1;">
+                    <div class="portfolio-wrapper">
+                        <a href="images/p31.png" class="b-link-stripe b-animate-go   swipebox" title="Image Title">
+                            <img src="images/p3.png"/>
+                            <div class="b-wrapper">
+                                <h2 class="b-animate b-from-left    b-delay03 ">
+                                    <img src="images/add.png" alt=""/>
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="small-text">
+                        <p>咨询师姓名</p>
+                    </div>
+                </div>
+                <div class="portfolio card mix_all" data-cat="card" style="display: inline-block; opacity: 1;">
+                    <div class="portfolio-wrapper">
+                        <a href="images/p41.png" class="b-link-stripe b-animate-go   swipebox" title="Image Title">
+                            <img src="images/p4.png"/>
+                            <div class="b-wrapper">
+                                <h2 class="b-animate b-from-left    b-delay03 ">
+                                    <img src="images/add.png" alt=""/>
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="small-text">
+                        <p>咨询师姓名</p>
+                    </div>
+                </div>
+                <div class="portfolio photo mix_all" data-cat="photo" style="display: inline-block; opacity: 1;">
+                    <div class="portfolio-wrapper">
+                        <a href="images/p51.png" class="b-link-stripe b-animate-go   swipebox" title="Image Title">
+                            <img src="images/p5.png"/>
+                            <div class="b-wrapper">
+                                <h2 class="b-animate b-from-left    b-delay03 ">
+                                    <img src="images/add.png" alt=""/>
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="small-text">
+                        <p>咨询师姓名</p>
+                    </div>
+                </div>
+                <div class="portfolio app mix_all" data-cat="app" style="display: inline-block; opacity: 1;">
+                    <div class="portfolio-wrapper">
+                        <a href="images/p61.png" class="b-link-stripe b-animate-go  swipebox" title="Image Title">
+                            <img src="images/p6.png"/>
+                            <div class="b-wrapper">
+                                <h2 class="b-animate b-from-left    b-delay03 ">
+                                    <img src="images/add.png" alt=""/>
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="small-text">
+                        <p>咨询师姓名</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- recnt -->
+<!-- what -->
+<div class="what">
+    <div class="container">
+        <h6>TESTIMONIALS</h6>
+        <h3>WHAT PEOPLES ARE SAYING</h3>
+        <section class="slider">
+            <div class="flexslider">
+                <ul class="slides">
+                    <li>
+                        <div class="what-top">
+                            <p>Jobify offer an amazing service and I couldn’t be happier! They are dedicated to
+                                helping
+                                recruiters find great candidates, wonderful service!</p>
+                            <h5>Eftakher Alam,<span> Product Designer</span></h5>
+                            <div class="what-bottom">
+                                <img src="images/man.png" class="img-responsive" alt="">
+                            </div>
+                        </div>
+
+                    </li>
+                    <li>
+                        <div class="what-top">
+                            <p>Jobify offer an amazing service and I couldn’t be happier! They are dedicated to
+                                helping
+                                recruiters find great candidates, wonderful service!</p>
+                            <h5>Eftakher Alam,<span> Product Designer</span></h5>
+                            <div class="what-bottom">
+                                <img src="images/man.png" class="img-responsive" alt="">
+                            </div>
+                        </div>
+
+                    </li>
+                    <li>
+                        <div class="what-top">
+                            <p>Jobify offer an amazing service and I couldn’t be happier! They are dedicated to
+                                helping
+                                recruiters find great candidates, wonderful service!</p>
+                            <h5>Eftakher Alam,<span> Product Designer</span></h5>
+                            <div class="what-bottom">
+                                <img src="images/man.png" class="img-responsive" alt="">
+                            </div>
+                        </div>
+
+                    </li>
+                    <li>
+                        <div class="what-top">
+                            <p>Jobify offer an amazing service and I couldn’t be happier! They are dedicated to
+                                helping
+                                recruiters find great candidates, wonderful service!</p>
+                            <h5>Eftakher Alam,<span> Product Designer</span></h5>
+                            <div class="what-bottom">
+                                <img src="images/man.png" class="img-responsive" alt="">
+                            </div>
+                        </div>
+
+                    </li>
+                    <div class="clearfix"></div>
+                </ul>
+            </div>
+        </section>
+        <!-- FlexSlider -->
+        <script defer src="js/jquery.flexslider.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                SyntaxHighlighter.all();
+            });
+            $(window).load(function () {
+                $('.flexslider').flexslider({
+                    animation: "slide",
+                    start: function (slider) {
+                        $('body').removeClass('loading');
+                    }
+                });
+            });
+        </script>
+        <!-- FlexSlider -->
+
+    </div>
+</div>
+<!-- what -->
+<!-- footer-top -->
+<div class="footer-top">
+    <div class="container">
+        <div class="col-md-4 foo-left">
+            <a href="index.html"><img src="images/logo.png" class="img-responsive" alt=""></a>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                labore. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                invidunt
+                ut labore. sed diam nonumy eirmod tempor invidunt ut labore. Lorem ipsum dolor sit amet, consetetur
+                sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore.</p>
+        </div>
+        <div class="col-md-4 foo-left">
+            <h3>Twitter Update</h3>
+            <h6>ABOUT 9 HOURS</h6>
+            <p>AGOMeet Aldous - a Brave New World for #rails with more cohesion, less coupling and greater dev speed
+                http://t.co/rsekglotzs</p>
+            <h6>ABOUT 1 DAY AGO</h6>
+            <p>Here's a rare Interview with #graphicdesign legend Massimo Vignelli http://t.co/duxnpoh57z
+                http://t.co/kxO3gPBTo7</p>
+        </div>
+        <div class="col-md-4 foo-left">
+            <h3>Useful lnks</h3>
+            <ul>
+                <li class="active"><a href="about.html">About Us</a></li>
+                <li><a href="#">Services </a></li>
+                <li><a href="#">Work </a></li>
+                <li><a href="blog.html">Our Blog</a></li>
+                <li><a href=" 404.html">Customers Testimonials</a></li>
+                <li><a href="#">Affliate</a></li>
+                <li><a href=" contact.html">Contact Us</a></li>
+                <div class="clearfix"></div>
+            </ul>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<!-- footer-top -->
+<!-- footer-bottom -->
+<div class="footer-bottom">
+    <div class="container">
+        <p>Copyright &copy; 2015.Company name All rights reserved.More Templates - Collect from</p>
+    </div>
+</div>
+<!-- footer-bottom -->
+<script>
+</script>
+</body>
+</html>
