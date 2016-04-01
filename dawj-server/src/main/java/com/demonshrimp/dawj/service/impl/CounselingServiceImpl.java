@@ -64,6 +64,7 @@ public class CounselingServiceImpl extends BaseServiceImpl<Site, String> impleme
 		CounselingType c = counselingTypeDao.get(counselingTypeId);
 		c.setName(counselingType.getName());
 		c.setDescription(counselingType.getDescription());
+		c.setContent(counselingType.getContent());
 		c.setLastModifyTime(new Date());
 		counselingTypeDao.update(c);
 		return c;
@@ -89,6 +90,7 @@ public class CounselingServiceImpl extends BaseServiceImpl<Site, String> impleme
 		c.setCounselingType(counselingArticle.getCounselingType());
 		c.setTitle(counselingArticle.getTitle());
 		c.setContent(counselingArticle.getContent());
+		c.setDescription(counselingArticle.getDescription());
 		c.setImage(counselingArticle.getImage());
 		c.setTag(counselingArticle.getTag());
 		c.setLastModifyTime(new Date());
@@ -156,7 +158,7 @@ public class CounselingServiceImpl extends BaseServiceImpl<Site, String> impleme
 
 	@Override
 	public void deleteCounselor(String counselingTypeId) {
-		counselingTypeDao.deleteById(counselingTypeId);
+		counselorDao.deleteById(counselingTypeId);
 	}
 
 	

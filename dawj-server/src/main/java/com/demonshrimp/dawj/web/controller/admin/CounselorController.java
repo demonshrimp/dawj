@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demonshrimp.dawj.model.entity.Counselor;
@@ -16,19 +15,19 @@ import pers.ksy.common.model.Result;
 import pers.ksy.common.orm.QueryCondition;
 import pers.ksy.common.orm.QueryConditionImpl;
 
-@RestController
+@RestController(value = "counselorAdminController")
 @RequestMapping(value = "/admin/counselor")
 public class CounselorController extends BaseAdminController {
 	@Autowired
 	private CounselingService counselingService;
 
 	@RequestMapping(path = "/list", method = RequestMethod.GET)
-	@SerializationFilter(target = Counselor.class, fields = { "site" })
+	@SerializationFilter(target = Counselor.class, fields = { "site", "about" })
 	public Object list() {
 		QueryCondition qc = new QueryConditionImpl(Counselor.class);
-		return Result.successResult(counselingService.counselorList(getCurrentSite().getId()),null);
+		return Result.successResult(counselingService.counselorList(getCurrentSite().getId()), null);
 	}
-	
+
 	@RequestMapping(path = "/{counselorId}", method = RequestMethod.GET)
 	@SerializationFilter(target = Counselor.class, fields = { "site" })
 	public Object get(@PathVariable String counselorId) {

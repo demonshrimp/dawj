@@ -37,5 +37,12 @@ public interface SystemService extends BaseService<Site,String>{
 	 */
 	Site getCurrentLoginSite(String token);
 
+	/**
+	 * 
+	 * @param path
+	 * @return
+	 */
+	public Site getSiteByPath(String path);
+
 	
 }

@@ -20,6 +20,7 @@ public class CounselingArticle extends BaseSiteEntity {
 	private CounselingType counselingType;
 	private String title;
 	private String content;
+	private String description;
 	private String image;
 	private String tag;
 	private Long visited;
@@ -60,6 +61,15 @@ public class CounselingArticle extends BaseSiteEntity {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	@Column(nullable = true)
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Column(nullable = false)

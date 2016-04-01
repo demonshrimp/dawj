@@ -35,6 +35,8 @@ public class UserServiceTest extends BaseTestCase {
 		site.setName("test");
 		site.setCity("test");
 		site.setPassword(MD5Util.MD5("123456"));
+		site.setCertificated(true);
+		site.setPath("/");
 		systemService.addSite(site);
 		create3Users();
 	}

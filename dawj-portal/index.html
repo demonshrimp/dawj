@@ -8,11 +8,42 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="keywords" content="心理咨询,咨询,心理,大爱无疆"/>
     <link href='http://fonts.useso.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
-    <script src="js/jquery.min.js"></script>
-    <script src="js/masonry.pkgd.min.js"></script>
     <link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen"/>
     <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.css" rel="stylesheet">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/masonry.pkgd.min.js"></script>
+    <script src="js/main.js"></script>
     <style>
+        .bs-glyphicons-list {
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .bs-glyphicons li {
+            margin: 1%;
+            float: left;
+            width: 18%;
+            height: 65px;
+            padding: 10px;
+            font-size: 10px;
+            line-height: 1.4;
+            text-align: center;
+            background-color: #f9f9f9;
+            border: 1px solid #fff;
+        }
+
+        .bs-glyphicons li:hover {
+            color: #fff;
+            background-color: #563d7c;
+        }
+
+        @media (max-width: 768px) {
+            .bs-glyphicons li {
+                margin: 1%;
+                width: 48%;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -52,13 +83,11 @@
                 <span class="menu"> </span>
                 <ul class="cl-effect-3">
                     <li class="active"><a href="index.html">首页</a></li>
-                    <li><a href=" consulting-articles.html">心理文章 </a></li>
-                    <li><a href=" employeers.html">咨询师 </a></li>
-                    <li><a href=" 404.html">心理咨询 </a></li>
-                    <li><a href=" about.html">关于</a></li>
-                    <li><a href=" contact.html">联系我们</a></li>
+                    <li><a href="consultors.html">咨询师 </a></li>
+                    <li><a href="consulting-articles.html">心理咨询 </a></li>
+                    <li><a href="about.html">关于</a></li>
+                    <li><a href="contact.html">联系我们</a></li>
                     <div class="clearfix"></div>
-
                 </ul>
                 <!-- script-for-nav -->
                 <script>
@@ -138,50 +167,222 @@
     </div>
 </div>
 <!-- our -->
-<!--<div class="our">
+<div class="our">
     <div class="container">
-        <h5>our process</h5>
-        <h2>How We Work for you?</h2>
+        <h5>咨询分类</h5>
+        <!--<h2>How We Work for you?</h2>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua</p>
+            dolore magna aliqua</p>-->
         <div class="our-top">
-            <div class="col-md-4 our-left">
-                <i class="best"></i>
-                <h3>Searching for the best job</h3>
-                <p>Using the outcomes from the job, we will put together a plan for the most effective marketing
-                    strategy to get the best results.</p>
+            <div class="blog-content">
+                <div class="bs-glyphicons">
+                    <ul class="bs-glyphicons-list" id="ulConsultingTypes">
+                        <li>
+                            <a href="#"><h3>测试分类1</h3></a>
+                        </li>
+                        <li>
+                            <a href="#"><h3>测试分类1</h3></a>
+                        </li>
+                        <li>
+                            <a href="#"><h3>测试分类1</h3></a>
+                        </li>
+                        <li>
+                            <a href="#"><h3>测试分类1</h3></a>
+                        </li>
+                        <li>
+                            <a href="#"><h3>测试分类1</h3></a>
+                        </li>
+                        <li>
+                            <a href="#"><h3>测试分类1</h3></a>
+                        </li>
+                        <li>
+                            <a href="#"><h3>测试分类1</h3></a>
+                        </li>
+                        <li>
+                            <a href="#"><h3>测试分类1</h3></a>
+                        </li>
+                        <li>
+                            <a href="#"><h3>测试分类1</h3></a>
+                        </li>
+                        <li>
+                            <a href="#"><h3>测试分类1</h3></a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div class="col-md-4 our-left">
-                <i class="resu"></i>
-                <h3>Searching for the best job</h3>
-                <p>Using the outcomes from the job, we will put together a plan for the most effective marketing
-                    strategy to get the best results.</p>
+        </div>
+        <script type="text/javascript">
+            $(function () {
+                $.get(App.Constants.API_BASE + '/counseling-type/list', function (result) {
+                    if (result.header.success) {
+                        var types = result.body;
+                        var ul = $('#ulConsultingTypes');
+                        ul.empty();
+                        for (var i = 0; i < types.length; i++) {
+                            ul.append('<li><a href="consulting-type.html?id=' + types[i].id + '"><h3>' + types[i].name + '</h3></a></li>')
+                        }
+                    }
+                });
+            });
+        </script>
+    </div>
+</div>
+<div class="portfolios entertain_box  wow fadeInUp" data-wow-delay="0.4s">
+    <div class="container">
+        <div class="blog-top">
+            <a href="consultors.html">
+                <h3> 心理咨询师
+                    <small>更多<img width="64px" src="images/more_horiz_128px.png"/></small>
+                </h3>
+            </a>
+        </div>
+        <div class="portfoliolist" id="counselorlist">
+            <div class="portfolio app mix_all" data-cat="app" style="display: inline-block; opacity: 1;">
+                <div class="portfolio-wrapper" style="position: relative">
+                    <a href="images/p11.png" class="b-link-stripe b-animate-go swipebox" title="Image Title">
+                        <img src="images/p1.png"/>
+                        <div class="b-wrapper">
+                            <h2 class="b-animate b-from-left    b-delay03 ">
+                                <img src="images/add.png" alt=""/>
+                            </h2>
+                        </div>
+                    </a>
+                </div>
+                <div class="small-text">
+                    <p>咨询师姓名</p>
+                </div>
             </div>
-            <div class="col-md-4 our-left">
-                <i class="interv"></i>
-                <h3>Searching for the best job</h3>
-                <p>Using the outcomes from the job, we will put together a plan for the most effective marketing
-                    strategy to get the best results.</p>
+            <div class="portfolio card mix_all" data-cat="card" style="display: inline-block; opacity: 1;">
+                <div class="portfolio-wrapper">
+                    <a href="images/p21.png" class="b-link-stripe b-animate-go   swipebox" title="Image Title">
+                        <img src="images/p2.png"/>
+                        <div class="b-wrapper">
+                            <h2 class="b-animate b-from-left    b-delay03 ">
+                                <img src="images/add.png" alt=""/>
+                            </h2>
+                        </div>
+                    </a>
+                </div>
+                <div class="small-text">
+                    <p>咨询师姓名</p>
+                </div>
             </div>
-            <div class="clearfix"></div>
+            <div class="portfolio photo mix_all" data-cat="photo" style="display: inline-block; opacity: 1;">
+                <div class="portfolio-wrapper">
+                    <a href="images/p31.png" class="b-link-stripe b-animate-go   swipebox" title="Image Title">
+                        <img src="images/p3.png"/>
+                        <div class="b-wrapper">
+                            <h2 class="b-animate b-from-left    b-delay03 ">
+                                <img src="images/add.png" alt=""/>
+                            </h2>
+                        </div>
+                    </a>
+                </div>
+                <div class="small-text">
+                    <p>咨询师姓名</p>
+                </div>
+            </div>
+            <div class="portfolio card mix_all" data-cat="card" style="display: inline-block; opacity: 1;">
+                <div class="portfolio-wrapper">
+                    <a href="images/p41.png" class="b-link-stripe b-animate-go   swipebox" title="Image Title">
+                        <img src="images/p4.png"/>
+                        <div class="b-wrapper">
+                            <h2 class="b-animate b-from-left    b-delay03 ">
+                                <img src="images/add.png" alt=""/>
+                            </h2>
+                        </div>
+                    </a>
+                </div>
+                <div class="small-text">
+                    <p>咨询师姓名</p>
+                </div>
+            </div>
+            <div class="portfolio photo mix_all" data-cat="photo" style="display: inline-block; opacity: 1;">
+                <div class="portfolio-wrapper">
+                    <a href="images/p51.png" class="b-link-stripe b-animate-go   swipebox" title="Image Title">
+                        <img src="images/p5.png"/>
+                        <div class="b-wrapper">
+                            <h2 class="b-animate b-from-left    b-delay03 ">
+                                <img src="images/add.png" alt=""/>
+                            </h2>
+                        </div>
+                    </a>
+                </div>
+                <div class="small-text">
+                    <p>咨询师姓名</p>
+                </div>
+            </div>
+            <div class="portfolio app mix_all" data-cat="app" style="display: inline-block; opacity: 1;">
+                <div class="portfolio-wrapper">
+                    <a href="images/p61.png" class="b-link-stripe b-animate-go swipebox" title="Image Title">
+                        <img src="images/p6.png"/>
+                        <div class="b-wrapper">
+                            <h2 class="b-animate b-from-left b-delay03">
+                                <img src="images/add.png" alt=""/>
+                            </h2>
+                        </div>
+                    </a>
+                </div>
+                <div class="small-text">
+                    <p>咨询师姓名</p>
+                </div>
+            </div>
         </div>
     </div>
-</div>-->
+    <script type="text/javascript">
+        $(function () {
+            $.get(App.Constants.API_BASE + '/counselor/list', function (result) {
+                if (result.header.success) {
+                    var counselors = result.body;
+                    var list = $('#counselorlist');
+                    list.empty();
+                    for (var i = 0; i < counselors.length; i++) {
+                        var counselor = counselors[i];
+                        list.append('<div class="portfolio photo mix_all" data-cat="photo" style="display: inline-block; opacity: 1;">'
+                                + '<div class="portfolio-wrapper">'
+                                + '<a href="images/p51.png" class="b-link-stripe b-animate-go   swipebox" title="Image Title" style="height: 182px;display: block;overflow: hidden">'
+                                + '<img src="' + counselor.fullImage + '"/>'
+                                + '<div class="b-wrapper">'
+                                + '<h2 class="b-animate b-from-left    b-delay03 ">'
+                                + '<img src="images/add.png" alt=""/>'
+                                + '</h2>'
+                                + '</div>'
+                                + '</a>'
+                                + '</div>'
+                                + '<div class="small-text">'
+                                + '<p>' + counselor.name + '</p>'
+                                + '</div>'
+                                + '</div>');
+                    }
+                }
+            });
+        });
+    </script>
+</div>
 <!-- our -->
+<!--<div class="types">
+    <div class="container">
+        <div class="blog-top">
+            <a href="consulting-articles.html">
+                <h3> 咨询类目 </h3>
+            </a>
+        </div>
 
+    </div>
+</div>-->
 <!-- Blog -->
 <div class="blog">
     <div class="container">
         <div class="blog-top">
             <a href="consulting-articles.html">
-                <h3> 咨询类目
+                <h3> 心理资讯
                     <small>更多<img width="64px" src="images/more_horiz_128px.png"/></small>
                 </h3>
             </a>
         </div>
         <div class="blog-content">
             <div class="blog-content-left">
-                <div class="blog-articals">
+                <div class="blog-articals" id="counselingArticlelist">
                     <div class="blog-artical">
                         <div class="blog-artical-basicinfo">
                             <ul>
@@ -196,6 +397,8 @@
                             <div class="blog-artical-info-head">
                                 <h2><a href="single.html">咨询文章标题</a></h2>
                                 <ul>
+                                    <li><i class="fa fa-calendar-check-o"></i>2016-03-25 22:34:01</li>
+                                    <li><i class="fa fa-users"></i> 399</li>
                                     <li>
                                         <i class="fa fa-tag"></i>
                                         <a href="#">Lorem</a>,
@@ -203,10 +406,6 @@
                                         <a href="#">printer</a>,
                                         <a href="#">unknown</a>
                                     </li>
-                                    <li style="float: right"><i class="fa fa-calendar-check-o"></i>2016-03-25
-                                        22:34:01
-                                    </li>
-                                    <li style="float: right"><i class="fa fa-users"></i> 399</li>
                                     <div class="clearfix"></div>
                                 </ul>
                             </div>
@@ -231,6 +430,8 @@
                             <div class="blog-artical-info-head">
                                 <h2><a href="single.html">咨询文章标题</a></h2>
                                 <ul>
+                                    <li><i class="fa fa-calendar-check-o"></i>2016-03-25 22:34:01</li>
+                                    <li><i class="fa fa-users"></i> 399</li>
                                     <li>
                                         <i class="fa fa-tag"></i>
                                         <a href="#">Lorem</a>,
@@ -238,10 +439,6 @@
                                         <a href="#">printer</a>,
                                         <a href="#">unknown</a>
                                     </li>
-                                    <li style="float: right"><i class="fa fa-calendar-check-o"></i>2016-03-25
-                                        22:34:01
-                                    </li>
-                                    <li style="float: right"><i class="fa fa-users"></i> 399</li>
                                     <div class="clearfix"></div>
                                 </ul>
                             </div>
@@ -266,6 +463,8 @@
                             <div class="blog-artical-info-head">
                                 <h2><a href="single.html">咨询文章标题</a></h2>
                                 <ul>
+                                    <li><i class="fa fa-calendar-check-o"></i>2016-03-25 22:34:01</li>
+                                    <li><i class="fa fa-users"></i> 399</li>
                                     <li>
                                         <i class="fa fa-tag"></i>
                                         <a href="#">Lorem</a>,
@@ -273,10 +472,6 @@
                                         <a href="#">printer</a>,
                                         <a href="#">unknown</a>
                                     </li>
-                                    <li style="float: right"><i class="fa fa-calendar-check-o"></i>2016-03-25
-                                        22:34:01
-                                    </li>
-                                    <li style="float: right"><i class="fa fa-users"></i> 399</li>
                                     <div class="clearfix"></div>
                                 </ul>
                             </div>
@@ -294,214 +489,54 @@
 
         </div>
     </div>
+    <script type="text/javascript">
+        $(function () {
+            $.get(App.Constants.API_BASE + '/counseling-article/page?orderBy=createTime&desc=true&start=0&length=3', function (result) {
+                if (result.header.success) {
+                    var counselingArticles = result.body.list;
+                    var list = $('#counselingArticlelist');
+                    list.empty();
+                    for (var i = 0; i < counselingArticles.length; i++) {
+                        var counselingArticle = counselingArticles[i];
+                        list.append('<div class="blog-artical">'
+                                + '<div class="blog-artical-basicinfo">'
+                                + '<ul>'
+                                + '<li class="post-date"><p><span>' + counselingArticle.counselingType.name + '</span><label></label></p></li>'
+                                + '<div class="clearfix"></div>'
+                                + '</ul>'
+                                + '</div>'
+                                + '<div class="blog-artical-info">'
+                                + '<div class="blog-artical-info-img">'
+                                + ' <a href="consulting-article.html?id=' + counselingArticle.id + '"><img src="' + counselingArticle.fullImage + '" title="post-name"></a>'
+                                + ' </div>'
+                                + '     <div class="blog-artical-info-head">'
+                                + '      <h2><a href="consulting-article.html?id=' + counselingArticle.id + '">' + counselingArticle.title + '</a></h2>'
+                                + '         <ul>'
+                                + '             <li><i class="fa fa-calendar-check-o"></i>' + counselingArticle.createTime + '</li>'
+                                + '             <li><i class="fa fa-users"></i> ' + counselingArticle.visited + '</li>'
+                                + '             <li>'
+                                + '                 <i class="fa fa-tag"></i>'
+                                + '                 <a href="#">Lorem</a>,'
+                                + '                 <a href="#">Ipsum</a>,'
+                                + '                 <a href="#">printer</a>,'
+                                + '                 <a href="#">unknown</a>'
+                                + '             </li>'
+                                + '             <div class="clearfix"></div>'
+                                + '         </ul>'
+                                + '     </div>'
+                                + ' <div class="blog-artical-info-text">'
+                                + '    <p>' + counselingArticle.description + '<a href="consulting-article.html?id=' + counselingArticle.id + '">......</a></p>'
+                                + '   </div>'
+                                + '  </div>'
+                                + ' <div class="clearfix"></div>'
+                                + '</div>');
+                    }
+                }
+            });
+        });
+    </script>
 </div>
 <!-- /Blog -->
-<div class="portfolios entertain_box  wow fadeInUp" data-wow-delay="0.4s">
-    <div class="container">
-        <div class="blog-top">
-            <a href="employeers.html">
-                <h3> 心理咨询师
-                    <small>更多<img width="64px" src="images/more_horiz_128px.png"/></small>
-                </h3>
-            </a>
-        </div>
-        <div id="portfoliolist">
-            <div class="portfolio app mix_all" data-cat="app" style="display: inline-block; opacity: 1;">
-                <div class="portfolio-wrapper" style="position: relative">
-                    <a href="images/p11.png" class="b-link-stripe b-animate-go swipebox" title="Image Title">
-                        <img src="images/p1.png"/>
-                        <div class="b-wrapper">
-                            <h2 class="b-animate b-from-left    b-delay03 ">
-                                <img src="images/add.png" alt=""/>
-                            </h2>
-                        </div>
-                    </a>
-                </div>
-                <div class="small-text">
-                    <p>咨询师姓名</p>
-                </div>
-            </div>
-            <div class="portfolio card mix_all" data-cat="card" style="display: inline-block; opacity: 1;">
-                <div class="portfolio-wrapper">
-                    <a href="images/p21.png" class="b-link-stripe b-animate-go   swipebox" title="Image Title">
-                        <img src="images/p2.png"/>
-                        <div class="b-wrapper">
-                            <h2 class="b-animate b-from-left    b-delay03 ">
-                                <img src="images/add.png" alt=""/>
-                            </h2>
-                        </div>
-                    </a>
-                </div>
-                <div class="small-text">
-                    <p>咨询师姓名</p>
-                </div>
-            </div>
-            <div class="portfolio photo mix_all" data-cat="photo" style="display: inline-block; opacity: 1;">
-                <div class="portfolio-wrapper">
-                    <a href="images/p31.png" class="b-link-stripe b-animate-go   swipebox" title="Image Title">
-                        <img src="images/p3.png"/>
-                        <div class="b-wrapper">
-                            <h2 class="b-animate b-from-left    b-delay03 ">
-                                <img src="images/add.png" alt=""/>
-                            </h2>
-                        </div>
-                    </a>
-                </div>
-                <div class="small-text">
-                    <p>咨询师姓名</p>
-                </div>
-            </div>
-            <div class="portfolio card mix_all" data-cat="card" style="display: inline-block; opacity: 1;">
-                <div class="portfolio-wrapper">
-                    <a href="images/p41.png" class="b-link-stripe b-animate-go   swipebox" title="Image Title">
-                        <img src="images/p4.png"/>
-                        <div class="b-wrapper">
-                            <h2 class="b-animate b-from-left    b-delay03 ">
-                                <img src="images/add.png" alt=""/>
-                            </h2>
-                        </div>
-                    </a>
-                </div>
-                <div class="small-text">
-                    <p>咨询师姓名</p>
-                </div>
-            </div>
-            <div class="portfolio photo mix_all" data-cat="photo" style="display: inline-block; opacity: 1;">
-                <div class="portfolio-wrapper">
-                    <a href="images/p51.png" class="b-link-stripe b-animate-go   swipebox" title="Image Title">
-                        <img src="images/p5.png"/>
-                        <div class="b-wrapper">
-                            <h2 class="b-animate b-from-left    b-delay03 ">
-                                <img src="images/add.png" alt=""/>
-                            </h2>
-                        </div>
-                    </a>
-                </div>
-                <div class="small-text">
-                    <p>咨询师姓名</p>
-                </div>
-            </div>
-            <div class="portfolio app mix_all" data-cat="app" style="display: inline-block; opacity: 1;">
-                <div class="portfolio-wrapper">
-                    <a href="images/p61.png" class="b-link-stripe b-animate-go  swipebox" title="Image Title">
-                        <img src="images/p6.png"/>
-                        <div class="b-wrapper">
-                            <h2 class="b-animate b-from-left    b-delay03 ">
-                                <img src="images/add.png" alt=""/>
-                            </h2>
-                        </div>
-                    </a>
-                </div>
-                <div class="small-text">
-                    <p>咨询师姓名</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="portfolios entertain_box  wow fadeInUp" data-wow-delay="0.4s">
-    <div class="container">
-        <div class="blog-top">
-            <a href="404.html">
-                <h3> 心理资讯
-                    <small>更多<img width="64px" src="images/more_horiz_128px.png"/></small>
-                </h3>
-            </a>
-        </div>
-        <div id="portfoliolist">
-            <div class="portfolio app mix_all" data-cat="app" style="display: inline-block; opacity: 1;">
-                <div class="portfolio-wrapper" style="position: relative">
-                    <a href="images/p11.png" class="b-link-stripe b-animate-go swipebox" title="Image Title">
-                        <img src="images/p1.png"/>
-                        <div class="b-wrapper">
-                            <h2 class="b-animate b-from-left    b-delay03 ">
-                                <img src="images/add.png" alt=""/>
-                            </h2>
-                        </div>
-                    </a>
-                </div>
-                <div class="small-text">
-                    <p>咨询师姓名</p>
-                </div>
-            </div>
-            <div class="portfolio card mix_all" data-cat="card" style="display: inline-block; opacity: 1;">
-                <div class="portfolio-wrapper">
-                    <a href="images/p21.png" class="b-link-stripe b-animate-go   swipebox" title="Image Title">
-                        <img src="images/p2.png"/>
-                        <div class="b-wrapper">
-                            <h2 class="b-animate b-from-left    b-delay03 ">
-                                <img src="images/add.png" alt=""/>
-                            </h2>
-                        </div>
-                    </a>
-                </div>
-                <div class="small-text">
-                    <p>咨询师姓名</p>
-                </div>
-            </div>
-            <div class="portfolio photo mix_all" data-cat="photo" style="display: inline-block; opacity: 1;">
-                <div class="portfolio-wrapper">
-                    <a href="images/p31.png" class="b-link-stripe b-animate-go   swipebox" title="Image Title">
-                        <img src="images/p3.png"/>
-                        <div class="b-wrapper">
-                            <h2 class="b-animate b-from-left    b-delay03 ">
-                                <img src="images/add.png" alt=""/>
-                            </h2>
-                        </div>
-                    </a>
-                </div>
-                <div class="small-text">
-                    <p>咨询师姓名</p>
-                </div>
-            </div>
-            <div class="portfolio card mix_all" data-cat="card" style="display: inline-block; opacity: 1;">
-                <div class="portfolio-wrapper">
-                    <a href="images/p41.png" class="b-link-stripe b-animate-go   swipebox" title="Image Title">
-                        <img src="images/p4.png"/>
-                        <div class="b-wrapper">
-                            <h2 class="b-animate b-from-left    b-delay03 ">
-                                <img src="images/add.png" alt=""/>
-                            </h2>
-                        </div>
-                    </a>
-                </div>
-                <div class="small-text">
-                    <p>咨询师姓名</p>
-                </div>
-            </div>
-            <div class="portfolio photo mix_all" data-cat="photo" style="display: inline-block; opacity: 1;">
-                <div class="portfolio-wrapper">
-                    <a href="images/p51.png" class="b-link-stripe b-animate-go   swipebox" title="Image Title">
-                        <img src="images/p5.png"/>
-                        <div class="b-wrapper">
-                            <h2 class="b-animate b-from-left    b-delay03 ">
-                                <img src="images/add.png" alt=""/>
-                            </h2>
-                        </div>
-                    </a>
-                </div>
-                <div class="small-text">
-                    <p>咨询师姓名</p>
-                </div>
-            </div>
-            <div class="portfolio app mix_all" data-cat="app" style="display: inline-block; opacity: 1;">
-                <div class="portfolio-wrapper">
-                    <a href="images/p61.png" class="b-link-stripe b-animate-go  swipebox" title="Image Title">
-                        <img src="images/p6.png"/>
-                        <div class="b-wrapper">
-                            <h2 class="b-animate b-from-left    b-delay03 ">
-                                <img src="images/add.png" alt=""/>
-                            </h2>
-                        </div>
-                    </a>
-                </div>
-                <div class="small-text">
-                    <p>咨询师姓名</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <!-- recnt -->
 <!-- what -->
 <div class="what">
@@ -627,7 +662,5 @@
     </div>
 </div>
 <!-- footer-bottom -->
-<script>
-</script>
 </body>
 </html>

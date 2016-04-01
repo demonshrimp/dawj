@@ -24,6 +24,7 @@ public class User extends BaseSiteEntity {
 	private Date birthday;
 	private Date lastLoginTime;
 	private Integer points;
+	private String token;
 
 	public User() {
 		super();
@@ -115,6 +116,17 @@ public class User extends BaseSiteEntity {
 	public void setPoints(Integer points) {
 		this.points = points;
 	}
+
+	@Column
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+
 
 	public enum Sex {
 		MALE, FEMALE;

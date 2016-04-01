@@ -20,7 +20,7 @@
      * window.UEDITOR_HOME_URL = "/xxxx/xxxx/";
      */
     var URL = window.UEDITOR_HOME_URL || getUEBasePath();
-    URL = URL+'plugins/UEditor/';
+    //URL = URL+'plugins/UEditor/';
 
     /**
      * 配置项主体。注意，此处所有涉及到路径的配置别遗漏URL变量。
@@ -354,14 +354,14 @@
 
     function getConfigFilePath() {
 
-        var configPath = document.getElementsByTagName('script');
+        /*var configPath = document.getElementsByTagName('script');
 
-        return configPath[ configPath.length - 1 ].src;
+        return configPath[ configPath.length - 1 ].src;*/
+        return  document.getElementById('ueditorConfig').src;
 
     }
 
     function getBasePath(docUrl, confUrl) {
-
         var basePath = confUrl;
 
 

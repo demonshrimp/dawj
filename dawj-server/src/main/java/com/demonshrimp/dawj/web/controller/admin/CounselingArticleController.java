@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demonshrimp.dawj.model.entity.CounselingArticle;
-import com.demonshrimp.dawj.model.entity.CounselingType;
-import com.demonshrimp.dawj.model.entity.Site;
 import com.demonshrimp.dawj.service.CounselingService;
 
 import pers.ksy.common.annotation.SerializationFilter;
@@ -18,7 +16,7 @@ import pers.ksy.common.model.Result;
 import pers.ksy.common.orm.QueryCondition;
 import pers.ksy.common.orm.QueryConditionImpl;
 
-@RestController
+@RestController(value = "counselingArticleAdminController")
 @RequestMapping(value = "/admin/counseling-article")
 public class CounselingArticleController extends BaseAdminController {
 	@Autowired
@@ -26,11 +24,12 @@ public class CounselingArticleController extends BaseAdminController {
 
 	@RequestMapping(path = "/page", method = RequestMethod.GET)
 	@SerializationFilter(target = CounselingArticle.class, fields = { "site" })
-	public Object page(@RequestParam(name="start")int pageIndex,@RequestParam(name="length")int pageSize) {
+	public Object page(@RequestParam(name = "start") int pageIndex, @RequestParam(name = "length") int pageSize) {
 		QueryCondition qc = new QueryConditionImpl(CounselingArticle.class);
-		return Result.successResult(counselingService.findCounselingArticlePage(getCurrentSite().getId(),qc, pageIndex, pageSize), null);
+		return Result.successResult(
+				counselingService.findCounselingArticlePage(getCurrentSite().getId(), qc, pageIndex, pageSize), null);
 	}
-	
+
 	@RequestMapping(path = "/{counselingArticleId}", method = RequestMethod.GET)
 	@SerializationFilter(target = CounselingArticle.class, fields = { "site" })
 	public Object get(@PathVariable String counselingArticleId) {

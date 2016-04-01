@@ -1417,7 +1417,6 @@ ul#filters {
     opacity: 1;
 }
 
-}
 #filters {
     margin: 3% 0;
     padding: 0;
@@ -1447,7 +1446,7 @@ ul#filters {
     color: #ffffff;
 }
 
-#portfoliolist .portfolio {
+.portfoliolist .portfolio {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     -o-box-sizing: border-box;
@@ -1458,7 +1457,7 @@ ul#filters {
     margin: 0 1% 1% 0;
 }
 
-div#portfoliolist {
+div.portfoliolist {
     padding: 40px 0px;
 }
 
@@ -1758,6 +1757,9 @@ i.adm1 {
     -moz-border-radius: 0.5em;
     -o-border-radius: 0.5em;
     -ms-border-radius: 0.5em;
+}
+.blog-pagenat ul li a.current-page {
+    background-color : grey;
 }
 
 .blog-pagenat ul li a:hover {
@@ -2503,7 +2505,7 @@ a.b-home:hover {
     text-transform: uppercase;
 }
 
-.register-top-grid input[type="text"], .register-bottom-grid input[type="text"], .register-top-grid input[type="password"], .register-bottom-grid input[type="password"] {
+.register-top-grid input[type="text"], .register-bottom-grid input[type="text"], .register-top-grid input[type="password"], .register-bottom-grid input[type="password"], .register-top-grid select {
     border: 1px solid #4E9ECA;
     outline-color: #4E9ECA;
     width: 96%;
@@ -2809,7 +2811,7 @@ div.register-bottom-grid {
         margin-top: 29%;
     }
 
-    div#portfoliolist {
+    div.portfoliolist {
         padding: 16px 0px;
     }
 
@@ -3092,6 +3094,7 @@ div.register-bottom-grid {
 
     .post-date span {
         font-size: 1.1em;
+        padding-right: 4px;
     }
 
     .post-date label {
@@ -3893,7 +3896,7 @@ div.register-bottom-grid {
         width: 88%;
     }
 
-    #portfoliolist .portfolio {
+    .portfoliolist .portfolio {
         width: 49%;
         margin: 0 1% 2% 0;
     }

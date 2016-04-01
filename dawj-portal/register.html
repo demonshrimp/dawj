@@ -43,14 +43,14 @@
     <div class="header-bottom">
         <div class="container">
             <div class="logo">
-                <a href="index.html"><img src="images/logo1.png" class="img-responsive" alt=""></a>
+                <a href="index.html"><img src="images/logo.png" class="img-responsive" alt=""></a>
             </div>
             <div class="head-nav">
                 <span class="menu"> </span>
                 <ul class="cl-effect-3">
                     <li class="active"><a href="index.html">首页</a></li>
                     <li><a href=" consulting-articles.html">心理文章 </a></li>
-                    <li><a href=" employeers.html">咨询师 </a></li>
+                    <li><a href="consultors.html">咨询师 </a></li>
                     <li><a href=" 404.html">心理咨询 </a></li>
                     <li><a href=" about.html">关于</a></li>
                     <li><a href=" contact.html">联系我们</a></li>
@@ -83,6 +83,13 @@
             <form>
                 <div class="register-top-grid">
                     <h3>个人信息</h3>
+                    <div class="wow fadeInRight" data-wow-delay="0.4s">
+                        <span>注册方式<label>*</label></span>
+                        <select id="selectRegisterType" >
+                            <option value="0">手机注册</option>
+                            <option value="1">邮箱注册</option>
+                        </select>
+                    </div>
                     <div class="wow fadeInRight" data-wow-delay="0.4s">
                         <span>手机<label>*</label></span>
                         <input type="text">
@@ -167,5 +174,12 @@
     </div>
 </div>
 <!-- footer-bottom -->
+<script>
+    $(function(){
+       $('#selectRegisterType').change(function(){
+
+       });
+    });
+</script>
 </body>
 </html>

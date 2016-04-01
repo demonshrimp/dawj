@@ -9,6 +9,7 @@
     <meta name="keywords" content="心理咨询,咨询,心理,大爱无疆"/>
     <link href='http://fonts.useso.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
     <script src="js/jquery.min.js"></script>
+    <script src="js/main.js"></script>
     <link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen"/>
     <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.css" rel="stylesheet">
 </head>
@@ -50,7 +51,7 @@
                 <ul class="cl-effect-3">
                     <li class="active"><a href="index.html">首页</a></li>
                     <li><a href=" consulting-articles.html">心理文章 </a></li>
-                    <li><a href=" employeers.html">咨询师 </a></li>
+                    <li><a href="consultors.html">咨询师 </a></li>
                     <li><a href=" 404.html">心理咨询 </a></li>
                     <li><a href=" about.html">关于</a></li>
                     <li><a href=" contact.html">联系我们</a></li>
@@ -84,7 +85,7 @@
         </div>
         <div class="blog-content">
             <div class="blog-content-left">
-                <div class="blog-articals">
+                <div class="blog-articals" id="counselingArticlelist">
                     <div class="blog-artical">
                         <div class="blog-artical-basicinfo">
                             <ul>
@@ -195,10 +196,12 @@
                 <div class="blog-pagenat">
                     <ul>
                         <li><a class="frist" href="#"> <span> </span></a></li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
+                        <span id="pages">
+                            <li><a class="" href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">4</a></li>
+                        </span>
                         <li><a class="last" href="#"> <span> </span></a></li>
                         <div class="clearfix"></div>
                     </ul>
@@ -297,12 +300,79 @@
 <!-- footer-bottom -->
 <div class="footer-bottom">
     <div class="container">
-        <p>Copyright &copy; 2015.Company name All rights reserved.More Templates <a href="http://www.cssmoban.com/"
-                                                                                    target="_blank"
-                                                                                    title="模板之家">模板之家</a> - Collect from
-            <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a></p>
+        <p>Copyright &copy; 2015.Company name All rights reserved.More Templates - Collect from</p>
     </div>
 </div>
 <!-- footer-bottom -->
+<script type="text/javascript">
+    $(function () {
+
+        //init datas
+        loadPage(0);
+        //init events
+        $('.blog-pagenat').on('click', '.go-page', function () {
+
+        });
+
+        //fs
+        function loadPage(start) {
+            $.get(App.Constants.API_BASE + '/counseling-article/page?orderBy=createTime&desc=true&length=3&start=' + start, function (result) {
+                if (result.header.success) {
+                    var pageInfo = result.body;
+                    var counselingArticles = pageInfo.list;
+                    var list = $('#counselingArticlelist');
+                    list.empty();
+                    for (var i = 0; i < counselingArticles.length; i++) {
+                        var counselingArticle = counselingArticles[i];
+                        list.append('<div class="blog-artical">'
+                                + '<div class="blog-artical-basicinfo">'
+                                + '<ul>'
+                                + '<li class="post-date"><p><span>' + counselingArticle.counselingType.name + '</span><label></label></p></li>'
+                                + '<div class="clearfix"></div>'
+                                + '</ul>'
+                                + '</div>'
+                                + '<div class="blog-artical-info">'
+                                + '<div class="blog-artical-info-img">'
+                                + ' <a href="consulting-article.html?id=' + counselingArticle.id + '"><img src="' + counselingArticle.fullImage + '" title="post-name"></a>'
+                                + ' </div>'
+                                + '     <div class="blog-artical-info-head">'
+                                + '      <h2><a href="consulting-article.html?id=' + counselingArticle.id + '">' + counselingArticle.title + '</a></h2>'
+                                + '         <ul>'
+                                + '             <li><i class="fa fa-calendar-check-o"></i>' + counselingArticle.createTime + '</li>'
+                                + '             <li><i class="fa fa-users"></i> ' + counselingArticle.visited + '</li>'
+                                + '             <li>'
+                                + '                 <i class="fa fa-tag"></i>'
+                                + '                 <a href="#">Lorem</a>,'
+                                + '                 <a href="#">Ipsum</a>,'
+                                + '                 <a href="#">printer</a>,'
+                                + '                 <a href="#">unknown</a>'
+                                + '             </li>'
+                                + '             <div class="clearfix"></div>'
+                                + '         </ul>'
+                                + '     </div>'
+                                + ' <div class="blog-artical-info-text">'
+                                + '    <p>' + counselingArticle.description + '<a href="consulting-article.html?id=' + counselingArticle.id + '">......</a></p>'
+                                + '   </div>'
+                                + '  </div>'
+                                + ' <div class="clearfix"></div>'
+                                + '</div>');
+                    }
+                    ;
+
+                    var pages = $('#pages');
+                    pages.empty();
+                    for (var i = 0; i < pageInfo.amount; i++) {
+                        if (i == start) {
+                            pages.append('<li><a class="current-page" href="#start=' + i + '" >' + (i + 1) + '</a></li>');
+                        } else {
+                            pages.append('<li><a class="go-page" href="#start=' + i + '" data-start="' + i + '">' + (i + 1) + '</a></li>');
+                        }
+                    }
+                    ;
+                }
+            });
+        }
+    });
+</script>
 </body>
 </html>

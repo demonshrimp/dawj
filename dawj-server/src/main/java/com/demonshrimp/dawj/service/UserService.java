@@ -29,12 +29,12 @@ public interface UserService extends BaseService<User,String>{
 
 	/**
 	 * 用户登录
-	 * @param mobile
+	 * @param anyAccount 任意账号 mobile/email/wechatUserId/qq
 	 * @param password
 	 * @return
 	 * @throws ServiceException
 	 */
-	User login(String mobile, String password) throws ServiceException;
+	User login(String anyAccount, String password) throws ServiceException;
 
 
 	/**
@@ -43,6 +43,22 @@ public interface UserService extends BaseService<User,String>{
 	 * @return
 	 */
 	public User getUserByMobile(String mobile);
+
+
+	public User getCurrentLoginUser(String token);
+	
+	/**
+	 * 发送验证码
+	 * @param contactInfo
+	 */
+	public void sendCaptcha(String contactInfo, MessageService.Type type);
+	
+	/**
+	 * 校验验证码
+	 * @param contactInfo
+	 * @param captcha
+	 */
+	public boolean checkCaptcha(String contactInfo, int captcha);
 
 
 }

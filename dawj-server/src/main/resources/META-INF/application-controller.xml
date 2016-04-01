@@ -51,7 +51,7 @@
 	<aop:config>
 		<aop:aspect id="jsonFilterAspect" ref="jsonFilterAdvice">
 			<aop:pointcut id="jsonFilterPointcut"
-				expression="execution(* com.demonshrimp.dawj.web.controller.*.*(..))" />
+				expression="execution(* com.demonshrimp.dawj.web.controller.*.*.*(..))" />
 			<aop:around pointcut-ref="jsonFilterPointcut" method="doAround" />
 		</aop:aspect>
 	</aop:config>

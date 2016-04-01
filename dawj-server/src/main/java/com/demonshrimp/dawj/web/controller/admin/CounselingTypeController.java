@@ -8,25 +8,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demonshrimp.dawj.model.entity.CounselingType;
-import com.demonshrimp.dawj.model.entity.Site;
 import com.demonshrimp.dawj.service.CounselingService;
 
 import pers.ksy.common.annotation.SerializationFilter;
 import pers.ksy.common.model.Result;
 
-@RestController
+@RestController(value = "counselingTypeAdminController")
 @RequestMapping(value = "/admin/counseling-type")
 public class CounselingTypeController extends BaseAdminController {
-	
+
 	@Autowired
 	private CounselingService counselingService;
 
 	@RequestMapping(path = "/list", method = RequestMethod.GET)
-	@SerializationFilter(target = CounselingType.class, fields = { "site" })
+	@SerializationFilter(target = CounselingType.class, fields = { "site", "content" })
 	public Object list() {
-		return Result.successResult(counselingService.counselingTypeList(getCurrentSite().getId()),null);
+		return Result.successResult(counselingService.counselingTypeList(getCurrentSite().getId()), null);
 	}
-	
+
 	@RequestMapping(path = "/{counselingTypeId}", method = RequestMethod.GET)
 	@SerializationFilter(target = CounselingType.class, fields = { "site" })
 	public Object get(@PathVariable String counselingTypeId) {

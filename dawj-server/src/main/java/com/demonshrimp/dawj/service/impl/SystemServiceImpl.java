@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import com.demonshrimp.dawj.exception.ServiceException;
 import com.demonshrimp.dawj.model.dao.BaseDao;
@@ -99,6 +100,13 @@ public class SystemServiceImpl extends BaseServiceImpl<Site, String> implements 
 		if (diffTime > 1000 * 60 * 60 * 1) {
 			throw new ServiceException("令牌无效", "901");
 		}
+		return site;
+	}
+
+	@Override
+	public Site getSiteByPath(String path) {
+		Site site = siteDao.getByProperty("path", path);
+		Assert.notNull(site,"站点不存在");
 		return site;
 	}
 

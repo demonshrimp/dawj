@@ -1,10 +1,7 @@
 package com.demonshrimp.dawj.model.entity;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -15,6 +12,7 @@ public class CounselingType extends BaseSiteEntity {
 
 	private String name;
 	private String description;
+	private String content;
 
 	public CounselingType() {
 		super();
@@ -41,4 +39,14 @@ public class CounselingType extends BaseSiteEntity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	@Column(nullable = false, length = 65535)
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+	
 }

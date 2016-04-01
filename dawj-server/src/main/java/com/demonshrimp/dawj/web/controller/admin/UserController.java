@@ -18,7 +18,7 @@ import pers.ksy.common.orm.MatchMode;
 import pers.ksy.common.orm.QueryCondition;
 import pers.ksy.common.orm.QueryConditionImpl;
 
-@RestController
+@RestController(value = "userAdminController")
 @RequestMapping(value = "/admin/user")
 public class UserController extends BaseAdminController {
 	@Autowired
