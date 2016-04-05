@@ -26,6 +26,7 @@ public class Counselor extends BaseSiteEntity {
 	private String image;
 	private Double fees;
 	private String about;
+	private String consultingCase;
 	private Boolean certificated;
 	private List<CounselingType> counselingTypes;
 
@@ -76,7 +77,7 @@ public class Counselor extends BaseSiteEntity {
 	public void setFees(Double fees) {
 		this.fees = fees;
 	}
-	
+
 	@Column(nullable = false, length = 65535)
 	public String getAbout() {
 		return about;
@@ -84,6 +85,15 @@ public class Counselor extends BaseSiteEntity {
 
 	public void setAbout(String about) {
 		this.about = about;
+	}
+
+	@Column(name = "consulting_case", nullable = true, length = 65535)
+	public String getConsultingCase() {
+		return consultingCase;
+	}
+
+	public void setConsultingCase(String consultingCase) {
+		this.consultingCase = consultingCase;
 	}
 
 	@Column(nullable = false)

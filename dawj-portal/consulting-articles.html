@@ -20,8 +20,8 @@
         <div class="container">
             <div class="head-left">
                 <ul class="number">
-                    <li><span><i class="phone"> </i>+0123 456 789</span></li>
-                    <li><a href="mailto:info@example.com"><i class="mail"> </i>hello@address.com</a></li>
+                    <li><span><i class="phone"> </i>0371-55601221</span></li>
+                    <li><a href="mailto:info@dawjxlzx.com"><i class="mail"> </i>info@dawjxlzx.com</a></li>
                     <div class="clearfix"></div>
                 </ul>
             </div>
@@ -41,7 +41,7 @@
             <div class="clearfix"></div>
         </div>
     </div>
-    <div class="header-bottom">
+    <div class="header-bottom hidden">
         <div class="container">
             <div class="logo">
                 <a href="index.html"><img src="images/logo1.png" class="img-responsive" alt=""></a>
@@ -86,7 +86,7 @@
         <div class="blog-content">
             <div class="blog-content-left">
                 <div class="blog-articals" id="counselingArticlelist">
-                    <div class="blog-artical">
+                    <!--<div class="blog-artical">
                         <div class="blog-artical-basicinfo">
                             <ul>
                                 <li class="post-date"><p><span>测试的类目1</span><label></label></p></li>
@@ -120,87 +120,17 @@
                             </div>
                         </div>
                         <div class="clearfix"></div>
-                    </div>
-                    <div class="blog-artical">
-                        <div class="blog-artical-basicinfo">
-                            <ul>
-                                <li class="post-date"><p><span>测试的类目1</span><label></label></p></li>
-                                <div class="clearfix"></div>
-                            </ul>
-                        </div>
-                        <div class="blog-artical-info">
-                            <div class="blog-artical-info-img">
-                                <a href="single.html"><img src="images/blog2.png" title="post-name"></a>
-                            </div>
-                            <div class="blog-artical-info-head">
-                                <h2><a href="single.html">咨询文章标题</a></h2>
-                                <ul>
-                                    <li>
-                                        <i class="fa fa-tag"></i>
-                                        <a href="#">Lorem</a>,
-                                        <a href="#">Ipsum</a>,
-                                        <a href="#">printer</a>,
-                                        <a href="#">unknown</a>
-                                    </li>
-                                    <li style="float: right"><i class="fa fa-calendar-check-o"></i>2016-03-25
-                                        22:34:01
-                                    </li>
-                                    <li style="float: right"><i class="fa fa-users"></i> 399</li>
-                                    <div class="clearfix"></div>
-                                </ul>
-                            </div>
-                            <div class="blog-artical-info-text">
-                                <p>咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文.<a
-                                        href="#">[...]</a></p>
-                            </div>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="blog-artical">
-                        <div class="blog-artical-basicinfo">
-                            <ul>
-                                <li class="post-date"><p><span>测试的类目1</span><label></label></p></li>
-                                <div class="clearfix"></div>
-                            </ul>
-                        </div>
-                        <div class="blog-artical-info">
-                            <div class="blog-artical-info-img">
-                                <a href="single.html"><img src="images/blog3.png" title="post-name"></a>
-                            </div>
-                            <div class="blog-artical-info-head">
-                                <h2><a href="single.html">咨询文章标题</a></h2>
-                                <ul>
-                                    <li>
-                                        <i class="fa fa-tag"></i>
-                                        <a href="#">Lorem</a>,
-                                        <a href="#">Ipsum</a>,
-                                        <a href="#">printer</a>,
-                                        <a href="#">unknown</a>
-                                    </li>
-                                    <li style="float: right"><i class="fa fa-calendar-check-o"></i>2016-03-25
-                                        22:34:01
-                                    </li>
-                                    <li style="float: right"><i class="fa fa-users"></i> 399</li>
-                                    <div class="clearfix"></div>
-                                </ul>
-                            </div>
-                            <div class="blog-artical-info-text">
-                                <p>咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文.<a
-                                        href="#">[...]</a></p>
-                            </div>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
+                    </div>-->
                 </div>
                 <!--start-blog-pagenate-->
                 <div class="blog-pagenat">
                     <ul>
                         <li><a class="frist" href="#"> <span> </span></a></li>
                         <span id="pages">
-                            <li><a class="" href="#">1</a></li>
+                            <li><a class="go-page" data-start="+" href="#">1</a></li>
                             <li><a href="#">2</a></li>
                             <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
+                            <li><a class="go-page" data-start="-" href="#">4</a></li>
                         </span>
                         <li><a class="last" href="#"> <span> </span></a></li>
                         <div class="clearfix"></div>
@@ -208,7 +138,7 @@
                 </div>
                 <!--//End-blog-pagenate-->
             </div>
-            <div class="blog-content-right">
+            <div class="blog-content-right hidden">
                 <div class="b-search">
                     <form>
                         <input type="text" value="Search" onfocus="this.value = '';"
@@ -265,31 +195,28 @@
 <div class="footer-top">
     <div class="container">
         <div class="col-md-4 foo-left">
-            <a href="index.html"><img src="images/logo.png" class="img-responsive" alt=""></a>
-            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                labore. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
-                ut labore. sed diam nonumy eirmod tempor invidunt ut labore. Lorem ipsum dolor sit amet, consetetur
-                sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore.</p>
+            <a class="hidden" href="index.html"><img src="images/logo1.png" class="img-responsive" alt=""></a>
+            <p>大爱无疆心理咨询有限公司是在教育部政策（教思政厅[2011]1号）的影响下应运而生的全国目前唯一一家无区域执业的心理咨询公司。</p>
+            <p>公司具备资质：心理咨询；教育咨询；非学历短期培训（国内基本已停止审批）；人力中介服务（国内基本已停止审批）；教育文化交流活动组织策划；教育软件技术开发等。以上资质全国范围内均可使用。</p>
         </div>
         <div class="col-md-4 foo-left">
-            <h3>Twitter Update</h3>
-            <h6>ABOUT 9 HOURS</h6>
-            <p>AGOMeet Aldous - a Brave New World for #rails with more cohesion, less coupling and greater dev speed
-                http://t.co/rsekglotzs</p>
-            <h6>ABOUT 1 DAY AGO</h6>
-            <p>Here's a rare Interview with #graphicdesign legend Massimo Vignelli http://t.co/duxnpoh57z
-                http://t.co/kxO3gPBTo7</p>
+            <h3>公司概况</h3>
+            <h6>成立情况</h6>
+            <p>2016年1月由中国工商总局核名后注册成立。</p>
+            <p>2016年3月份正式运营。</p>
+            <h6>荣誉</h6>
+            <p> 河南电视台法制频道优秀心理咨询机构。</p>
+            <p>河南大象融媒集团心理咨询模范单位。</p>
         </div>
-        <div class="col-md-4 foo-left">
-            <h3>Useful lnks</h3>
+        <div class="col-md-4 foo-left hidden">
+            <h3>常用链接</h3>
             <ul>
-                <li class="active"><a href="about.html">About Us</a></li>
-                <li><a href="#">Services </a></li>
-                <li><a href="#">Work </a></li>
-                <li><a href="blog.html">Our Blog</a></li>
-                <li><a href=" 404.html">Customers Testimonials</a></li>
-                <li><a href="#">Affliate</a></li>
-                <li><a href=" contact.html">Contact Us</a></li>
+                <li class="active"><a href="index.html">首页</a></li>
+                <li class="active"><a href="about.html">关于我们</a></li>
+                <li><a href="#">咨询师 </a></li>
+                <li><a href="#">心理咨询 </a></li>
+                <li><a href="blog.html">联系我们</a></li>
+                <li><a href=" 404.html">个人中心</a></li>
                 <div class="clearfix"></div>
             </ul>
         </div>
@@ -311,7 +238,16 @@
         loadPage(0);
         //init events
         $('.blog-pagenat').on('click', '.go-page', function () {
+            var start = $(this).data('start');
+            loadPage(start);
+        });
 
+        $('.frist').click(function () {
+            loadPage(0);
+        });
+
+        $('.last').click(function () {
+            loadPage($('.go-page').length);
         });
 
         //fs
@@ -357,7 +293,6 @@
                                 + ' <div class="clearfix"></div>'
                                 + '</div>');
                     }
-                    ;
 
                     var pages = $('#pages');
                     pages.empty();
@@ -368,7 +303,8 @@
                             pages.append('<li><a class="go-page" href="#start=' + i + '" data-start="' + i + '">' + (i + 1) + '</a></li>');
                         }
                     }
-                    ;
+
+                    window.scrollTo(0, 0)
                 }
             });
         }

@@ -149,6 +149,7 @@ public class CounselingServiceImpl extends BaseServiceImpl<Site, String> impleme
 		c.setName(counselor.getName());
 		c.setTitle(counselor.getTitle());
 		c.setAbout(counselor.getAbout());
+		c.setConsultingCase(counselor.getConsultingCase());
 		c.setImage(counselor.getImage());
 		c.setLastModifyTime(new Date());
 		c.setCounselingTypes(counselor.getCounselingTypes());
@@ -159,6 +160,12 @@ public class CounselingServiceImpl extends BaseServiceImpl<Site, String> impleme
 	@Override
 	public void deleteCounselor(String counselingTypeId) {
 		counselorDao.deleteById(counselingTypeId);
+	}
+
+	@Override
+	public Page<Counselor> findCounselorPage(String siteId, QueryCondition qc, int pageIndex, int pageSize) {
+		qc.eq("site.id", siteId);
+		return counselorDao.findByPage(qc, pageIndex, pageSize);
 	}
 
 	

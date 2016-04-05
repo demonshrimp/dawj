@@ -18,10 +18,11 @@
                 <label>头像</label>
                 <div class="row">
                     <div class="col-sm-6" style="max-width: 400px">
-                        <img id="imgCounselorImage" class="img-thumbnail" data-holder-rendered="true" >
+                        <img id="imgCounselorImage" class="img-thumbnail" data-holder-rendered="true">
                         <div class="progress progress-striped active" role="progressbar" aria-valuemin="10"
                              aria-valuemax="100" aria-valuenow="0">
-                            <div id="progressCounselorImage" class="progress-bar progress-bar-success" style="width:0%;"></div>
+                            <div id="progressCounselorImage" class="progress-bar progress-bar-success"
+                                 style="width:0%;"></div>
                         </div>
                         <div class="caption" align="center">
                             <span class="btn btn-primary fileinput-button">
@@ -31,7 +32,7 @@
                         </div>
                     </div>
                 </div>
-                <input name="image" type="hidden" />
+                <input name="image" type="hidden"/>
             </div>
             <div class="form-group">
                 <label>咨询费用</label>
@@ -46,7 +47,14 @@
             </div>
             <div class="form-group">
                 <label>咨询师介绍</label>
-                <textarea id="editor" name="about" class="ueditor" type="text/plain"  style="height:500px;width:100%"></textarea>
+                <textarea id="editor" name="about" class="ueditor" type="text/plain"
+                          style="height:500px;width:100%"></textarea>
+            </div>
+            <div class="form-group">
+                <label>咨询师案例</label>
+                <textarea id="caseEditor" name="consultingCase" class="ueditor" type="text/plain"
+                          style="height:500px;width:100%"></textarea>
+
             </div>
             <!-- /.box-body -->
             <div class="box-footer">
@@ -65,7 +73,7 @@
 <link rel="stylesheet" href="plugins/blueimp-file-upload/css/jquery.fileupload-ui.css">
 <!-- UEditor -->
 <script id="ueditorConfig" type="text/javascript" charset="utf-8" src="plugins/UEditor/ueditor.config.js"></script>
-<script type="text/javascript" charset="utf-8" src="plugins/UEditor/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="plugins/UEditor/ueditor.all.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="plugins/UEditor/lang/zh-cn/zh-cn.js"></script>
 <ueheader></ueheader>
 <!-- select2 -->
@@ -79,6 +87,7 @@
     $(function () {
         /************** init views **************/
         var ue = UE.getEditor('editor');
+        var caseUe = UE.getEditor('caseEditor');
 
         $("#fileCounselorImage").fileupload({
             url: App.Constants.API_BASE + '/site/file-upload',
@@ -107,7 +116,7 @@
             console.log(select);
             var counselingTypes = result.body;
             select.empty();
-            for(var i=0;i<counselingTypes.length;i++){
+            for (var i = 0; i < counselingTypes.length; i++) {
                 var option = $('<option>');
                 option.text(counselingTypes[i].name);
                 option.val(counselingTypes[i].id);
@@ -126,17 +135,18 @@
                 var counselor = result.body;
                 App.Utils.FormUtil.setData('#formCounselor', counselor);
                 $("#imgCounselorImage").attr('src', counselor.fullImage);
-                UE.getEditor('editor').setContent(counselor.about);
+                ue.setContent(counselor.about);
+                caseUe.setContent(counselor.consultingCase);
             });
         }
-
 
 
         /************** init events **************/
         $('#formCounselor').submit(function () {
             var counselor = App.Utils.FormUtil.toJson(this);
             counselor.id = counselorId;
-            counselor.about = UE.getEditor('editor').getContent();
+            counselor.about = ue.getContent();
+            counselor.consultingCase = caseUe.getContent();
             $.ajax({
                 url: App.Constants.API_BASE + '/counselor/' + (counselorId ? counselorId : ''),
                 contentType: "application/json",

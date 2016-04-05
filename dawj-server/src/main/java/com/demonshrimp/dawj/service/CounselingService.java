@@ -128,4 +128,14 @@ public interface CounselingService extends BaseService<Site, String> {
 	 */
 	void deleteCounselor(String counselingTypeId);
 
+	/**
+	 * 咨询师分页查询
+	 * @param siteId
+	 * @param qc
+	 * @param pageIndex
+	 * @param pageSize
+	 * @return
+	 */
+	public Page<Counselor> findCounselorPage(String siteId, QueryCondition qc, int pageIndex, int pageSize);
+
 }

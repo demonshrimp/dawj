@@ -131,6 +131,10 @@ ul a:focus {
     display: block;
 }
 
+.logo img {
+    margin: auto 0;
+}
+
 .header-bottom {
     padding: 2em 0 0.39em;
 }
@@ -1217,9 +1221,9 @@ i.bung {
 }
 
 .visson-text h4 {
-    font-size: 1.1em;
+    font-size: 1.3em;
     color: #666666;
-    font-weight: 600;
+    font-weight: bold;
     line-height: 1.4em;
     margin: 10px 0 15px 0;
     text-transform: uppercase;
@@ -1469,6 +1473,7 @@ div.portfoliolist {
 
 .portfolio img {
     max-width: 100%;
+    max-height: 182px;
     /*--position: relative;--*/
     transition: all 300ms !important;
     -webkit-transition: all 300ms !important;
@@ -1635,7 +1640,7 @@ div.portfoliolist {
 
 .blog-artical-basicinfo li {
     width: 80px;
-    height: 80px;
+    height: 110px;
     border: 1px solid #666666;
     text-align: center;
     margin: 0.8em auto;
@@ -1758,8 +1763,9 @@ i.adm1 {
     -o-border-radius: 0.5em;
     -ms-border-radius: 0.5em;
 }
+
 .blog-pagenat ul li a.current-page {
-    background-color : grey;
+    background-color: grey;
 }
 
 .blog-pagenat ul li a:hover {
@@ -2349,7 +2355,7 @@ i.inter {
 }
 
 .single-top img {
-    width: 100%;
+    /*width: 100%;*/
 }
 
 .main {
@@ -3103,7 +3109,7 @@ div.register-bottom-grid {
 
     .blog-artical-basicinfo li {
         width: 60px;
-        height: 60px;
+        height: 80px;
     }
 
     .blog-artical-info-head h2 a {
@@ -3589,7 +3595,13 @@ div.register-bottom-grid {
     }
 
     .visson-text h4 {
-        font-size: 1em;
+        font-size: 1.1em;
+        font-weight: bold;
+    }
+
+    .portfoliolist .portfolio {
+        width: 49%;
+        margin: 0 1% 2% 0;
     }
 
     .portfolio-top h3 {
@@ -3717,12 +3729,12 @@ div.register-bottom-grid {
 
     .head-right {
         float: right;
-        margin: 0;
+        display: none;
     }
 
     .head-left {
-        float: left;
-        display: none;
+        margin: 0;
+        float: right;
     }
 
     .callbacks_tabs {
@@ -3875,7 +3887,8 @@ div.register-bottom-grid {
     }
 
     .visson-text h4 {
-        font-size: 0.9em;
+        font-size: 1.1em;
+        font-weight: bold;
         margin: 0;
     }
 

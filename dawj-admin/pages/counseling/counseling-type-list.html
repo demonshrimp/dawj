@@ -100,14 +100,14 @@
             }
         });
 
-        function edit(site) {
-            App.loadPage('pages/counseling/counseling-type.html?id=' + site.id);
+        function edit(counselingType) {
+            App.loadPage('pages/counseling/counseling-type.html?id=' + counselingType.id);
         }
 
-        function remove(site) {
-            if (confirm('确定要删除这个站点吗？')) {
+        function remove(counselingType) {
+            if (confirm('确定要删除这个类目吗？')) {
                 $.ajax({
-                    url: App.Constants.API_BASE + '/site/' + site.id,
+                    url: App.Constants.API_BASE + '/counseling-type/' + counselingType.id,
                     type: 'DELETE',
                     success: function (result) {
                         alert(result.header.message);
