@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.demonshrimp.dawj.exception.ServiceException;
+import com.demonshrimp.dawj.message.sms.weimi.WeiMiSmsProvider;
 import com.demonshrimp.dawj.model.dao.BaseDao;
 import com.demonshrimp.dawj.model.dao.SiteDao;
 import com.demonshrimp.dawj.model.dao.UserDao;
@@ -15,6 +16,9 @@ import com.demonshrimp.dawj.model.entity.Site;
 import com.demonshrimp.dawj.model.entity.User;
 import com.demonshrimp.dawj.service.CaptchaService;
 import com.demonshrimp.dawj.service.MessageService;
+import com.demonshrimp.dawj.service.MessageService.Type;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.demonshrimp.dawj.service.UserService;
 
 import pers.ksy.common.orm.QueryCondition;
@@ -22,7 +26,8 @@ import pers.ksy.common.orm.QueryCondition;
 @Transactional
 @Service
 public class UserServiceImpl extends BaseServiceImpl<User, String> implements UserService {
-
+	private String TMPL_CAPTCHA = "【大爱无疆】尊敬的用户，你的手机验证码是：%P%，30分钟内有效。请不要把此验证码泄露给任何人，以便你能安全使用。";
+	
 	@Autowired
 	private UserDao userDao;
 	@Autowired
@@ -31,6 +36,8 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements Us
 	private MessageService messageService;
 	@Autowired
 	private CaptchaService captchaService;
+	@Autowired
+	private WeiMiSmsProvider weiMiSmsProvider;
 
 	@Override
 	public BaseDao<User, String> getDao() {
@@ -63,9 +70,10 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements Us
 	@Override
 	public User login(String anyAccount, String password) throws ServiceException {
 		QueryCondition qc = userDao.getQC();
+		qc.eq("mobile", anyAccount);
 		User user = userDao.uniqueByQC(qc);
 		if (null == user) {
-			throw new ServiceException("站点不存在");
+			throw new ServiceException("用户不存在");
 		}
 		if (!user.getPassword().equals(password)) {
 			throw new ServiceException("密码错误");
@@ -98,7 +106,17 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements Us
 	@Override
 	public void sendCaptcha(String contactInfo, MessageService.Type type) {
 		int captcha = captchaService.generateCaptcha();
-		messageService.sendMessage(contactInfo, "【大爱无疆】验证码", "欢迎来到大爱无疆，您的验证码为：" + captcha, type);
+		if (type == Type.MOBILE) {
+			System.out.println(contactInfo + ":" + captcha);
+			String json = weiMiSmsProvider.sendCaptcha(contactInfo, captcha);
+			JsonObject obj = new Gson().fromJson(json, JsonObject.class);
+			System.out.println(json);
+			if (obj.get("code").getAsInt() != 0) {
+				throw new ServiceException(obj.get("msg").getAsString());
+			}
+		} else {
+			messageService.sendMessage(contactInfo, "【大爱无疆】验证码", buildCaptchaContent(captcha), type);
+		}
 		captchaService.storeCaptcha(contactInfo, captcha);
 	}
 
@@ -107,4 +125,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements Us
 		return captchaService.checkCaptcha(contactInfo, captcha, true);
 	}
 
+	private String buildCaptchaContent(int captcha) {
+		return TMPL_CAPTCHA.replace("%P%", captcha + "");
+	}
 }

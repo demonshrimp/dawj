@@ -26,6 +26,10 @@ var App = {
         }
     };
 
+    App.setCurrentLoginSite = function (user) {
+        window.sessionStorage.setItem(App.Constants.KEY_CURRENT_USER, JSON.stringify(user));
+    };
+
     App.Utils.ArrayUtil = {
         /**
          *
@@ -57,67 +61,60 @@ var App = {
     App.Utils.ObjectUtil = {
         getValue: function (data, key) {
             var keys = key.split('.');
-            var result = data;
-            for (var i = 0; i < keys.length; i++) {
-                var k = keys[i];
+            var k = keys[0];
+            if (keys.length > 1) {
+                var ksub = key.substr(k.length + 1);
                 var isArray = false
                 if (k.indexOf('[]') > 0) {
                     k = k.substr(0, k.length - 2);
                     isArray = true;
                 }
-                if (result) {
-                    if (isArray) {
-                        var array = [];
-                        for (var j = 0; j < result.length; j++) {
-                            array.push(this.getValue(result[j], key.substr(key.indexOf(keys[i]) + 1)));
-                        }
-                        return array;
-                    } else {
-                        result = result[keys[i]];
+                if (isArray) {
+                    var array = [];
+                    for (var j = 0; j < data[k].length; j++) {
+                        array.push(this.getValue(data[k][j], ksub));
                     }
+                    return array;
+                } else {
+                    return this.getValue(data[k], ksub);
                 }
+            } else {
+                return data[k];
             }
-            return result;
         },
         setValue: function (data, key, value) {
             var keys = key.split('.');
-            console.log(keys);
-            var obj = data;
-            var lastData = data;
-            for (var i = 0; i < keys.length; i++) {
-                var key = keys[i];
-                if (i == keys.length - 1) {
-                    if ($.isArray(obj[key])) {
-                        obj[key].push(value);
-                    } else {
-                        obj[key] = value;
-                    }
-                    return;
-                }
-                var isArray = false
-                if (key.indexOf('[]') > 0) {
-                    key = key.substr(0, key.length - 2);
+            var k = keys[0];
+            if (keys.length > 1) {
+                var ksub = key.substr(k.length + 1);
+                var isArray = false;
+                if (k.indexOf('[]') > 0) {
+                    k = k.substr(0, k.length - 2);
                     isArray = true;
                 }
-                obj = obj[key];
-                if (!obj) {
-                    if (isArray) {
-                        lastData[key] = [{}];
-                        obj = lastData[key][0];
-                    } else {
-                        lastData[key] = {};
-                        obj = lastData[key];
+                var obj = {};
+                this.setValue(obj, ksub, value);
+                if (isArray) {
+                    if (!data[k]) {
+                        data[k] = [];
                     }
+                    data[k].push(obj);
+                } else {
+                    data[k] = obj;
                 }
-                lastData = obj;
+            } else {
+                data[k] = value;
             }
         }
     }
 
     App.Utils.FormUtil = {
         toJson: function (form) {
+            if (form instanceof jQuery) {
+                form = $(form);
+            }
             var serializeObj = {};
-            var array = $(form).serializeArray();
+            var array = form.serializeArray();
             $(array).each(function () {
                 App.Utils.ObjectUtil.setValue(serializeObj, this.name, this.value);
                 /*if (serializeObj[this.name]) {
@@ -136,7 +133,7 @@ var App = {
             $(form).find('[name]').each(function () {
                 var key = $(this).attr('name');
                 var value = App.Utils.ObjectUtil.getValue(data, key);
-                if (value && value.toString) {
+                if (value && value.toString && !(value instanceof Array)) {
                     value = value.toString();
                 }
                 $(this).val(value);

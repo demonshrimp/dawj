@@ -7,12 +7,18 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
 import com.demonshrimp.dawj.exception.ServiceException;
+import com.demonshrimp.dawj.message.sms.weimi.WeiMiSmsProvider;
 import com.demonshrimp.dawj.service.MessageService;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 @Service
 public class MessageServiceImpl implements MessageService {
 	@Autowired
 	private JavaMailSender javaMailSender;
+
+	@Autowired
+	private WeiMiSmsProvider weiMiSmsProvider;
 
 	@Override
 	public void sendMessage(String destination, String subject, String content, Type type) {
@@ -29,17 +35,24 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	private void senSms(String mobile, String content) {
-		throw new ServiceException("尚未实现短信发送方式");
+		System.out.println(mobile + ":" + content);
+		String json = weiMiSmsProvider.sms_api1(mobile, content, "json");
+		JsonObject obj = new Gson().fromJson(json, JsonObject.class);
+		System.out.println(json);
+		if (obj.get("code").getAsInt() != 0) {
+			throw new ServiceException(obj.get("msg").getAsString());
+		}
 	}
 
 	private void sendMail(String to, String subject, String content) {
 		// 建立邮件消息
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		mailMessage.setTo(to);
-		mailMessage.setFrom(((JavaMailSenderImpl)javaMailSender).getUsername());
+		mailMessage.setFrom(((JavaMailSenderImpl) javaMailSender).getUsername());
 		mailMessage.setSubject(subject);
 		mailMessage.setText(content);
 		javaMailSender.send(mailMessage);
 	}
 
+	
 }

@@ -29,8 +29,8 @@ public class UserController extends BaseUserController {
 
 	@RequestMapping(path = "/", method = RequestMethod.POST)
 	public Object save(@RequestBody User user) {
-		user = userService.addUser(user, user.getSite().getId());
-		return Result.successResult(user.getId(), "新增成功");
+		user = userService.addUser(user, getCurrentSite().getId());
+		return Result.successResult(user.getId(), "注册成功");
 	}
 
 	@RequestMapping(path = "/{userId}", method = RequestMethod.PUT)
@@ -43,21 +43,26 @@ public class UserController extends BaseUserController {
 	@RequestMapping(path = "/send-mobile-captcha", method = RequestMethod.GET)
 	public Object sendMobileCaptcha(String mobile) {
 		userService.sendCaptcha(mobile, MessageService.Type.MOBILE);
-		return Result.successResult();
+		return Result.successResult("验证码发送成功");
 	}
 
 	@RequestMapping(path = "/send-email-captcha", method = RequestMethod.GET)
 	public Object sendEmailCaptcha(String email) {
 		userService.sendCaptcha(email, MessageService.Type.EMAIL);
-		return Result.successResult();
+		return Result.successResult("验证码发送成功");
 	}
 
 	@RequestMapping(path = "/check-captcha", method = RequestMethod.GET)
 	public Object checkCaptcha(String contactInfo, int captcha) {
-		if(userService.checkCaptcha(contactInfo, captcha)){
+		if (userService.checkCaptcha(contactInfo, captcha)) {
 			return Result.successResult();
 		}
 		return Result.errorResult("验证码错误");
+	}
+
+	@RequestMapping(path = "/personal-details", method = RequestMethod.GET)
+	public Object personalDetails() {
+		return Result.successResult(getCurrentUser(), null);
 	}
 
 }

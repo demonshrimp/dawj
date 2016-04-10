@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>Home</title>
+    <title>大爱无疆-首页</title>
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
     <link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,6 +10,7 @@
     <link href='http://fonts.useso.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen"/>
     <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.css" rel="stylesheet">
+    <link  href="css/animate.min.css" rel="stylesheet"/>
     <script src="js/jquery.min.js"></script>
     <script src="js/masonry.pkgd.min.js"></script>
     <script src="js/main.js"></script>
@@ -84,15 +85,15 @@
     </div>
     <div class="header-bottom">
         <div class="container">
-            <div class="logo">
+            <div class="logo animated slideInDown">
                 <a href="index.html"><img src="images/logo1.png" class="img-responsive" alt=""></a>
             </div>
             <div class="head-nav">
                 <span class="menu"> </span>
                 <ul class="cl-effect-3">
                     <li class="active"><a href="index.html">首页</a></li>
-                    <li><a href="consultors.html">咨询师 </a></li>
-                    <li><a href="consulting-articles.html">心理咨询 </a></li>
+                    <li><a href="counselors.html">咨询师 </a></li>
+                    <li><a href="counseling-articles.html">心理咨询 </a></li>
                     <li><a href="about.html">关于</a></li>
                     <li><a href="contact.html">联系我们</a></li>
                     <div class="clearfix"></div>
@@ -108,8 +109,11 @@
                 <!-- script-for-nav -->
             </div>
             <div class="header-right1">
-                <li><a href="login.html">登录</a></li>
-                <li><a href="register.html">注册</a></li>
+                <ul id="loginPanel">
+                    <li><a href="login.html">登录</a></li>
+                    <li><a href="register.html">注册</a></li>
+                </ul>
+                <p id="unLoginPanel" class="hidden">欢迎，<a id="userName" href="user-center.html">用户</a>　<a href="user-center.html">[个人中心]</a><a href="#login.html">[注销]</a></p>
             </div>
             <div class="clearfix"></div>
         </div>
@@ -146,26 +150,21 @@
             <ul class="rslides" id="slider4">
                 <li>
                     <div class="banner-info">
-                        <h1>Job Searching Just Got So Easy</h1>
-                        <p>Consectetur adipisicing elit, sed do lorem ipsum dolor sit amet, eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                            laboris nisi ut .</p>
+                        <h1>心理咨询，就是那么轻松</h1>
+                        <p>文字正文1文字正文1文字正文1文字正文1文字正文1文字正文1文字正文1文字正文1文字正文1文字正文1 .</p>
                     </div>
                 </li>
                 <li>
                     <div class="banner-info">
-                        <h1>Tempor incididunt ut labore</h1>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                            laboris nisi ut .</p>
+                        <h1>文字标题2</h1>
+                        <p>文字正文2文字正文2文字正文2文字正文2文字正文2文字正文2文字正文2文字正文2文字正文2文字正文2文字正文2文字正文2 .</p>
                     </div>
                 </li>
                 <li>
                     <div class="banner-info">
-                        <h1>Consectetur adipisicing elit</h1>
-                        <p>Eiusmod tempor incididunt lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do ut
-                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                            laboris nisi ut.</p>
+                        <h1>文字标题3</h1>
+                        <p>文字正文3文字正文3文字正文3文字正文3文字正文3文字正文3文字正文3文字正文3文字正文3文字正文3文字正文3文字正文3
+                            文字正文3文字正文3文字正文3文字正文3文字正文3文字正文3文字正文3文字正文3文字正文3文字正文3.</p>
                     </div>
                 </li>
             </ul>
@@ -223,7 +222,7 @@
                     var ul = $('#ulConsultingTypes');
                     ul.empty();
                     for (var i = 0; i < types.length; i++) {
-                        ul.append('<li><a href="consulting-type.html?id=' + types[i].id + '"><h3>' + types[i].name + '</h3></a></li>')
+                        ul.append('<li><a href="counseling-type.html?id=' + types[i].id + '"><h3>' + types[i].name + '</h3></a></li>')
                     }
                 }
             });
@@ -233,7 +232,7 @@
 <div class="portfolios entertain_box  wow fadeInUp" data-wow-delay="0.4s">
     <div class="container">
         <div class="blog-top">
-            <a href="consultors.html">
+            <a href="counselors.html">
                 <h3> 心理咨询师
                     <small>更多<img width="64px" src="images/more_horiz_128px.png"/></small>
                 </h3>
@@ -268,7 +267,7 @@
                         var counselor = counselors[i];
                         list.append('<div class="portfolio" style="display: inline-block; opacity: 1;">'
                                 + '<div class="portfolio-wrapper">'
-                                + '<a href="consultor.html?id=' + counselor.id + '" class="b-link-stripe" title="' + counselor.name + '">'
+                                + '<a href="counselor.html?id=' + counselor.id + '" class="b-link-stripe" title="' + counselor.name + '">'
                                 + '<img src="' + counselor.fullImage + '"/>'
                                 + '</a>'
                                 + '</div>'
@@ -286,7 +285,7 @@
 <!--<div class="types">
     <div class="container">
         <div class="blog-top">
-            <a href="consulting-articles.html">
+            <a href="counseling-articles.html">
                 <h3> 咨询类目 </h3>
             </a>
         </div>
@@ -297,7 +296,7 @@
 <div class="blog">
     <div class="container">
         <div class="blog-top">
-            <a href="consulting-articles.html">
+            <a href="counseling-articles.html">
                 <h3> 心理资讯
                     <small>更多<img width="64px" src="images/more_horiz_128px.png"/></small>
                 </h3>
@@ -364,10 +363,10 @@
                                 + '</div>'
                                 + '<div class="blog-artical-info">'
                                 + '<div class="blog-artical-info-img">'
-                                + ' <a href="consulting-article.html?id=' + counselingArticle.id + '"><img src="' + counselingArticle.fullImage + '" title="post-name"></a>'
+                                + ' <a href="counseling-article.html?id=' + counselingArticle.id + '"><img src="' + counselingArticle.fullImage + '" title="post-name"></a>'
                                 + ' </div>'
                                 + '     <div class="blog-artical-info-head">'
-                                + '      <h2><a href="consulting-article.html?id=' + counselingArticle.id + '">' + counselingArticle.title + '</a></h2>'
+                                + '      <h2><a href="counseling-article.html?id=' + counselingArticle.id + '">' + counselingArticle.title + '</a></h2>'
                                 + '         <ul>'
                                 + '             <li><i class="fa fa-calendar-check-o"></i>' + counselingArticle.createTime + '</li>'
                                 + '             <li><i class="fa fa-users"></i> ' + counselingArticle.visited + '</li>'
@@ -382,7 +381,7 @@
                                 + '         </ul>'
                                 + '     </div>'
                                 + ' <div class="blog-artical-info-text">'
-                                + '    <p>' + counselingArticle.description + '<a href="consulting-article.html?id=' + counselingArticle.id + '">......</a></p>'
+                                + '    <p>' + counselingArticle.description + '<a href="counseling-article.html?id=' + counselingArticle.id + '">......</a></p>'
                                 + '   </div>'
                                 + '  </div>'
                                 + ' <div class="clearfix"></div>'

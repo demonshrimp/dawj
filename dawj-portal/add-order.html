@@ -1,0 +1,384 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>大爱无疆-提交订单</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="keywords" content="心理咨询,咨询,心理,大爱无疆"/>
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
+    <link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>
+    <link href='http://fonts.useso.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href="js/vendor/bootstrapvalidator/dist/css/bootstrapValidator.min.css">
+    <script src="js/vendor/jquery.min.js"></script>
+    <script src="/js/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/vendor/bootstrapvalidator/dist/js/bootstrapValidator.js"></script>
+    <script src="js/main.js"></script>
+    <link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen"/>
+    <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.css" rel="stylesheet">
+</head>
+<body>
+<!-- header -->
+<div class="header">
+    <div class="header-top">
+        <div class="container">
+            <div class="head-left">
+                <ul class="number">
+                    <li><span><i class="phone"> </i>0371-55601221</span></li>
+                    <li><a href="mailto:info@dawjxlzx.com"><i class="mail"> </i>info@dawjxlzx.com</a></li>
+                    <div class="clearfix"></div>
+                </ul>
+            </div>
+            <div class="head-right">
+                <ul>
+                    <li><a href="#"><i class="fb"> </i></a></li>
+                    <li><a href="#"><i class="twt"> </i></a></li>
+                    <li><a href="#"><i class="ttt"> </i></a></li>
+                    <li><a href="#"><i class="ve"> </i></a></li>
+                    <li><a href="#"><i class="in"> </i></a></li>
+                    <li><a href="#"><i class="dib"> </i></a></li>
+                    <li><a href="#"><i class="fli"> </i></a></li>
+                    <li><a href="#"><i class="rss"> </i></a></li>
+                    <div class="clearfix"></div>
+                </ul>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="header-bottom">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html"><img src="images/logo.png" class="img-responsive" alt=""></a>
+            </div>
+            <div class="head-nav">
+                <span class="menu"> </span>
+                <ul class="cl-effect-3">
+                    <li class="active"><a href="index.html">首页</a></li>
+                    <li><a href="counseling-articles.html">心理文章 </a></li>
+                    <li><a href="counselors.html">咨询师 </a></li>
+                    <li><a href=" 404.html">心理咨询 </a></li>
+                    <li><a href=" about.html">关于</a></li>
+                    <li><a href=" contact.html">联系我们</a></li>
+                    <div class="clearfix"></div>
+
+                </ul>
+                <!-- script-for-nav -->
+                <script>
+                    $("span.menu").click(function () {
+                        $(".head-nav ul").slideToggle(300, function () {
+                            // Animation complete.
+                        });
+                    });
+                </script>
+                <!-- script-for-nav -->
+            </div>
+            <div class="header-right1">
+                <ul id="loginPanel">
+                    <li><a href="login.html">登录</a></li>
+                    <li><a href="register.html">注册</a></li>
+                </ul>
+                <p id="unLoginPanel" class="hidden">欢迎，<a id="userName" href="user-center.html">用户</a>　<a
+                        href="user-center.html">[个人中心]</a><a href="#login.html">[注销]</a></p>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<!-- header -->
+<!-- registration -->
+<div class="main-1">
+    <div class="container">
+        <div class="register">
+            <form id="formOrder">
+                <div class="register-top-grid">
+                    <h3>联系人信息</h3>
+                    <div class="wow fadeInLeft form-group" data-wow-delay="0.4s">
+                        <span>姓名<label>*</label></span>
+                        <input name="contactName" type="text">
+                    </div>
+                    <div class="wow fadeInLeft form-group" data-wow-delay="0.4s">
+                        <span>手机<label>*</label></span>
+                        <input name="contactMobile" type="text">
+                    </div>
+                    <div class="wow fadeInLeft form-group" data-wow-delay="0.4s">
+                        <span>联系地址<label>*</label></span>
+                        <input name="contactAddress" type="text">
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="register-top-grid">
+                    <h3>咨询内容</h3>
+                    <div class="wow fadeInLeft form-group" data-wow-delay="0.4s">
+                        <span>咨询师<label>*</label></span>
+                        <input disabled name="consultorName" type="text">
+                    </div>
+                    <div class="wow fadeInLeft form-group" data-wow-delay="0.4s">
+                        <span>咨询类别<label>*</label></span>
+                        <select name="counselingType.id">
+                            <option value="">请选择咨询类别...</option>
+                        </select>
+                    </div>
+                    <div class="wow fadeInLeft form-group" data-wow-delay="0.4s">
+                        <span>咨询内容<label>*</label></span>
+                        <textarea name="consultingContent" class="col-md-12" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="register-top-grid">
+                    <h3>订单信息</h3>
+                    <div class="wow fadeInLeft form-group" data-wow-delay="0.4s">
+                        <span>咨询时长(小时)<label>*</label></span>
+                        <input name="consultingDuration" name="mobile" type="number" value="1">
+                    </div>
+                    <div class="wow fadeInLeft form-group" data-wow-delay="0.4s">
+                        <span>预约咨询日期<label>*</label></span>
+                        <input name="scheduledTime" name="birthday" type="date">
+                    </div>
+                    <div class="wow fadeInLeft form-group" data-wow-delay="0.4s">
+                        <span>备注</span>
+                        <textarea name="remark" class="col-md-12" rows="5"></textarea>
+                    </div>
+                </div>
+            </form>
+            <div class="clearfix"></div>
+            <div class="register-but">
+                <form action="javascript:void(0);">
+                    <input id="btnSubmit" type="submit" value="提交">
+                    <div class="clearfix"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- registration -->
+
+<!-- footer-top -->
+<div class="footer-top">
+    <div class="container">
+        <div class="col-md-4 foo-left">
+            <a href="index.html"><img src="images/logo1.png" class="img-responsive" alt=""></a>
+            <p>大爱无疆心理咨询有限公司是在教育部政策（教思政厅[2011]1号）的影响下应运而生的全国目前唯一一家无区域执业的心理咨询公司。</p>
+            <p>公司具备资质：心理咨询；教育咨询；非学历短期培训（国内基本已停止审批）；人力中介服务（国内基本已停止审批）；教育文化交流活动组织策划；教育软件技术开发等。以上资质全国范围内均可使用。</p>
+        </div>
+        <div class="col-md-4 foo-left">
+            <h3>公司概况</h3>
+            <h6>成立情况</h6>
+            <p>2016年1月由中国工商总局核名后注册成立。</p>
+            <p>2016年3月份正式运营。</p>
+            <h6>荣誉</h6>
+            <p> 河南电视台法制频道优秀心理咨询机构。</p>
+            <p>河南大象融媒集团心理咨询模范单位。</p>
+        </div>
+        <div class="col-md-4 foo-left">
+            <h3>常用链接</h3>
+            <ul>
+                <li class="active"><a href="index.html">首页</a></li>
+                <li class="active"><a href="about.html">关于我们</a></li>
+                <li><a href="#">咨询师 </a></li>
+                <li><a href="#">心理咨询 </a></li>
+                <li><a href="blog.html">联系我们</a></li>
+                <li><a href=" 404.html">个人中心</a></li>
+                <div class="clearfix"></div>
+            </ul>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<!-- footer-top -->
+<!-- footer-bottom -->
+<div class="footer-bottom">
+    <div class="container">
+        <p>Copyright &copy; 2015.Company name All rights reserved.More Templates - Collect from</p>
+    </div>
+</div>
+<!-- footer-bottom -->
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">支付</h4>
+            </div>
+            <div class="modal-body">
+                <p><label>请选择在线支付方式：</label></p>
+                <form class="form-inline">
+                    <div class="form-group" style="width: 100%">
+                        <div class="radio col-md-6">
+                            <label>
+                                <input type="radio" name="optionsRadios" value="option1" checked/>
+                                <img src="images/ssdk_oks_classic_alipay.png"/>
+                                支付宝支付
+                            </label>
+                        </div>
+                        <div class="radio col-md-6">
+                            <label>
+                                <input type="radio" name="optionsRadios" value="option1" checked/>
+                                <img src="images/ssdk_oks_classic_wechat.png"/>
+                                微信支付
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">稍后支付</button>
+                <button type="button" class="btn btn-primary" id="btnSubmitPay">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+
+        generateCaptchaNum();
+
+        var form = $('#formOrder').bootstrapValidator({
+            message: '未通过校验',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                contactName: {
+                    validators: {
+                        notEmpty: {
+                            message: '联系人姓名不能用空'
+                        }
+                    }
+                },
+                contactMobile: {
+                    validators: {
+                        notEmpty: {
+                            message: '联系电话不能为空'
+                        }
+                    }
+                },
+                contactAddress: {
+                    validators: {
+                        notEmpty: {
+                            message: '联系地址不能为空'
+                        }
+                    }
+                },
+                consultorName: {
+                    validators: {
+                        notEmpty: {
+                            message: '咨询师不能为空'
+                        }
+                    }
+                },
+                'consultingType.id': {
+                    validators: {
+                        notEmpty: {
+                            message: '请选择咨询类别'
+                        }
+                    }
+                },
+                consultingContent: {
+                    validators: {
+                        notEmpty: {
+                            message: '咨询内容不能为空'
+                        }
+                    }
+                },
+                consultingDuration: {
+                    validators: {
+                        notEmpty: {
+                            message: '咨询时长不能为空'
+                        }
+                    }
+                },
+                scheduledTime: {
+                    validators: {
+                        notEmpty: {
+                            message: '预约咨询时期不能为空'
+                        },
+                        date: {
+                            format: 'YYYY-MM-DD',
+                            message: '预约咨询时期格式不正确(yyyy-MM-dd)'
+                        },
+                        callback: {
+                            message: '预约时间不能小于今天',
+                            callback: function (value, validator) {
+                                var date = new Date(value);
+                                var today = new Date();
+                                today = new Date(today.Format('yyyy-MM-dd'));
+                                return date >= today;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        var validator = form.data('bootstrapValidator');
+
+        //init datas
+        var counselorId = App.Utils.UrlUtil.getUrlParameter('counselorId');
+        $.get(App.Constants.API_BASE + '/counselor/' + counselorId, function (result) {
+            if (result.header.success) {
+                var counselor = result.body;
+                form.find('[name="consultorName"]').val(counselor.name);
+                var selectType = form.find('[name="counselingType.id"]');
+                for (var i = 0; i < counselor.counselingTypes.length; i++) {
+                    var type = counselor.counselingTypes[i];
+                    selectType.append('<option value="' + type.id + '">' + type.name + '</option>');
+                }
+            }
+        });
+
+        var user = App.getCurrentLoginUser(true);
+        form.find('[name="contactName"]').val(user.name);
+        form.find('[name="contactMobile"]').val(user.mobile);
+        form.find('[name="contactAddress"]').val(user.address);
+        form.find('[name="scheduledTime"]').val(new Date().Format('yyyy-MM-dd'));
+
+
+        //init evens
+        $('#btnSubmit').click(function () {
+            validator.validate();
+            if (validator.isValid()) {
+                var order = App.Utils.FormUtil.toJson(form);
+                order.counselor = {id: counselorId};
+                order.scheduledTime = order.scheduledTime + ' 00:00:00';
+                $.ajax({
+                    url: App.Constants.API_BASE + '/order/',
+                    contentType: "application/json",
+                    method: 'POST',
+                    data: JSON.stringify(order),
+                    dataType: 'json',
+                    success: function (result) {
+                        alert(result.header.message);
+                        if (result.header.success) {
+                            $('#myModal').modal({
+                                keyboard: false
+                            });
+                        }
+                    }
+                });
+            }
+        });
+
+        $('#myModal').on('hidden.bs.modal', function (e) {
+            window.location.href = 'user-center.html#order';
+        });
+
+        $('#btnSubmitPay').click(function () {
+
+        });
+
+        //state methods
+        // Generate a simple captcha
+        function randomNumber(min, max) {
+            return Math.floor(Math.random() * (max - min + 1) + min);
+        }
+
+        function generateCaptchaNum() {
+            $('#captchaOperation').html([randomNumber(1, 10), '+', randomNumber(1, 20), '='].join(' '));
+        }
+
+    });
+</script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>Blog</title>
+    <title>大爱无疆-心理资讯</title>
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
     <link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,6 +12,7 @@
     <script src="js/main.js"></script>
     <link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen"/>
     <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet" />
 </head>
 <body>
 <!-- header -->
@@ -50,8 +51,8 @@
                 <span class="menu"> </span>
                 <ul class="cl-effect-3">
                     <li class="active"><a href="index.html">首页</a></li>
-                    <li><a href=" consulting-articles.html">心理文章 </a></li>
-                    <li><a href="consultors.html">咨询师 </a></li>
+                    <li><a href=" counseling-articles.html">心理文章 </a></li>
+                    <li><a href="counselors.html">咨询师 </a></li>
                     <li><a href=" 404.html">心理咨询 </a></li>
                     <li><a href=" about.html">关于</a></li>
                     <li><a href=" contact.html">联系我们</a></li>
@@ -69,8 +70,11 @@
                 <!-- script-for-nav -->
             </div>
             <div class="header-right1">
-                <li><a href="login.html">登录</a></li>
-                <li><a href="register.html">注册</a></li>
+                <ul id="loginPanel">
+                    <li><a href="login.html">登录</a></li>
+                    <li><a href="register.html">注册</a></li>
+                </ul>
+                <p id="unLoginPanel" class="hidden">欢迎，<a id="userName" href="user-center.html">用户</a>　<a href="user-center.html">[个人中心]</a><a href="#login.html">[注销]</a></p>
             </div>
             <div class="clearfix"></div>
         </div>
@@ -80,7 +84,7 @@
 <!-- Blog -->
 <div class="blog">
     <div class="container">
-        <div class="portfolio-top">
+        <div class="portfolio-top animated slideInDown">
             <h3> 咨询文章 </h3>
         </div>
         <div class="blog-content">
@@ -128,9 +132,6 @@
                         <li><a class="frist" href="#"> <span> </span></a></li>
                         <span id="pages">
                             <li><a class="go-page" data-start="+" href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a class="go-page" data-start="-" href="#">4</a></li>
                         </span>
                         <li><a class="last" href="#"> <span> </span></a></li>
                         <div class="clearfix"></div>
@@ -269,10 +270,10 @@
                                 + '</div>'
                                 + '<div class="blog-artical-info">'
                                 + '<div class="blog-artical-info-img">'
-                                + ' <a href="consulting-article.html?id=' + counselingArticle.id + '"><img src="' + counselingArticle.fullImage + '" title="post-name"></a>'
+                                + ' <a href="counseling-article.html?id=' + counselingArticle.id + '"><img src="' + counselingArticle.fullImage + '" title="post-name"></a>'
                                 + ' </div>'
                                 + '     <div class="blog-artical-info-head">'
-                                + '      <h2><a href="consulting-article.html?id=' + counselingArticle.id + '">' + counselingArticle.title + '</a></h2>'
+                                + '      <h2><a href="counseling-article.html?id=' + counselingArticle.id + '">' + counselingArticle.title + '</a></h2>'
                                 + '         <ul>'
                                 + '             <li><i class="fa fa-calendar-check-o"></i>' + counselingArticle.createTime + '</li>'
                                 + '             <li><i class="fa fa-users"></i> ' + counselingArticle.visited + '</li>'
@@ -287,7 +288,7 @@
                                 + '         </ul>'
                                 + '     </div>'
                                 + ' <div class="blog-artical-info-text">'
-                                + '    <p>' + counselingArticle.description + '<a href="consulting-article.html?id=' + counselingArticle.id + '">......</a></p>'
+                                + '    <p>' + counselingArticle.description + '<a href="counseling-article.html?id=' + counselingArticle.id + '">......</a></p>'
                                 + '   </div>'
                                 + '  </div>'
                                 + ' <div class="clearfix"></div>'

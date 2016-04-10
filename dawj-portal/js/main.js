@@ -5,9 +5,26 @@ var App = {
 (function ($, App) {
     "use strict";
 
-    App.Constants.API_BASE = "http://localhost:8080/dawj-server/api/usr";
+    App.Constants.API_BASE = "http://192.168.1.104:8080/dawj-server/api/usr";
 
     App.Constants.KEY_CURRENT_USER = "_ASDdawjuu";
+
+    App.initialize = function () {
+        var user = App.getCurrentLoginUser();
+        if (user) {
+            setupGlobalAjax();
+            $('#loginPanel').hide();
+            var panel = $('#unLoginPanel');
+            panel.removeClass('hidden');
+
+            $('#userName').text(user.name);
+
+            $('#btnLogoff').click(function () {
+                window.sessionStorage.removeItem(App.Constants.KEY_CURRENT_USER);
+                window.location.reload();
+            });
+        }
+    };
 
     App.loadPage = function (url) {
         window.location.href = "#" + url;
@@ -17,9 +34,13 @@ var App = {
         var s = window.sessionStorage.getItem(App.Constants.KEY_CURRENT_USER);
         if (s) {
             return JSON.parse(s);
-        }else if(compulsive){
+        } else if (compulsive) {
             window.location.href = 'login.html';
         }
+    };
+
+    App.setCurrentLoginSite = function (user) {
+        window.sessionStorage.setItem(App.Constants.KEY_CURRENT_USER, JSON.stringify(user));
     };
 
     App.Utils.ArrayUtil = {
@@ -53,67 +74,60 @@ var App = {
     App.Utils.ObjectUtil = {
         getValue: function (data, key) {
             var keys = key.split('.');
-            var result = data;
-            for (var i = 0; i < keys.length; i++) {
-                var k = keys[i];
+            var k = keys[0];
+            if (keys.length > 1) {
+                var ksub = key.substr(k.length + 1);
                 var isArray = false
                 if (k.indexOf('[]') > 0) {
                     k = k.substr(0, k.length - 2);
                     isArray = true;
                 }
-                if (result) {
-                    if (isArray) {
-                        var array = [];
-                        for (var j = 0; j < result.length; j++) {
-                            array.push(this.getValue(result[j], key.substr(key.indexOf(keys[i]) + 1)));
-                        }
-                        return array;
-                    } else {
-                        result = result[keys[i]];
+                if (isArray) {
+                    var array = [];
+                    for (var j = 0; j < data[k].length; j++) {
+                        array.push(this.getValue(data[k][j], ksub));
                     }
+                    return array;
+                } else {
+                    return this.getValue(data[k], ksub);
                 }
+            } else {
+                return data[k];
             }
-            return result;
         },
         setValue: function (data, key, value) {
             var keys = key.split('.');
-            console.log(keys);
-            var obj = data;
-            var lastData = data;
-            for (var i = 0; i < keys.length; i++) {
-                var key = keys[i];
-                if (i == keys.length - 1) {
-                    if ($.isArray(obj[key])) {
-                        obj[key].push(value);
-                    } else {
-                        obj[key] = value;
-                    }
-                    return;
-                }
-                var isArray = false
-                if (key.indexOf('[]') > 0) {
-                    key = key.substr(0, key.length - 2);
+            var k = keys[0];
+            if (keys.length > 1) {
+                var ksub = key.substr(k.length + 1);
+                var isArray = false;
+                if (k.indexOf('[]') > 0) {
+                    k = k.substr(0, k.length - 2);
                     isArray = true;
                 }
-                obj = obj[key];
-                if (!obj) {
-                    if (isArray) {
-                        lastData[key] = [{}];
-                        obj = lastData[key][0];
-                    } else {
-                        lastData[key] = {};
-                        obj = lastData[key];
+                var obj = {};
+                this.setValue(obj, ksub, value);
+                if (isArray) {
+                    if (!data[k]) {
+                        data[k] = [];
                     }
+                    data[k].push(obj);
+                } else {
+                    data[k] = obj;
                 }
-                lastData = obj;
+            } else {
+                data[k] = value;
             }
         }
     }
 
     App.Utils.FormUtil = {
         toJson: function (form) {
+            if (form instanceof jQuery) {
+                form = $(form);
+            }
             var serializeObj = {};
-            var array = $(form).serializeArray();
+            var array = form.serializeArray();
             $(array).each(function () {
                 App.Utils.ObjectUtil.setValue(serializeObj, this.name, this.value);
                 /*if (serializeObj[this.name]) {
@@ -132,187 +146,14 @@ var App = {
             $(form).find('[name]').each(function () {
                 var key = $(this).attr('name');
                 var value = App.Utils.ObjectUtil.getValue(data, key);
-                if (value && value.toString) {
+                if (value && value.toString && !(value instanceof Array)) {
                     value = value.toString();
                 }
                 $(this).val(value);
             });
         }
-    }
-
-
-    App.Utils.DataTablesHelper = {
-        buildOperationButtons: function (buttons, data) {
-            var btns = "";
-            for (var i = 0; i < buttons.length; i++) {
-                var button = buttons[i];
-                var a = $('<a  href="javascript:void(0);" class="btn-operation"></a>');
-                for (var p in data) {
-                    a.attr("data-" + p, data[p]);
-                }
-                a.attr("data-operation", button.operation);
-                a.text(button.text);
-                btns += a[0].outerHTML + " / ";
-            }
-            if (btns.length > 3) {
-                btns = btns.substr(0, btns.length - 3);
-            }
-            return btns;
-        },
-        onOperationButtonClick: function (tableSelector, handle) {
-            $(tableSelector).on("click", ".btn-operation", function () {
-                var data = $(this).data();
-                handle.apply(this, [data]);
-            });
-        },
-        language: function (language) {
-            return $.extend(this.defaultLanguage, language);
-        },
-        defaultLanguage: {
-            "sProcessing": "处理中...",
-            "sLengthMenu": "显示 _MENU_ 项结果",
-            "sZeroRecords": "没有匹配结果",
-            "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
-            "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
-            "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
-            "sInfoPostFix": "",
-            "sSearch": "搜索:",
-            "sUrl": "",
-            "sEmptyTable": "表中数据为空",
-            "sLoadingRecords": "载入中...",
-            "sInfoThousands": ",",
-            "oPaginate": {
-                "sFirst": "首页",
-                "sPrevious": "上页",
-                "sNext": "下页",
-                "sLast": "末页"
-            },
-            "oAria": {
-                "sSortAscending": ": 以升序排列此列",
-                "sSortDescending": ": 以降序排列此列"
-            }
-        },
-        pipeline: function () {
-            //
-            // Pipelining function for DataTables. To be used to the `ajax` option of DataTables
-            //
-            $.fn.dataTable.pipeline = function (opts) {
-                // Configuration options
-                var conf = $.extend({
-                    pages: 0,     // number of pages to cache
-                    url: '',      // script url
-                    data: null,   // function or object with parameters to send to the server
-                                  // matching how `ajax.data` works in DataTables
-                    method: 'GET' // Ajax HTTP method
-                }, opts);
-
-                // Private variables for storing the cache
-                var cacheLower = -1;
-                var cacheUpper = null;
-                var cacheLastRequest = null;
-                var cacheLastJson = null;
-
-                return function (request, drawCallback, settings) {
-                    var ajax = false;
-                    var requestStart = request.start;
-                    var drawStart = request.start;
-                    var requestLength = request.length;
-                    var requestEnd = requestStart + requestLength;
-
-                    if (settings.clearCache) {
-                        // API requested that the cache be cleared
-                        ajax = true;
-                        settings.clearCache = false;
-                    }
-                    else if (cacheLower < 0 || requestStart < cacheLower || requestEnd > cacheUpper) {
-                        // outside cached data - need to make a request
-                        ajax = true;
-                    }
-                    else if (JSON.stringify(request.order) !== JSON.stringify(cacheLastRequest.order) ||
-                        JSON.stringify(request.columns) !== JSON.stringify(cacheLastRequest.columns) ||
-                        JSON.stringify(request.search) !== JSON.stringify(cacheLastRequest.search)
-                    ) {
-                        // properties changed (ordering, columns, searching)
-                        ajax = true;
-                    }
-
-                    // Store the request for checking next time around
-                    cacheLastRequest = $.extend(true, {}, request);
-
-                    if (ajax) {
-                        // Need data from the server
-                        if (requestStart < cacheLower) {
-                            requestStart = requestStart - (requestLength * (conf.pages - 1));
-
-                            if (requestStart < 0) {
-                                requestStart = 0;
-                            }
-                        }
-
-                        cacheLower = requestStart;
-                        cacheUpper = requestStart + (requestLength * conf.pages);
-
-                        request.start = requestStart;
-                        request.length = requestLength * conf.pages;
-
-                        // Provide the same `data` options as DataTables.
-                        if ($.isFunction(conf.data)) {
-                            // As a function it is executed with the data object as an arg
-                            // for manipulation. If an object is returned, it is used as the
-                            // data object to submit
-                            var d = conf.data(request);
-                            if (d) {
-                                $.extend(request, d);
-                            }
-                        }
-                        else if ($.isPlainObject(conf.data)) {
-                            // As an object, the data given extends the default
-                            $.extend(request, conf.data);
-                        }
-
-                        settings.jqXHR = $.ajax({
-                            "type": conf.method,
-                            "url": conf.url,
-                            "data": request,
-                            "dataType": "json",
-                            "cache": false,
-                            "success": function (json) {
-                                var data = {
-                                    "recordsTotal": json.body.total,
-                                    "recordsFiltered": json.body.total,
-                                    "data": json.body.list
-                                }
-                                cacheLastJson = $.extend(true, {}, data);
-
-                                if (cacheLower != drawStart) {
-                                    data.data.splice(0, drawStart - cacheLower);
-                                }
-                                data.data.splice(requestLength, data.data.length);
-
-                                drawCallback(data);
-                            }
-                        });
-                    }
-                    else {
-                        var json = $.extend(true, {}, cacheLastJson);
-                        json.draw = request.draw; // Update the echo for each response
-                        json.data.splice(0, requestStart - cacheLower);
-                        json.data.splice(requestLength, json.data.length);
-
-                        drawCallback(json);
-                    }
-                }
-            };
-
-            // Register an API method that will empty the pipelined data, forcing an Ajax
-            // fetch on the next draw (i.e. `table.clearPipeline().draw()`)
-            $.fn.dataTable.Api.register('clearPipeline()', function () {
-                return this.iterator('table', function (settings) {
-                    settings.clearCache = true;
-                });
-            });
-        }
     };
+
     App.Utils.UrlUtil = {
         getProjectRoot: function () {
             var localhostPaht = this.getRoot();
@@ -341,8 +182,19 @@ var App = {
     App.Utils.StringUtil = {
         md5: function (string) {
             return md5(string);
+        },
+        uuid: function () {
+            var s = [];
+            var hexDigits = "0123456789abcdef";
+            for (var i = 0; i < 36; i++) {
+                s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+            }
+            s[14] = "4"; // bits 12-15 of the time_hi_and_version field to 0010
+            s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
+            s[8] = s[13] = s[18] = s[23] = "-";
+            var uuid = s.join("");
+            return uuid;
         }
-
     }
     function md5(string) {
         function md5_RotateLeft(lValue, iShiftBits) {
@@ -560,20 +412,46 @@ var App = {
         return (md5_WordToHex(a) + md5_WordToHex(b) + md5_WordToHex(c) + md5_WordToHex(d)).toLowerCase();
     }
 
-    jQuery.extend({
-        getUrlVars: function () {
-            var vars = [], hash;
-            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-            for (var i = 0; i < hashes.length; i++) {
-                hash = hashes[i].split('=');
-                vars.push(hash[0]);
-                vars[hash[0]] = hash[1];
+    function setupGlobalAjax() {
+        var user = App.getCurrentLoginUser();
+        $.ajaxSetup({
+            headers: {
+                '_utoken': user.token
+            },
+            beforeSend: function (request, settings) {
+                request.done(function (result) {
+                    if (result.header) {
+                        if (result.header.errorCode == "900" || result.header.errorCode == "901") {
+                            alert(result.header.message);
+                            window.localStorage.removeItem(App.Constants.KEY_CURRENT_USER);
+                            window.location.href = 'login.html';
+                        }
+                    }
+                })
             }
-            return vars;
-        },
-        getUrlVar: function (name) {
-            return jQuery.getUrlVars()[name];
-        }
-    });
+        });
+    }
 
+    jQuery(App.initialize);
+    // 对Date的扩展，将 Date 转化为指定格式的String
+    // 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
+    // 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
+    // 例子：
+    // (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423
+    // (new Date()).Format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18
+    Date.prototype.Format = function (fmt) { //author: meizz
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
 })(jQuery, App);

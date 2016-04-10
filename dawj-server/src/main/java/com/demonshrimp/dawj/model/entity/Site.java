@@ -25,6 +25,10 @@ public class Site extends BaseEntity {
 		super();
 	}
 
+	public Site(String id) {
+		super(id);
+	}
+
 	public Site(String name, String city, String path, Boolean certificated, String password) {
 		super();
 		this.name = name;

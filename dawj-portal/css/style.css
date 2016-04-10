@@ -304,7 +304,7 @@ i.rss:hover {
 }
 
 .banner {
-    background: url(../images/banner.jpg) no-repeat;
+    background: url(../images/banner.jpg) no-repeat 0px -0px;
     background-size: cover;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -2500,7 +2500,7 @@ a.b-home:hover {
 .register-top-grid div, .register-bottom-grid div {
     width: 48%;
     float: left;
-    margin: 10px 0;
+    margin: 20px 2% 20px 0;
 }
 
 .register-top-grid span, .register-bottom-grid span {
@@ -2511,12 +2511,29 @@ a.b-home:hover {
     text-transform: uppercase;
 }
 
-.register-top-grid input[type="text"], .register-bottom-grid input[type="text"], .register-top-grid input[type="password"], .register-bottom-grid input[type="password"], .register-top-grid select {
+.register-top-grid input[type="text"],
+.register-bottom-grid input[type="text"],
+.register-top-grid input[type="password"],
+.register-bottom-grid input[type="password"],
+.register-top-grid select,
+.register-top-grid input[type="date"],
+.register-bottom-grid input[type="date"],
+.register-top-grid input[type="number"],
+.register-bottom-grid input[type="number"] {
     border: 1px solid #4E9ECA;
     outline-color: #4E9ECA;
-    width: 96%;
+    width: 100%;
     font-size: 1em;
     padding: 0.5em;
+    line-height: 20px;
+    height: 36px;
+}
+
+.register-top-grid input[type="date"],
+.register-bottom-grid input[type="date"],
+.register-top-grid input[type="number"],
+.register-bottom-grid input[type="number"] {
+    padding-right: 26px;
 }
 
 .checkbox {

@@ -86,6 +86,7 @@
 <script>
     $(function () {
         /************** init views **************/
+        $("#selectCounselingType").select2();
         var ue = UE.getEditor('editor');
         var caseUe = UE.getEditor('caseEditor');
 
@@ -107,22 +108,26 @@
 
 
         /************** init datas **************/
-        $.get(App.Constants.API_BASE + '/counseling-type/list', function (result) {
-            if (!result.header.success) {
-                alert(result.header.message);
-                return;
+        $.ajax({
+            type: 'get',
+            url: App.Constants.API_BASE + '/counseling-type/list',
+            async: false,
+            success: function (result) {
+                if (!result.header.success) {
+                    alert(result.header.message);
+                    return;
+                }
+                var select = $("#selectCounselingType");
+                var counselingTypes = result.body;
+                select.empty();
+                for (var i = 0; i < counselingTypes.length; i++) {
+                    var option = $('<option>');
+                    option.text(counselingTypes[i].name);
+                    option.val(counselingTypes[i].id);
+                    select.append(option);
+                }
+                $('#formCounselor [type=submit]').removeAttr('disabled');
             }
-            var select = $('#selectCounselingType');
-            console.log(select);
-            var counselingTypes = result.body;
-            select.empty();
-            for (var i = 0; i < counselingTypes.length; i++) {
-                var option = $('<option>');
-                option.text(counselingTypes[i].name);
-                option.val(counselingTypes[i].id);
-                select.append(option);
-            }
-            $('#formCounselor [type=submit]').removeAttr('disabled');
         });
         var counselorId = $.getUrlVar('id');
         //if siteId!=null update else new
@@ -137,6 +142,8 @@
                 $("#imgCounselorImage").attr('src', counselor.fullImage);
                 ue.setContent(counselor.about);
                 caseUe.setContent(counselor.consultingCase);
+                var typesId = App.Utils.ObjectUtil.getValue(counselor, 'counselingTypes[].id');
+                $("#selectCounselingType").trigger("change");
             });
         }
 

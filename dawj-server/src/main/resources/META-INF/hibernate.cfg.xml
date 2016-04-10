@@ -28,6 +28,7 @@
 		<mapping class="com.demonshrimp.dawj.model.entity.CounselingType" />
 		<mapping class="com.demonshrimp.dawj.model.entity.CounselingArticle" />
 		<mapping class="com.demonshrimp.dawj.model.entity.Counselor" />
+		<mapping class="com.demonshrimp.dawj.model.entity.Order" />
 
 	</session-factory>
 

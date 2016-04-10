@@ -29,7 +29,7 @@ public class CounselingArticleController extends BaseUserController {
 			String orderBy, @RequestParam(defaultValue = "false") Boolean desc) {
 		QueryCondition qc = new QueryConditionImpl(CounselingArticle.class);
 		if (StringUtil.notEmpty(orderBy)) {
-			qc.addOrder(Order.add(orderBy, desc));
+			qc.addOrder(Order.add(orderBy, !desc));
 		}
 		qc.addOrder(Order.desc("createTime"));
 		return Result.successResult(

@@ -19,6 +19,8 @@
 	<aop:aspectj-autoproxy />
 
 	<bean class="pers.ksy.common.spring4.SpringUtil" lazy-init="false" />
+	
+	<!-- mail sender -->
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="protocol" value="smtp" />
 		<property name="host" value="smtp.redaigy.com" />
@@ -30,6 +32,12 @@
 				<prop key="mail.smtp.auth">true</prop>
 			</props>
 		</property>
+	</bean>
+	
+	<!-- weimi sms sender -->
+	<bean id="weiMiSmsProvider" class="com.demonshrimp.dawj.message.sms.weimi.WeiMiSmsProvider">
+		<property name="uid" value="iEZjuUjzFSG7" />
+		<property name="pas" value="etfuny4g" />
 	</bean>
 
 </beans>
