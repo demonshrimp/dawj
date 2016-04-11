@@ -19,7 +19,7 @@
 	<aop:aspectj-autoproxy />
 
 	<bean class="pers.ksy.common.spring4.SpringUtil" lazy-init="false" />
-	
+
 	<!-- mail sender -->
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="protocol" value="smtp" />
@@ -33,10 +33,36 @@
 			</props>
 		</property>
 	</bean>
-	
+
 	<!-- weimi sms sender -->
 	<bean id="weiMiSmsProvider" class="com.demonshrimp.dawj.message.sms.weimi.WeiMiSmsProvider">
 		<property name="uid" value="iEZjuUjzFSG7" />
 		<property name="pas" value="etfuny4g" />
 	</bean>
+
+	<!-- alipay sdk -->
+	<bean id="alipayClient" class="com.alipay.api.DefaultAlipayClient">
+		<constructor-arg name="serverUrl"
+			value="https://openapi.alipay.com/gateway.do" />
+		<constructor-arg name="appId" value="2016033001255226" />
+		<constructor-arg name="privateKey"
+			value="MIICXQIBAAKBgQC95jJRBdv7ekrRc6Y2cSqnAC/3cHIPJzid+yAut0GOrKvNvRyU
+					vH8rJUxa5t7ojTLU6tnH78lmZWNUP474jvjG8grtWVxwbWA557Je72b1kUDHquFv
+					8RFdmrfXu6O0zC2lrmcqPAJw+TAhR1wOBDospc+3V5YPDwDk1ORu9Kp0MwIDAQAB
+					AoGAJ5b5QHkHPqtlM7t3mHwJV12rolt3+/7CR/VV5UdhTHxlKPRXJA8UOAuDmqPt
+					LvBY+5impI8yHr3ecm75wIoWBQ+whXZP16PA2Z8rpAMN/cAyq6IcqOUY41LYPW2L
+					pss/pMSnKi7MkELKGJH3wqsXejoKpG4o2j4c/yPn/S1YbQkCQQDu2Ess7dv+hinL
+					YZISwMZ1G07myBsWixCDJknZJQUTi8JzhY2l8rh/hBaZLIkyvDgcn0j1FMumZ3br
+					Af1DDyWnAkEAy4ns0ubyDJ/qcwsFbw7VE46bUhSXR6bDlpMHgke+cz323EytKzqz
+					mNys8HhRXroOg5bf86v+iHKCJq7N2n9mlQJAc65zCrnR+b8Fcyo407hm5sVpO8Hj
+					zNFiGANtdSzG/qaMceNXre6XibtyLpIxiU88ZjCH55xA3sHyCPUXs2kctQJBAKB0
+					Co34IbhyGJC4j4ANYUwZj7gVI20IugdpwPGjPS/8GS9yAtGhZROMY4juULcsVWTG
+					+6VMYUuPeaqlAwLMjEECQQCsTNrWAfauTSMFHfvWPzMDxhHf2ML3VUzjQK2Vl8eq
+					OHUr6hQYNyQEGEJ9MTF/2wqLcymhqv56Fr2aCQ/E3/Of" />
+		<constructor-arg name="format" value="json" />
+		<constructor-arg name="charset" value="utf-8" />
+		<constructor-arg name="alipayPulicKey"
+			value="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDI6d306Q8fIfCOaTXyiUeJHkrIvYISRcc73s3vF1ZT7XN8RNPwJxo8pWaJMmvyTn9N4HQ632qJBVHf8sxHi/fEsraprwCtzvzQETrNRwVxLO5jVmRGi60j8Ue1efIlzPXV9je9mkjzOmdssymZkh2QhUrCmZYI/FCEa3/cNMW0QIDAQAB" />
+	</bean>
+
 </beans>

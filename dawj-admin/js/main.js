@@ -110,7 +110,7 @@ var App = {
 
     App.Utils.FormUtil = {
         toJson: function (form) {
-            if (form instanceof jQuery) {
+            if (!(form instanceof jQuery)) {
                 form = $(form);
             }
             var serializeObj = {};

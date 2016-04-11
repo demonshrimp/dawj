@@ -81,11 +81,11 @@
                 <span class="menu"> </span>
                 <ul class="cl-effect-3">
                     <li class="active"><a href="index.html">首页</a></li>
-                    <li><a href="counseling-articles.html">心理文章 </a></li>
-                    <li><a href="counselors.html">咨询师 </a></li>
-                    <li><a href="404.html">心理咨询 </a></li>
-                    <li><a href="about.html">关于</a></li>
-                    <li><a href="contact.html">联系我们</a></li>
+                    <li><a href="counselors.html">找咨询师 </a></li>
+                    <li><a href="404.html">心理测评 </a></li>
+                    <li><a href="counseling-articles.html">心理案例 </a></li>
+                    <li class="hidden"><a href="about.html">关于</a></li>
+                    <li class="hidden"><a href="contact.html">联系我们</a></li>
                     <div class="clearfix"></div>
                 </ul>
                 <!-- script-for-nav -->
@@ -251,14 +251,19 @@
             <p>河南大象融媒集团心理咨询模范单位。</p>
         </div>
         <div class="col-md-4 foo-left">
-            <h3>常用链接</h3>
+            <h3>联系我们</h3>
             <ul>
-                <li class="active"><a href="index.html">首页</a></li>
+                <li><a><span class="glyphicon glyphicon-phone-alt" style="font-size: 17px;margin: 0 4px"></span>0371-55601221</a>
+                </li>
+                <li><a href="mailto:info@dawjxlzx.com"><i class="mail"></i>info@dawjxlzx.com</a></li>
+                <li><a><span class="glyphicon glyphicon-home" style="font-size: 17px;margin: 0 4px"></span>河南省郑州市金水区经三路66号金成国际广场4号楼2单元1102</a>
+                </li>
+                <!--<li class="active"><a href="index.html">首页</a></li>
                 <li class="active"><a href="about.html">关于我们</a></li>
                 <li><a href="#">咨询师 </a></li>
                 <li><a href="#">心理咨询 </a></li>
                 <li><a href="blog.html">联系我们</a></li>
-                <li><a href=" 404.html">个人中心</a></li>
+                <li><a href=" 404.html">个人中心</a></li>-->
                 <div class="clearfix"></div>
             </ul>
         </div>
@@ -269,7 +274,7 @@
 <!-- footer-bottom -->
 <div class="footer-bottom">
     <div class="container">
-        <p>Copyright &copy; 2015.Company name All rights reserved.More Templates - Collect from</p>
+        <p>Copyright &copy; 2016.大爱无疆 All rights reserved.</p>
     </div>
 </div>
 <!-- footer-bottom -->
@@ -467,11 +472,11 @@
                                 + '             <p style="margin-bottom: 10px"><strong>时长：</strong>' + order.consultingDuration + '小时</p>'
                                 + '         </div>'
                                 + '     </div>'
-                                + '     <div class="col-md-2"><span><strong class="visible-sm visible-xs">实际金额：</strong>￥1000</span>'
+                                + '     <div class="col-md-2"><span><strong class="visible-sm visible-xs">实际金额：</strong>￥' + order.amount + '</span>'
                                 + '     </div>'
-                                + '     <div class="col-md-2 col-xs-8"><span><strong class="visible-sm visible-xs">状态：</strong>' + order.status + '</span>'
+                                + '     <div class="col-md-2 col-xs-8"><span><strong class="visible-sm visible-xs">状态：</strong>' + getOrderStatusText(order.status) + '</span>'
                                 + '     </div>'
-                                + '     <div class="col-md-2 col-xs-4"><a class="btn btn-link" href="#">付款</a></div>'
+                                + '     <div class="col-md-2 col-xs-4"><a class="btn btn-primary" href="#">付款</a></div>'
                                 + ' </div>'
                                 + '</div>');
                     }
@@ -489,6 +494,16 @@
                     window.scrollTo(0, 0)
                 }
             });
+        }
+
+        function getOrderStatusText(status) {
+            var text = "";
+            switch (status) {
+                case "NEW":
+                    text = "待付款";
+                    break;
+            }
+            return text;
         }
 
     });

@@ -22,6 +22,7 @@ public class Order extends BaseSiteEntity {
 	private CounselingType counselingType;
 	private String consultingContent;
 	private Integer consultingDuration;
+	private Double amount;
 	private String contactName;
 	private String contactMobile;
 	private String contactAddress;
@@ -44,7 +45,7 @@ public class Order extends BaseSiteEntity {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
+
 	@ManyToOne(cascade = CascadeType.REFRESH)
 	@JoinColumn(name = "counselor_id", nullable = false)
 	public Counselor getCounselor() {
@@ -81,6 +82,15 @@ public class Order extends BaseSiteEntity {
 
 	public void setConsultingDuration(Integer consultingDuration) {
 		this.consultingDuration = consultingDuration;
+	}
+
+	@Column(nullable = false, scale = 2)
+	public Double getAmount() {
+		return amount;
+	}
+
+	public void setAmount(Double amount) {
+		this.amount = amount;
 	}
 
 	@Column(name = "contact_name", nullable = false)

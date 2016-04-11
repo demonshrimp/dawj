@@ -200,6 +200,7 @@ ul.number li a, ul.number li span {
 .head-right {
     float: right;
     margin: 0.5em 0;
+    display: none;
 }
 
 .header-top {
@@ -2513,8 +2514,10 @@ a.b-home:hover {
 
 .register-top-grid input[type="text"],
 .register-bottom-grid input[type="text"],
+.login-right input[type="text"],
 .register-top-grid input[type="password"],
 .register-bottom-grid input[type="password"],
+.login-right input[type="password"],
 .register-top-grid select,
 .register-top-grid input[type="date"],
 .register-bottom-grid input[type="date"],
@@ -2684,7 +2687,7 @@ div.register-bottom-grid {
 @media (max-width: 1024px) {
     .head-nav {
         float: left;
-        width: 64.8%;
+        /*width: 64.8%;*/
         margin-left: 3%;
     }
 

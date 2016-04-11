@@ -5,7 +5,7 @@ var App = {
 (function ($, App) {
     "use strict";
 
-    App.Constants.API_BASE = "http://192.168.1.104:8080/dawj-server/api/usr";
+    App.Constants.API_BASE = "http://127.0.0.1:8080/dawj-server/api/usr";
 
     App.Constants.KEY_CURRENT_USER = "_ASDdawjuu";
 
@@ -123,7 +123,7 @@ var App = {
 
     App.Utils.FormUtil = {
         toJson: function (form) {
-            if (form instanceof jQuery) {
+            if (!(form instanceof jQuery)) {
                 form = $(form);
             }
             var serializeObj = {};

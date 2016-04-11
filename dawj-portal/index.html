@@ -10,7 +10,7 @@
     <link href='http://fonts.useso.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen"/>
     <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.css" rel="stylesheet">
-    <link  href="css/animate.min.css" rel="stylesheet"/>
+    <link href="css/animate.min.css" rel="stylesheet"/>
     <script src="js/jquery.min.js"></script>
     <script src="js/masonry.pkgd.min.js"></script>
     <script src="js/main.js"></script>
@@ -92,10 +92,11 @@
                 <span class="menu"> </span>
                 <ul class="cl-effect-3">
                     <li class="active"><a href="index.html">首页</a></li>
-                    <li><a href="counselors.html">咨询师 </a></li>
-                    <li><a href="counseling-articles.html">心理咨询 </a></li>
-                    <li><a href="about.html">关于</a></li>
-                    <li><a href="contact.html">联系我们</a></li>
+                    <li><a href="counselors.html">找咨询师 </a></li>
+                    <li><a href="404.html">心理测评 </a></li>
+                    <li><a href="counseling-articles.html">心理案例 </a></li>
+                    <li class="hidden"><a href="about.html">关于</a></li>
+                    <li class="hidden"><a href="contact.html">联系我们</a></li>
                     <div class="clearfix"></div>
                 </ul>
                 <!-- script-for-nav -->
@@ -113,7 +114,8 @@
                     <li><a href="login.html">登录</a></li>
                     <li><a href="register.html">注册</a></li>
                 </ul>
-                <p id="unLoginPanel" class="hidden">欢迎，<a id="userName" href="user-center.html">用户</a>　<a href="user-center.html">[个人中心]</a><a href="#login.html">[注销]</a></p>
+                <p id="unLoginPanel" class="hidden">欢迎，<a id="userName" href="user-center.html">用户</a>　<a
+                        href="user-center.html">[个人中心]</a><a href="#login.html">[注销]</a></p>
             </div>
             <div class="clearfix"></div>
         </div>
@@ -151,20 +153,20 @@
                 <li>
                     <div class="banner-info">
                         <h1>心理咨询，就是那么轻松</h1>
-                        <p>文字正文1文字正文1文字正文1文字正文1文字正文1文字正文1文字正文1文字正文1文字正文1文字正文1 .</p>
+                        <p>我们秉持着“服务大众、共创和谐、健康心理！”的理念，为用户打造一个最快捷、专业的集“咨询、陪护、疗愈”为一体的一站式在线心理咨询服务。</p>
                     </div>
                 </li>
                 <li>
                     <div class="banner-info">
-                        <h1>文字标题2</h1>
-                        <p>文字正文2文字正文2文字正文2文字正文2文字正文2文字正文2文字正文2文字正文2文字正文2文字正文2文字正文2文字正文2 .</p>
+                        <h1>尊重</h1>
+                        <p>在价值、尊严、人格等方面与求助者平等，把求助者作为有思想感情、内心体验、生活追求和独特性与自主性的活生生的人去对待。应当体现为对求助者现状、价值观、人格和权益的接纳、关注和爱护。</p>
                     </div>
                 </li>
                 <li>
                     <div class="banner-info">
-                        <h1>文字标题3</h1>
-                        <p>文字正文3文字正文3文字正文3文字正文3文字正文3文字正文3文字正文3文字正文3文字正文3文字正文3文字正文3文字正文3
-                            文字正文3文字正文3文字正文3文字正文3文字正文3文字正文3文字正文3文字正文3文字正文3文字正文3.</p>
+                        <h1>真诚</h1>
+                        <p>咨询师在咨询过程中对来访者真挚诚恳，不特意取悦对方，不因自我防御而掩饰，不回避自己的失误和短处，直截了当的表达自己的想法。
+                            真诚能换取信任和喜爱，还能给求助者一种安全感。</p>
                     </div>
                 </li>
             </ul>
@@ -395,7 +397,7 @@
 <!-- /Blog -->
 <!-- recnt -->
 <!-- what -->
-<div class="what">
+<div class="what hidden">
     <div class="container">
         <h6>TESTIMONIALS</h6>
         <h3>WHAT PEOPLES ARE SAYING</h3>
@@ -492,14 +494,19 @@
             <p>河南大象融媒集团心理咨询模范单位。</p>
         </div>
         <div class="col-md-4 foo-left">
-            <h3>常用链接</h3>
+            <h3>联系我们</h3>
             <ul>
-                <li class="active"><a href="index.html">首页</a></li>
+                <li><a><span class="glyphicon glyphicon-phone-alt" style="font-size: 17px;margin: 0 4px"></span>0371-55601221</a>
+                </li>
+                <li><a href="mailto:info@dawjxlzx.com"><i class="mail"></i>info@dawjxlzx.com</a></li>
+                <li><a><span class="glyphicon glyphicon-home" style="font-size: 17px;margin: 0 4px"></span>河南省郑州市金水区经三路66号金成国际广场4号楼2单元1102</a>
+                </li>
+                <!--<li class="active"><a href="index.html">首页</a></li>
                 <li class="active"><a href="about.html">关于我们</a></li>
                 <li><a href="#">咨询师 </a></li>
                 <li><a href="#">心理咨询 </a></li>
                 <li><a href="blog.html">联系我们</a></li>
-                <li><a href=" 404.html">个人中心</a></li>
+                <li><a href=" 404.html">个人中心</a></li>-->
                 <div class="clearfix"></div>
             </ul>
         </div>
@@ -510,7 +517,7 @@
 <!-- footer-bottom -->
 <div class="footer-bottom">
     <div class="container">
-        <p>Copyright &copy; 2015.Company name All rights reserved.More Templates - Collect from</p>
+        <p>Copyright &copy; 2016.大爱无疆 All rights reserved.</p>
     </div>
 </div>
 <!-- footer-bottom -->
