@@ -35,7 +35,9 @@ var App = {
         if (s) {
             return JSON.parse(s);
         } else if (compulsive) {
-            window.location.href = 'login.html';
+            var pageUrl = window.location.toString();
+            pageUrl = encodeURI(pageUrl);
+            window.location.href = 'login.html?page_url='+pageUrl;
         }
     };
 

@@ -24,14 +24,14 @@ public class CounselorController extends BaseUserController {
 	private CounselingService counselingService;
 
 	@RequestMapping(path = "/list", method = RequestMethod.GET)
-	@SerializationFilter(target = Counselor.class, fields = { "site", "about" })
+	@SerializationFilter(target = Counselor.class, fields = { "site", "about", "consultingCase" })
 	public Object list() {
 		QueryCondition qc = new QueryConditionImpl(Counselor.class);
 		return Result.successResult(counselingService.counselorList(getCurrentSite().getId()), null);
 	}
 	
 	@RequestMapping(path = "/page", method = RequestMethod.GET)
-	@SerializationFilter(target = Counselor.class, fields = { "site" })
+	@SerializationFilter(target = Counselor.class, fields = { "site", "about", "consultingCase" })
 	public Object page(@RequestParam(name = "start") int pageIndex, @RequestParam(name = "length") int pageSize,
 			String orderBy, @RequestParam(defaultValue = "false") Boolean desc) {
 		QueryCondition qc = new QueryConditionImpl(Counselor.class);

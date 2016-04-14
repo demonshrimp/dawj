@@ -28,7 +28,7 @@ public interface OrderService extends BaseService<Order,String>{
 	 * 支付订单
 	 * @param orderId 订单ID
 	 */
-	public void pay(String orderId);
+	public void pay(String orderId,String thirdOrderId,Order.PaymentPlatform paymentPlatform);
 
 	/**
 	 * 完成订单

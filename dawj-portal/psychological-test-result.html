@@ -1,0 +1,273 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>心理测试</title>
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
+    <link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="keywords" content="心理咨询,咨询,心理,大爱无疆"/>
+    <link href='http://fonts.useso.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href="css/animate.min.css" rel="stylesheet"/>
+    <script src="js/vendor/jquery.min.js"></script>
+    <script src="js/main.js"></script>
+    <link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen"/>
+    <style>
+        .blog-content {
+            line-height: 30px;;
+        }
+
+        .result-title {
+            text-align: center;
+        }
+
+        .red {
+            color: red;
+        }
+
+        .blue {
+            color: #0682ff;
+        }
+
+        .yellow {
+            color: #ffae09;
+        }
+
+        .green {
+            color: #99ff09;
+        }
+
+    </style>
+</head>
+<body>
+<!-- header -->
+<div class="header">
+    <div class="header-top">
+        <div class="container">
+            <div class="head-left">
+                <ul class="number">
+                    <li><span><i class="phone"> </i>+0123 456 789</span></li>
+                    <li><a href="mailto:info@example.com"><i class="mail"> </i>hello@address.com</a></li>
+                    <div class="clearfix"></div>
+                </ul>
+            </div>
+            <div class="head-right">
+                <ul>
+                    <li><a href="#"><i class="fb"> </i></a></li>
+                    <li><a href="#"><i class="twt"> </i></a></li>
+                    <li><a href="#"><i class="ttt"> </i></a></li>
+                    <li><a href="#"><i class="ve"> </i></a></li>
+                    <li><a href="#"><i class="in"> </i></a></li>
+                    <li><a href="#"><i class="dib"> </i></a></li>
+                    <li><a href="#"><i class="fli"> </i></a></li>
+                    <li><a href="#"><i class="rss"> </i></a></li>
+                    <div class="clearfix"></div>
+                </ul>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="header-bottom">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html"><img src="images/logo1.png" class="img-responsive" alt=""></a>
+            </div>
+            <div class="head-nav">
+                <span class="menu"> </span>
+                <ul class="cl-effect-3">
+                    <li class="active"><a href="index.html">首页</a></li>
+                    <li><a href="counselors.html">找咨询师 </a></li>
+                    <li><a href="psychological-test.html">心理测评 </a></li>
+                    <li><a href="counseling-articles.html">心理案例 </a></li>
+                    <li class="hidden"><a href="about.html">关于</a></li>
+                    <li class="hidden"><a href="contact.html">联系我们</a></li>
+                    <div class="clearfix"></div>
+                </ul>
+                <!-- script-for-nav -->
+                <script>
+                    $("span.menu").click(function () {
+                        $(".head-nav ul").slideToggle(300, function () {
+                            // Animation complete.
+                        });
+                    });
+                </script>
+                <!-- script-for-nav -->
+            </div>
+            <div class="header-right1">
+                <ul id="loginPanel">
+                    <li><a href="login.html">登录</a></li>
+                    <li><a href="register.html">注册</a></li>
+                </ul>
+                <p id="unLoginPanel" class="hidden">欢迎，<a id="userName" href="user-center.html">用户</a>　
+                    <a href="user-center.html">[个人中心]</a>
+                    <a href="#login.html">[注销]</a>
+                </p>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<!-- header -->
+<!-- 404 -->
+<div class="content-top">
+    <div class="container">
+        <div class="portfolio-top animated slideInDown">
+            <h3>评测结果</h3>
+        </div>
+        <div class="blog-content" style="padding-left: 50px;">
+            <h3 class="result-title">您的性格类型是：经典的<span id="color"></span>性格</h3>
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="#result1" aria-controls="result1" role="tab" data-toggle="tab">概括</a>
+                </li>
+                <li role="presentation">
+                    <a href="#result2" aria-controls="result2" role="tab" data-toggle="tab">个体优势</a>
+                </li>
+                <li role="presentation">
+                    <a href="#result3" aria-controls="result2" role="tab" data-toggle="tab">沟通优势</a>
+                </li>
+                <li role="presentation">
+                    <a href="#result4" aria-controls="result2" role="tab" data-toggle="tab">友谊优势</a>
+                </li>
+                <li role="presentation">
+                    <a href="#result5" aria-controls="result2" role="tab" data-toggle="tab">事业优势</a>
+                </li>
+                <li role="presentation">
+                    <a href="#result6" aria-controls="result2" role="tab" data-toggle="tab">个体局限</a>
+                </li>
+                <li role="presentation">
+                    <a href="#result7" aria-controls="result2" role="tab" data-toggle="tab">沟通局限</a>
+                </li>
+                <li role="presentation">
+                    <a href="#result8" aria-controls="result2" role="tab" data-toggle="tab">友谊局限</a>
+                </li>
+                <li role="presentation">
+                    <a href="#result9" aria-controls="result2" role="tab" data-toggle="tab">事业局限</a>
+                </li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane in fade active" id="result1">
+                    <div></div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="result2">
+                    <div></div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="result3">
+                    <div></div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="result4">
+                    <div></div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="result5">
+                    <div></div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="result6">
+                    <div></div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="result7">
+                    <div></div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="result8">
+                    <div></div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="result9">
+                    <div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 404 -->
+
+<!-- footer-top -->
+<div class="footer-top">
+    <div class="container">
+        <div class="col-md-4 foo-left">
+            <a href="index.html"><img src="images/logo1.png" class="img-responsive" alt=""></a>
+            <p>大爱无疆心理咨询有限公司是在教育部政策（教思政厅[2011]1号）的影响下应运而生的全国目前唯一一家无区域执业的心理咨询公司。</p>
+            <p>公司具备资质：心理咨询；教育咨询；非学历短期培训（国内基本已停止审批）；人力中介服务（国内基本已停止审批）；教育文化交流活动组织策划；教育软件技术开发等。以上资质全国范围内均可使用。</p>
+        </div>
+        <div class="col-md-4 foo-left">
+            <h3>公司概况</h3>
+            <h6>成立情况</h6>
+            <p>2016年1月由中国工商总局核名后注册成立。</p>
+            <p>2016年3月份正式运营。</p>
+            <h6>荣誉</h6>
+            <p> 河南电视台法制频道优秀心理咨询机构。</p>
+            <p>河南大象融媒集团心理咨询模范单位。</p>
+        </div>
+        <div class="col-md-4 foo-left">
+            <h3>联系我们</h3>
+            <ul>
+                <li><a><span class="glyphicon glyphicon-phone-alt" style="font-size: 17px;margin: 0 4px"></span>0371-55601221</a>
+                </li>
+                <li><a href="mailto:info@dawjxlzx.com"><i class="mail"></i>info@dawjxlzx.com</a></li>
+                <li><a><span class="glyphicon glyphicon-home" style="font-size: 17px;margin: 0 4px"></span>河南省郑州市金水区经三路66号金成国际广场4号楼2单元1102</a>
+                </li>
+                <!--<li class="active"><a href="index.html">首页</a></li>
+                <li class="active"><a href="about.html">关于我们</a></li>
+                <li><a href="#">咨询师 </a></li>
+                <li><a href="#">心理咨询 </a></li>
+                <li><a href="blog.html">联系我们</a></li>
+                <li><a href=" 404.html">个人中心</a></li>-->
+                <div class="clearfix"></div>
+            </ul>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<!-- footer-top -->
+<!-- footer-bottom -->
+<div class="footer-bottom">
+    <div class="container">
+        <p>Copyright &copy; 2016.大爱无疆 All rights reserved.</p>
+    </div>
+</div>
+<!-- footer-bottom -->
+<script src="js/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script>
+    $(function () {
+        var result = App.Utils.UrlUtil.getUrlParameter('result');
+        var map = {
+            red: {
+                n: 1,
+                text: '红色'
+            },
+            blue: {
+                n: 2,
+                text: '蓝色'
+            },
+            yellow: {
+                n: 3,
+                text: '黄色'
+            },
+            green: {
+                n: 4,
+                text: '绿色'
+            }
+        };
+        var color = map[result];
+        $('.result-title').addClass(result);
+        $('#color').text(color.text);
+        for (var i = 1; i <= 9; i++) {
+            var n = color.n;
+            (function (i) {
+                $.get('data/questions/q1/' + result + '/' + n + i + '.txt', function (data) {
+                    data = replaceAll(data, '\n', '<br>');
+                    $('#result' + i + ' div').html(data);
+                });
+            })(i);
+        }
+
+
+        function replaceAll(str, sptr, sptr1) {
+            while (str.indexOf(sptr) >= 0) {
+                str = str.replace(sptr, sptr1);
+            }
+            return str;
+        }
+    });
+</script>
+</body>
+</html>

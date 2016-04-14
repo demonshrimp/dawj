@@ -53,7 +53,7 @@
                 <ul class="cl-effect-3">
                     <li class="active"><a href="index.html">首页</a></li>
                     <li><a href="counselors.html">找咨询师 </a></li>
-                    <li><a href="404.html">心理测评 </a></li>
+                    <li><a href="psychological-test.html">心理测评 </a></li>
                     <li><a href="counseling-articles.html">心理案例 </a></li>
                     <li class="hidden"><a href="about.html">关于</a></li>
                     <li class="hidden"><a href="contact.html">联系我们</a></li>
@@ -220,7 +220,13 @@
                         return;
                     }
                     App.setCurrentLoginSite(result.body);
-                    window.location.href = 'index.html';
+                    var pageUrl = App.Utils.UrlUtil.getUrlParameter('page_url');
+                    pageUrl = decodeURI(pageUrl);
+                    if(pageUrl&&pageUrl!=''&&pageUrl!='null'){
+                        window.location.href = pageUrl;
+                    }else{
+                        window.location.href = 'index.html';
+                    }
                 });
             }
         });

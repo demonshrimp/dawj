@@ -24,7 +24,7 @@ public class CounselingArticleController extends BaseUserController {
 	private CounselingService counselingService;
 
 	@RequestMapping(path = "/page", method = RequestMethod.GET)
-	@SerializationFilter(target = CounselingArticle.class, fields = { "site" })
+	@SerializationFilter(target = CounselingArticle.class, fields = { "site", "content" })
 	public Object page(@RequestParam(name = "start") int pageIndex, @RequestParam(name = "length") int pageSize,
 			String orderBy, @RequestParam(defaultValue = "false") Boolean desc) {
 		QueryCondition qc = new QueryConditionImpl(CounselingArticle.class);

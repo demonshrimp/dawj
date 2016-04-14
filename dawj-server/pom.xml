@@ -95,11 +95,21 @@
 			<artifactId>commons-fileupload</artifactId>
 			<version>1.3.1</version>
 		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.6</version>
+		</dependency>
 		<!-- 3rd libs -->
 		<dependency>
 			<groupId>com.alipay.api</groupId>
 			<artifactId>alipay-sdk</artifactId>
 			<version>1.5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.qq</groupId>
+			<artifactId>qq-connect-sdk</artifactId>
+			<version>1.0</version>
 		</dependency>
 		<!-- javaee base -->
 		<dependency>

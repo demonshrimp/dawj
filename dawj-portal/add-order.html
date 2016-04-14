@@ -54,7 +54,7 @@
                 <ul class="cl-effect-3">
                     <li class="active"><a href="index.html">首页</a></li>
                     <li><a href="counselors.html">找咨询师 </a></li>
-                    <li><a href="404.html">心理测评 </a></li>
+                    <li><a href="psychological-test.html">心理测评 </a></li>
                     <li><a href="counseling-articles.html">心理案例 </a></li>
                     <li class="hidden"><a href="about.html">关于</a></li>
                     <li class="hidden"><a href="contact.html">联系我们</a></li>
@@ -141,7 +141,7 @@
                     <h3>金额</h3>
                     <div class="wow fadeInLeft form-group" data-wow-delay="0.4s">
                         <span>总额（￥）<label>*</label></span>
-                        <input name="amount" readonly type="text" value="100.00">
+                        <input name="amount" readonly type="text" value="0.00">
                     </div>
                 </div>
             </form>
@@ -213,18 +213,19 @@
             </div>
             <div class="modal-body">
                 <p><label>请选择在线支付方式：</label></p>
-                <form class="form-inline">
+                <form class="form-inline" id="formPayment">
+                    <input type="hidden" name="orderId" id="hiddenOrderId">
                     <div class="form-group" style="width: 100%">
                         <div class="radio col-md-6">
                             <label>
-                                <input type="radio" name="optionsRadios" value="option1" checked/>
+                                <input type="radio" name="paymentType" value="alipay" checked/>
                                 <img src="images/ssdk_oks_classic_alipay.png"/>
                                 支付宝支付
                             </label>
                         </div>
                         <div class="radio col-md-6">
                             <label>
-                                <input type="radio" name="optionsRadios" value="option1" checked/>
+                                <input type="radio" name="paymentType" value="wechat" checked/>
                                 <img src="images/ssdk_oks_classic_wechat.png"/>
                                 微信支付
                             </label>
@@ -337,6 +338,7 @@
                     var type = counselor.counselingTypes[i];
                     selectType.append('<option value="' + type.id + '">' + type.name + '</option>');
                 }
+                form.find('[name="consultingDuration"]').change();
             }
         });
 
@@ -363,6 +365,7 @@
                     success: function (result) {
                         alert(result.header.message);
                         if (result.header.success) {
+                            $('#hiddenOrderId').val(result.body);
                             $('#myModal').modal({
                                 keyboard: false
                             });
@@ -373,7 +376,11 @@
         });
 
         form.find('[name="consultingDuration"]').change(function () {
-            form.find('[name="amount"]').val(counselor.fees * $(this).val() + '.00');
+            var amount = counselor.fees * $(this).val() + '';
+            if(amount.indexOf('.')<0){
+                amount += '.00';
+            }
+            form.find('[name="amount"]').val(amount);
         });
 
         $('#myModal').on('hidden.bs.modal', function (e) {
@@ -381,7 +388,12 @@
         });
 
         $('#btnSubmitPay').click(function () {
-
+            var payment = App.Utils.FormUtil.toJson('#formPayment');
+            $('#myModal').modal('hide');
+            if (payment.paymentType == 'alipay') {
+                var url = App.Constants.API_BASE;
+                window.open(url.substr(0, url.length - 8) + '/alipay/orderpay.jsp?orderId=' + payment.orderId);
+            }
         });
 
         //state methods

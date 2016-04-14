@@ -82,7 +82,7 @@
                 <ul class="cl-effect-3">
                     <li class="active"><a href="index.html">首页</a></li>
                     <li><a href="counselors.html">找咨询师 </a></li>
-                    <li><a href="404.html">心理测评 </a></li>
+                    <li><a href="psychological-test.html">心理测评 </a></li>
                     <li><a href="counseling-articles.html">心理案例 </a></li>
                     <li class="hidden"><a href="about.html">关于</a></li>
                     <li class="hidden"><a href="contact.html">联系我们</a></li>
@@ -277,6 +277,44 @@
         <p>Copyright &copy; 2016.大爱无疆 All rights reserved.</p>
     </div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">支付</h4>
+            </div>
+            <div class="modal-body">
+                <p><label>请选择在线支付方式：</label></p>
+                <form class="form-inline" id="formPayment">
+                    <input type="hidden" name="orderId" id="hiddenOrderId">
+                    <div class="form-group" style="width: 100%">
+                        <div class="radio col-md-6">
+                            <label>
+                                <input type="radio" name="paymentType" value="alipay" checked/>
+                                <img src="images/ssdk_oks_classic_alipay.png"/>
+                                支付宝支付
+                            </label>
+                        </div>
+                        <div class="radio col-md-6">
+                            <label>
+                                <input type="radio" name="paymentType" value="wechat" checked/>
+                                <img src="images/ssdk_oks_classic_wechat.png"/>
+                                微信支付
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">稍后支付</button>
+                <button type="button" class="btn btn-primary" id="btnSubmitPay">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- footer-bottom -->
 <script src="js/vendor/bootstrap/js/bootstrap.min.js"></script>
 <script>
@@ -419,6 +457,22 @@
             loadPage($('.go-page').length);
         });
 
+        $('#orders').on('click', '.btn-pay', function () {
+            $('#hiddenOrderId').val($(this).data('id'));
+            $('#myModal').modal({
+                keyboard: false
+            });
+        });
+
+        $('#btnSubmitPay').click(function () {
+            var payment = App.Utils.FormUtil.toJson('#formPayment');
+            $('#myModal').modal('hide');
+            if (payment.paymentType == 'alipay') {
+                var url = App.Constants.API_BASE;
+                window.open(url.substr(0, url.length - 8) + '/alipay/orderpay.jsp?orderId=' + payment.orderId);
+            }
+        });
+
         //state methods
         function updateForm(user) {
             user.password = '!notmodified';
@@ -476,7 +530,7 @@
                                 + '     </div>'
                                 + '     <div class="col-md-2 col-xs-8"><span><strong class="visible-sm visible-xs">状态：</strong>' + getOrderStatusText(order.status) + '</span>'
                                 + '     </div>'
-                                + '     <div class="col-md-2 col-xs-4"><a class="btn btn-primary" href="#">付款</a></div>'
+                                + '     <div class="col-md-2 col-xs-4">' + getOrderHandler(order) + '</div>'
                                 + ' </div>'
                                 + '</div>');
                     }
@@ -497,15 +551,32 @@
         }
 
         function getOrderStatusText(status) {
-            var text = "";
+            var text = '';
             switch (status) {
-                case "NEW":
-                    text = "待付款";
+                case 'NEW':
+                    text = '待付款';
+                    break;
+                case 'PAID':
+                    text = "已付款";
+                    break;
+                case 'COMPLETED':
+                    text = "已完成";
+                    break;
+                case 'CLOSED':
+                    text = "已关闭";
                     break;
             }
             return text;
         }
-
+        function getOrderHandler(order){
+            var html = '';
+            switch (order.status) {
+                case 'NEW':
+                    html = '<a class="btn btn-primary btn-pay" href="#" data-id="' + order.id + '")">付款</a>';
+                    break;
+            }
+            return html;
+        }
     });
 </script>
 </body>

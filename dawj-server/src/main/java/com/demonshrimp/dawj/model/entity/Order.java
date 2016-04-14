@@ -32,6 +32,9 @@ public class Order extends BaseSiteEntity {
 	private Date fulfillmentTime;
 	private Status status;
 
+	private String thirdOrderId;
+	private PaymentPlatform paymentPlatform;
+
 	public Order() {
 		super();
 	}
@@ -168,7 +171,30 @@ public class Order extends BaseSiteEntity {
 		this.status = status;
 	}
 
+	@Column(name = "third_order_id")
+	public String getThirdOrderId() {
+		return thirdOrderId;
+	}
+
+	public void setThirdOrderId(String thirdOrderId) {
+		this.thirdOrderId = thirdOrderId;
+	}
+
+	@Column(name = "payment_platform")
+	@Enumerated(EnumType.ORDINAL)
+	public PaymentPlatform getPaymentPlatform() {
+		return paymentPlatform;
+	}
+
+	public void setPaymentPlatform(PaymentPlatform paymentPlatform) {
+		this.paymentPlatform = paymentPlatform;
+	}
+
 	public enum Status {
 		NEW, PAID, COMPLETED, REFUNDABLE, CLOSED;
+	}
+
+	public enum PaymentPlatform {
+		ALIPAY, WECHAT;
 	}
 }

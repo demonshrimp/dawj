@@ -65,8 +65,10 @@ public class Counselor extends BaseSiteEntity {
 
 	public void setImage(String image) {
 		this.image = image;
-		this.fullImage = ImageInfo.buildFullPath(
-				((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest(), image);
+		if (null != image && null != RequestContextHolder.getRequestAttributes()) {
+			this.fullImage = ImageInfo.buildFullPath(
+					((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest(), image);
+		}
 	}
 
 	@Column(nullable = false)
