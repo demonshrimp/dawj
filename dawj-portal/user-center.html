@@ -317,6 +317,7 @@
 </div>
 <!-- footer-bottom -->
 <script src="js/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/orderUtil.js"></script>
 <script>
     $(function () {
 
@@ -464,6 +465,41 @@
             });
         });
 
+        $('#orders').on('click', '.btn-close', function () {
+            var orderId = $(this).data('id');
+            if (confirm('确定要关闭这个订单吗？(该操作不可恢复)')) {
+                $.ajax({
+                    url: App.Constants.API_BASE + '/order/' + orderId + '/close',
+                    type: 'PUT',
+                    success: function (result) {
+                        if (result.header.success) {
+                            loadPage(0);
+                        }else{
+                            alert(result.header.message);
+                        }
+                    }
+                });
+            }
+        });
+
+        $('#orders').on('click', '.btn-refund', function () {
+            var orderId = $(this).data('id');
+            if (confirm('确定要申请退款吗？')) {
+                $.ajax({
+                    url: App.Constants.API_BASE + '/order/' + orderId + '/refund-app',
+                    type: 'PUT',
+                    success: function (result) {
+                        if (result.header.success) {
+                            loadPage(0);
+                        }else{
+                            alert(result.header.message);
+                        }
+                    }
+                });
+            }
+        });
+
+
         $('#btnSubmitPay').click(function () {
             var payment = App.Utils.FormUtil.toJson('#formPayment');
             $('#myModal').modal('hide');
@@ -528,7 +564,7 @@
                                 + '     </div>'
                                 + '     <div class="col-md-2"><span><strong class="visible-sm visible-xs">实际金额：</strong>￥' + order.amount + '</span>'
                                 + '     </div>'
-                                + '     <div class="col-md-2 col-xs-8"><span><strong class="visible-sm visible-xs">状态：</strong>' + getOrderStatusText(order.status) + '</span>'
+                                + '     <div class="col-md-2 col-xs-8"><span><strong class="visible-sm visible-xs">状态：</strong>' + App.Utils.OrderUtil.getStatusText(order.status) + '</span>'
                                 + '     </div>'
                                 + '     <div class="col-md-2 col-xs-4">' + getOrderHandler(order) + '</div>'
                                 + ' </div>'
@@ -550,29 +586,15 @@
             });
         }
 
-        function getOrderStatusText(status) {
-            var text = '';
-            switch (status) {
-                case 'NEW':
-                    text = '待付款';
-                    break;
-                case 'PAID':
-                    text = "已付款";
-                    break;
-                case 'COMPLETED':
-                    text = "已完成";
-                    break;
-                case 'CLOSED':
-                    text = "已关闭";
-                    break;
-            }
-            return text;
-        }
-        function getOrderHandler(order){
+        function getOrderHandler(order) {
             var html = '';
             switch (order.status) {
                 case 'NEW':
-                    html = '<a class="btn btn-primary btn-pay" href="#" data-id="' + order.id + '")">付款</a>';
+                    html = '<a class="btn btn-primary btn-pay" href="#" data-id="' + order.id + '")">付款</a>'
+                            + '/<a class="btn btn-primary btn-close" href="#" data-id="' + order.id + '")">关闭</a>';
+                    break;
+                case 'PAID':
+                    html = '<a class="btn btn-primary btn-refund" href="#" data-id="' + order.id + '")">退款</a>';
                     break;
             }
             return html;

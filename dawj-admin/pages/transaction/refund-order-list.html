@@ -81,7 +81,7 @@
                     className: 'center',
                     render: function (data, type, full, meta) {
                         return App.Utils.DataTablesHelper.buildOperationButtons([{
-                            text: '处理',
+                            text: '退款',
                             operation: 'refund'
                         }], full);
                     }
@@ -102,24 +102,17 @@
 
         App.Utils.DataTablesHelper.onOperationButtonClick('#tblRefundOrderList', function (data) {
             switch (data.operation) {
-                case  'edit':
-                    edit(data);
-                    break;
-                case  'remove':
-                    remove(data);
+                case  'refund':
+                    refund(data);
                     break;
             }
         });
 
-        function edit(data) {
-            App.loadPage('pages/counseling/counseling-article.html?id=' + data.id);
-        }
-
-        function remove(data) {
-            if (confirm('确定要删除这个站点吗？')) {
+        function refund(data) {
+            if (confirm('确定要退款这个订单吗？(该操作不可恢复)')) {
                 $.ajax({
-                    url: App.Constants.API_BASE + '/counseling-article/' + data.id,
-                    type: 'DELETE',
+                    url: App.Constants.API_BASE + '/order/' + data.id + '/refund',
+                    type: 'PUT',
                     success: function (result) {
                         alert(result.header.message);
                         if (result.header.success) {
@@ -129,6 +122,7 @@
                 });
             }
         }
+
 
         function refreshTable(retain) {
             var page = table.page.info().page;

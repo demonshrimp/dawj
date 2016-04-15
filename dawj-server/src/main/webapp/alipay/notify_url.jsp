@@ -1,3 +1,6 @@
+<%@page import="com.demonshrimp.dawj.model.entity.Order.PaymentPlatform"%>
+<%@page import="com.demonshrimp.dawj.service.OrderService"%>
+<%@page import="pers.ksy.common.spring4.SpringUtil"%>
 <%
 /* *
  功能：支付宝服务器异步通知页面
@@ -59,7 +62,11 @@
 				//如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
 				//请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
 				//如果有做过处理，不执行商户的业务程序
-				
+			try{
+				SpringUtil.getBean(OrderService.class).pay(out_trade_no, trade_no, PaymentPlatform.ALIPAY);
+			}catch(Exception e){
+				out.println(e.getMessage());
+			}
 			//注意：
 			//退款日期超过可退款期限后（如三个月可退款），支付宝系统发送该交易状态通知
 		} else if (trade_status.equals("TRADE_SUCCESS")){

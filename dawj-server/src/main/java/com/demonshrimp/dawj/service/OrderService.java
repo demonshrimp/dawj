@@ -41,6 +41,20 @@ public interface OrderService extends BaseService<Order,String>{
 	 * @param orderId 订单ID
 	 */
 	public void close(String orderId);
+	
+
+	/**
+	 * 退款申请
+	 * @param orderId
+	 */
+	void refundApply(String orderId);
+
+
+	/**
+	 * 退款
+	 * @param orderId
+	 */
+	void refund(String orderId);
 
 
 	/**
@@ -49,4 +63,12 @@ public interface OrderService extends BaseService<Order,String>{
 	 * @return
 	 */
 	public long[] statisticsQuantityMonthly(String siteId, int year);
+	
+	/**
+	 * 检查订单是不是用户的
+	 * @param orderId
+	 * @param userId
+	 */
+	void selfOrderCheck(String orderId, String userId);
+
 }

@@ -72,7 +72,7 @@
 			//如果有做过处理，不执行商户的业务程序
 			try{
 				SpringUtil.getBean(OrderService.class).pay(out_trade_no, trade_no, PaymentPlatform.ALIPAY);
-				response.sendRedirect(AlipayConfig.server_root + "/dawj/user-center.html#order");
+				response.sendRedirect(AlipayConfig.server_root + "/user-center.html#order");
 			}catch(Exception e){
 				out.println(e.getMessage());
 			}

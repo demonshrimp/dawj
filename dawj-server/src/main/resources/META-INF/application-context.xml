@@ -46,19 +46,7 @@
 			value="https://openapi.alipay.com/gateway.do" />
 		<constructor-arg name="appId" value="2016033001255226" />
 		<constructor-arg name="privateKey"
-			value="MIICXQIBAAKBgQC95jJRBdv7ekrRc6Y2cSqnAC/3cHIPJzid+yAut0GOrKvNvRyU
-					vH8rJUxa5t7ojTLU6tnH78lmZWNUP474jvjG8grtWVxwbWA557Je72b1kUDHquFv
-					8RFdmrfXu6O0zC2lrmcqPAJw+TAhR1wOBDospc+3V5YPDwDk1ORu9Kp0MwIDAQAB
-					AoGAJ5b5QHkHPqtlM7t3mHwJV12rolt3+/7CR/VV5UdhTHxlKPRXJA8UOAuDmqPt
-					LvBY+5impI8yHr3ecm75wIoWBQ+whXZP16PA2Z8rpAMN/cAyq6IcqOUY41LYPW2L
-					pss/pMSnKi7MkELKGJH3wqsXejoKpG4o2j4c/yPn/S1YbQkCQQDu2Ess7dv+hinL
-					YZISwMZ1G07myBsWixCDJknZJQUTi8JzhY2l8rh/hBaZLIkyvDgcn0j1FMumZ3br
-					Af1DDyWnAkEAy4ns0ubyDJ/qcwsFbw7VE46bUhSXR6bDlpMHgke+cz323EytKzqz
-					mNys8HhRXroOg5bf86v+iHKCJq7N2n9mlQJAc65zCrnR+b8Fcyo407hm5sVpO8Hj
-					zNFiGANtdSzG/qaMceNXre6XibtyLpIxiU88ZjCH55xA3sHyCPUXs2kctQJBAKB0
-					Co34IbhyGJC4j4ANYUwZj7gVI20IugdpwPGjPS/8GS9yAtGhZROMY4juULcsVWTG
-					+6VMYUuPeaqlAwLMjEECQQCsTNrWAfauTSMFHfvWPzMDxhHf2ML3VUzjQK2Vl8eq
-					OHUr6hQYNyQEGEJ9MTF/2wqLcymhqv56Fr2aCQ/E3/Of" />
+			value="MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAK+dOI8gKwYbc8GGDNeXv2bMTkqjljFIshoreva+MTINldHqpjnE+0UcP2BI7k3tJrNgHPzepzGGl5w09RD61gotb3Us9F97LSmDVt1eSdrMxbQKAOktfRO8fmzDkcpSQKc+j5+6icbMWQ78Omxi4rL6K6mhfYG0YE/FAstN+qHtAgMBAAECgYAMeI/Bqjkj7+MihRB4ZvBSroOIzWEnEtCDBz9uMkdwFILlK1Kum4x0dfMSNVum8QZkipjEZFNfMv2lPCWDFS0J4d2pGNuNhJuy0mDftPmRi7cuVES967/pWYgTvgtRDHY7e2rorL6XoMOyq7Cv4YCOtuenxbK0JQa6V1rRPerbSQJBANe0SSTvFfU5P+rrVvyUFilxNnWQ681QMXC/qtE7JxItFWZ1Kw3c3dSnfhyo+pQCv5mWaVFXl9JbEjhQg7r3ZEsCQQDQa7CRgELNuWq/DSERcMLqzGbyjLFUacVIee3x8zxmgq+RH58MbU1VroRBZ6nLVI1sxityOdWnxpFf96o3JX+nAkEAopyZH6zWAt4731+3XgZNhsSAZ7Tu7wLrorH7lmxfkgZGwczGvlapLO1v1y9UaEyCIMkRcG72V3CslaOtC0ABbQJBAKjb5xUrTnRw2exqDbWcnz8uVeYDWRSkEUN0DfUt9Wy0StwQO4MM91AI8XwwKZ/kJCTRtZd5BgJFXbjb5luBlRcCQQCVpvdrolg2gsvv4RKTLrH5QC1mehJuZouD3xz3wPOQStzb0b/hn/UvwVtUMUHzfXvYX9Y8Jbd44oaK8WojOenE" />
 		<constructor-arg name="format" value="json" />
 		<constructor-arg name="charset" value="utf-8" />
 		<constructor-arg name="alipayPulicKey"

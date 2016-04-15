@@ -59,6 +59,12 @@ public class OrderController extends BaseAdminController {
 		orderService.complete(orderId);
 		return Result.successResult("订单完成成功!");
 	}
+	
+	@RequestMapping(path = "/{orderId}/refund", method = RequestMethod.PUT)
+	public Object refund(@PathVariable String orderId) {
+		orderService.refund(orderId);
+		return Result.successResult("订单退款成功!");
+	}
 
 	@RequestMapping(path = "/count", method = RequestMethod.GET)
 	public Object count() {

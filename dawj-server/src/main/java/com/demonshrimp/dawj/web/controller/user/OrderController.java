@@ -29,11 +29,18 @@ public class OrderController extends BaseUserController {
 		return Result.successResult(order.getId(), "订单提交成功");
 	}
 
-	@RequestMapping(path = "/{userId}", method = RequestMethod.PUT)
-	public Object update(@PathVariable String orderId, @RequestBody Order order) {
-		order.setId(orderId);
-		orderService.update(order);
-		return Result.successResult("更新成功");
+	@RequestMapping(path = "/{orderId}/close", method = RequestMethod.PUT)
+	public Object close(@PathVariable String orderId) {
+		orderService.selfOrderCheck(orderId, getCurrentUser().getId());
+		orderService.close(orderId);
+		return Result.successResult(null);
+	}
+	
+	@RequestMapping(path = "/{orderId}/refund-app", method = RequestMethod.PUT)
+	public Object refundApp(@PathVariable String orderId) {
+		orderService.selfOrderCheck(orderId, getCurrentUser().getId());
+		orderService.refundApply(orderId);
+		return Result.successResult(null);
 	}
 
 	@RequestMapping(path = "/page", method = RequestMethod.GET)
