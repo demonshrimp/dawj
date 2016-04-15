@@ -180,7 +180,7 @@
 
         //fs
         function loadPage(start) {
-            $.get(App.Constants.API_BASE + '/counselor/page?orderBy=createTime&desc=true&length=6&start=' + start, function (result) {
+            $.get(App.Constants.API_BASE + '/counselor/page?orderBy=createTime&desc=true&length=6&pageIndex=' + start, function (result) {
                 if (result.header.success) {
                     console.log(result);
                     var pageInfo = result.body;

@@ -32,7 +32,7 @@ public class CounselorController extends BaseUserController {
 	
 	@RequestMapping(path = "/page", method = RequestMethod.GET)
 	@SerializationFilter(target = Counselor.class, fields = { "site", "about", "consultingCase" })
-	public Object page(@RequestParam(name = "start") int pageIndex, @RequestParam(name = "length") int pageSize,
+	public Object page(@RequestParam(name = "pageIndex") int pageIndex, @RequestParam(name = "length") int pageSize,
 			String orderBy, @RequestParam(defaultValue = "false") Boolean desc) {
 		QueryCondition qc = new QueryConditionImpl(Counselor.class);
 		if (StringUtil.notEmpty(orderBy)) {

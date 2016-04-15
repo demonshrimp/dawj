@@ -2,12 +2,8 @@
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
-                <h3 class="box-title">咨询文章列表</h3>
+                <h3 class="box-title">退款申请列表</h3>
                 <div class="box-tools pull-right">
-                    <button id="btnAddCounselingType" type="button" class="btn btn-box-tool" title="新增">
-                        <i class="fa fa-plus"></i>
-                        新增
-                    </button>
                     <button id="btnRefreshTable" type="button" class="btn btn-box-tool" title="刷新">
                         <i class="fa fa-refresh"></i>
                         刷新
@@ -16,13 +12,18 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-                <table id="tblCounselingArticleList" class="table table-bordered table-hover nowrap datatables">
+                <table id="tblRefundOrderList" class="table table-bordered table-hover nowrap datatables">
                     <thead>
                     <tr>
-                        <th>标题</th>
-                        <th>图片</th>
-                        <th>类别</th>
-                        <th>标签</th>
+                        <th>订单号</th>
+                        <th>咨询类别</th>
+                        <th>用户</th>
+                        <th>咨询师</th>
+                        <th>金额</th>
+                        <th>状态</th>
+                        <th>预约咨询时间</th>
+                        <th>支付平台</th>
+                        <th>支付时间</th>
                         <th>创建时间</th>
                         <th>最后修改时间</th>
                         <th>操作</th>
@@ -35,6 +36,7 @@
 </div>
 </div>
 <!-- /.box-body -->
+<script src="js/orderUtil.js"></script>
 <!-- DataTables -->
 <link rel="stylesheet" href="plugins/datatables/media/css/dataTables.bootstrap.min.css">
 <link rel="stylesheet" href="plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css">
@@ -55,21 +57,23 @@
 <script>
     $(function () {
         App.Utils.DataTablesHelper.pipelineNoCache();
-        var table = $('#tblCounselingArticleList').DataTable({
-            ajax : $.fn.dataTable.pipelineNoCache({
-                url: App.Constants.API_BASE + '/counseling-article/page'
+        var table = $('#tblRefundOrderList').DataTable({
+            ajax: $.fn.dataTable.pipelineNoCache({
+                url: App.Constants.API_BASE + '/order/refund-page'
             }),
             columns: [
-                {data: 'title'},
-                {
-                    data: 'fullImage',
-                    className: 'center',
-                    render: function (data, type, full, meta) {
-                        return '<a href="'+data+'" target="_blank"><img class="img-thumbnail img-preview" src="'+data+'" width="40px"  /></a>'
-                    }
-                },
+                {data: 'id'},
                 {data: 'counselingType.name'},
-                {data: 'tag'},
+                {data: 'user.name'},
+                {data: 'counselor.name'},
+                {data: 'amount'},
+                {
+                    data: 'status',
+                    render: App.Utils.OrderUtil.getStatusTag
+                },
+                {data: 'scheduledTime'},
+                {data: 'paymentPlatform'},
+                {data: 'paymentTime'},
                 {data: 'createTime'},
                 {data: 'lastModifyTime'},
                 {
@@ -77,11 +81,8 @@
                     className: 'center',
                     render: function (data, type, full, meta) {
                         return App.Utils.DataTablesHelper.buildOperationButtons([{
-                            text: '编辑',
-                            operation: 'edit'
-                        }, {
-                            text: '删除',
-                            operation: 'remove'
+                            text: '处理',
+                            operation: 'refund'
                         }], full);
                     }
                 }
@@ -98,10 +99,8 @@
         $('#btnRefreshTable').click(function () {
             refreshTable()
         });
-        $('#btnAddCounselingType').click(function () {
-            App.loadPage('pages/counseling/counseling-article.html');
-        });
-        App.Utils.DataTablesHelper.onOperationButtonClick('#tblCounselingArticleList', function (data) {
+
+        App.Utils.DataTablesHelper.onOperationButtonClick('#tblRefundOrderList', function (data) {
             switch (data.operation) {
                 case  'edit':
                     edit(data);

@@ -200,7 +200,7 @@ var App = {
             $.fn.dataTable.pipeline = function (opts) {
                 // Configuration options
                 var conf = $.extend({
-                    pages: 0,     // number of pages to cache
+                    pages: 1,     // number of pages to cache
                     url: '',      // script url
                     data: null,   // function or object with parameters to send to the server
                                   // matching how `ajax.data` works in DataTables
@@ -224,12 +224,10 @@ var App = {
                         // API requested that the cache be cleared
                         ajax = true;
                         settings.clearCache = false;
-                    }
-                    else if (cacheLower < 0 || requestStart < cacheLower || requestEnd > cacheUpper) {
+                    } else if (cacheLower < 0 || requestStart < cacheLower || requestEnd > cacheUpper) {
                         // outside cached data - need to make a request
                         ajax = true;
-                    }
-                    else if (JSON.stringify(request.order) !== JSON.stringify(cacheLastRequest.order) ||
+                    } else if (JSON.stringify(request.order) !== JSON.stringify(cacheLastRequest.order) ||
                         JSON.stringify(request.columns) !== JSON.stringify(cacheLastRequest.columns) ||
                         JSON.stringify(request.search) !== JSON.stringify(cacheLastRequest.search)
                     ) {
@@ -312,6 +310,42 @@ var App = {
                     settings.clearCache = true;
                 });
             });
+        },
+        pipelineNoCache: function () {
+            //
+            // Pipelining function for DataTables. To be used to the `ajax` option of DataTables
+            //
+            $.fn.dataTable.pipelineNoCache = function (opts) {
+                // Configuration options
+                var conf = $.extend({
+                    url: '',      // script url
+                    data: null,   // function or object with parameters to send to the server
+                                  // matching how `ajax.data` works in DataTables
+                    method: 'GET' // Ajax HTTP method
+                }, opts);
+
+                return function (request, drawCallback, settings) {
+                    request.pageIndex = request.start / request.length ;
+                    settings.jqXHR = $.ajax({
+                        "type": conf.method,
+                        "url": conf.url,
+                        "data": request,
+                        "dataType": "json",
+                        "cache": false,
+                        "success": function (json) {
+                            var data = {
+                                "recordsTotal": json.body.total,
+                                "recordsFiltered": json.body.total,
+                                "data": json.body.list
+                            }
+                            //data.data.splice(requestLength, data.data.length);
+
+                            drawCallback(data);
+                        }
+                    });
+
+                }
+            };
         }
     };
     App.Utils.UrlUtil = {

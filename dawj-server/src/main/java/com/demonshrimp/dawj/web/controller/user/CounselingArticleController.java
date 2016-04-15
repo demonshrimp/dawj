@@ -25,7 +25,7 @@ public class CounselingArticleController extends BaseUserController {
 
 	@RequestMapping(path = "/page", method = RequestMethod.GET)
 	@SerializationFilter(target = CounselingArticle.class, fields = { "site", "content" })
-	public Object page(@RequestParam(name = "start") int pageIndex, @RequestParam(name = "length") int pageSize,
+	public Object page(@RequestParam(name = "pageIndex") int pageIndex, @RequestParam(name = "length") int pageSize,
 			String orderBy, @RequestParam(defaultValue = "false") Boolean desc) {
 		QueryCondition qc = new QueryConditionImpl(CounselingArticle.class);
 		if (StringUtil.notEmpty(orderBy)) {

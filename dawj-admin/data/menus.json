@@ -44,7 +44,7 @@
           {
             "no": "132",
             "name": "退款管理",
-            "url": "pages/transaction/refund-list.html"
+            "url": "pages/transaction/refund-order-list.html"
           }
         ]
       },
@@ -82,18 +82,6 @@
         "name": "子站管理",
         "icon": "fa-sitemap",
         "url": "pages/sys/site-list.html"
-      },
-      {
-        "no": "22",
-        "name": "Warning",
-        "icon": "fa-circle-o text-yellow",
-        "url": "#"
-      },
-      {
-        "no": "23",
-        "name": "Information",
-        "icon": "fa-circle-o text-aqua",
-        "url": "#"
       }
     ]
   }

@@ -37,8 +37,16 @@ public interface OrderService extends BaseService<Order,String>{
 	public void complete(String orderId);
 	
 	/**
-	 * 结束订单
+	 * 关闭订单
 	 * @param orderId 订单ID
 	 */
 	public void close(String orderId);
+
+
+	/**
+	 * 年度订单量月统计
+	 * @param year 年份
+	 * @return
+	 */
+	public long[] statisticsQuantityMonthly(String siteId, int year);
 }

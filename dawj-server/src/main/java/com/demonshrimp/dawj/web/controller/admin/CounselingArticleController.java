@@ -24,7 +24,7 @@ public class CounselingArticleController extends BaseAdminController {
 
 	@RequestMapping(path = "/page", method = RequestMethod.GET)
 	@SerializationFilter(target = CounselingArticle.class, fields = { "site" })
-	public Object page(@RequestParam(name = "start") int pageIndex, @RequestParam(name = "length") int pageSize) {
+	public Object page(@RequestParam(name = "pageIndex") int pageIndex, @RequestParam(name = "length") int pageSize) {
 		QueryCondition qc = new QueryConditionImpl(CounselingArticle.class);
 		return Result.successResult(
 				counselingService.findCounselingArticlePage(getCurrentSite().getId(), qc, pageIndex, pageSize), null);

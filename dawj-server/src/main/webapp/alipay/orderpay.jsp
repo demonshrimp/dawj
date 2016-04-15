@@ -35,6 +35,9 @@
 		String orderId = request.getParameter("orderId");
 		OrderService orderService = SpringUtil.getBean(OrderService.class);
 		Order order = orderService.get(orderId);
+		if (order.getStatus() != Order.Status.NEW) {
+			out.println("<script>alert('错误的订单状态，请返回刷新重试！');window.close();</script>");
+		}
         //商户订单号，商户网站订单系统中唯一订单号，必填
         String out_trade_no = order.getId();
         //订单名称，必填

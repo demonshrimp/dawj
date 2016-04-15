@@ -255,7 +255,7 @@
 
         //fs
         function loadPage(start) {
-            $.get(App.Constants.API_BASE + '/counseling-article/page?orderBy=createTime&desc=true&length=3&start=' + start, function (result) {
+            $.get(App.Constants.API_BASE + '/counseling-article/page?orderBy=createTime&desc=true&length=3&pageIndex=' + start, function (result) {
                 if (result.header.success) {
                     var pageInfo = result.body;
                     var counselingArticles = pageInfo.list;

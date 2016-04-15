@@ -396,7 +396,11 @@
                 var hash = location.hash;
                 var page = hash.substr(1);
                 if (page) {
-                    $("#wrapperContent").load(page);
+                    $("#wrapperContent").load(page,function(response,status,xhr){
+                       if(xhr.status==404){
+                           $("#wrapperContent").load('pages/home/404.html');
+                       }
+                    });
                 }
             });
             var indexUrl = "pages/home/dashboard.html";
