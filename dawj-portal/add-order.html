@@ -130,7 +130,7 @@
                     </div>
                     <div class="wow fadeInLeft form-group" data-wow-delay="0.4s">
                         <span>预约咨询日期<label>*</label></span>
-                        <input name="scheduledTime" name="birthday" type="date">
+                        <input name="scheduledDate" name="birthday" type="date">
                     </div>
                     <div class="wow fadeInLeft form-group" style="width: 98%;" data-wow-delay="0.4s">
                         <span>备注</span>
@@ -302,7 +302,7 @@
                         }
                     }
                 },
-                scheduledTime: {
+                scheduledDate: {
                     validators: {
                         notEmpty: {
                             message: '预约咨询时期不能为空'
@@ -346,7 +346,7 @@
         form.find('[name="contactName"]').val(user.name);
         form.find('[name="contactMobile"]').val(user.mobile);
         form.find('[name="contactAddress"]').val(user.address);
-        form.find('[name="scheduledTime"]').val(new Date().Format('yyyy-MM-dd'));
+        form.find('[name="scheduledDate"]').val(new Date().Format('yyyy-MM-dd'));
 
 
         //init evens
@@ -355,7 +355,7 @@
             if (validator.isValid()) {
                 var order = App.Utils.FormUtil.toJson(form);
                 order.counselor = {id: counselorId};
-                order.scheduledTime = order.scheduledTime + ' 00:00:00';
+                order.scheduledDate = order.scheduledDate + ' 00:00:00';
                 $.ajax({
                     url: App.Constants.API_BASE + '/order/',
                     contentType: "application/json",

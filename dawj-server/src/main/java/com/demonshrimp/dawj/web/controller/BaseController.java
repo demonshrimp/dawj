@@ -17,7 +17,7 @@ public class BaseController {
 	@ExceptionHandler
 	public Result<String> exp(HttpServletRequest request, Throwable ex) {
 		ex.printStackTrace();
-		log.error(ex.getMessage(), ex);
+		log.debug(ex.getMessage(), ex);
 		if (ex instanceof ServiceException) {
 			ServiceException se = (ServiceException) ex;
 			return Result.errorResult(se.getErrorCode(), se.getMessage());
@@ -28,6 +28,9 @@ public class BaseController {
 				if (th2.getMessage().startsWith("Duplicate entry")) {
 					String name = this.getDuplicateFieldName(th2.getMessage());
 					return Result.errorResult("字段" + name + "的值不允许重复！");
+				}else if(th2.getMessage().startsWith("Cannot delete or update a parent row")){
+					String name = this.getReferenceTable(th2.getMessage());
+					return Result.errorResult("该记录正在被其他表：“" + name + "”中的对象引用，不能删除！");
 				}
 			}
 		}
@@ -42,5 +45,13 @@ public class BaseController {
 			name = s.substring(4, s.length() - 1);
 		}
 		return name;
+	}
+	
+	private String getReferenceTable(String msg){
+		String table = null;
+		String key = "Cannot delete or update a parent row: a foreign key constraint fails";
+		String ss[] = msg.substring(key.length()+2).split(",");
+		table = ss[0];
+		return table;
 	}
 }

@@ -1,6 +1,7 @@
 package com.demonshrimp.dawj.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,17 +49,41 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, String> implements 
 
 	@Override
 	public void complete(String orderId) {
-		throw new ServiceException("not implement!");
+		Order order = orderDao.load(orderId);
+		if (order.getStatus() != Status.PAID) {
+			throw new ServiceException("不能完成该状态的订单");
+		}
+		order.setFulfillmentTime(new Date());
+		order.setStatus(Order.Status.COMPLETED);
+		orderDao.update(order);
 	}
 
 	@Override
 	public void close(String orderId) {
-		throw new ServiceException("not implement!");
+		Order order = orderDao.load(orderId);
+		if (order.getStatus() != Status.NEW) {
+			throw new ServiceException("不能关闭该状态的订单");
+		}
+		order.setCloseTime(new Date());
+		order.setStatus(Order.Status.CLOSED);
+		orderDao.update(order);
+	}
+
+	@Override
+	public long[] statisticsQuantityMonthly(String siteId, int year) {
+		long[] result = new long[12];
+		List<Object[]> list = orderDao.statisticsQuantityMonthly(siteId, year);
+		for (Object[] data : list) {
+			long number = Long.valueOf(data[0].toString());
+			int month = Integer.valueOf(data[1].toString());
+			result[month - 1] = number;
+		}
+		return result;
 	}
 
 	@Override
 	protected BaseDao<Order, String> getDao() {
 		return orderDao;
 	}
-	
+
 }

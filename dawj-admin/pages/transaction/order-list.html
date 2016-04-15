@@ -1,1 +1,184 @@
-订单列表
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">订单列表</h3>
+                <div class="box-tools pull-right">
+                    <button id="btnRefreshTable" type="button" class="btn btn-box-tool" title="刷新">
+                        <i class="fa fa-refresh"></i>
+                        刷新
+                    </button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="tblOrderList" class="table table-bordered table-hover nowrap datatables">
+                    <thead>
+                    <tr>
+                        <th>订单号</th>
+                        <th>咨询类别</th>
+                        <th>用户</th>
+                        <th>咨询师</th>
+                        <th>金额</th>
+                        <th>状态</th>
+                        <th>预约咨询时间</th>
+                        <th>支付平台</th>
+                        <th>支付时间</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /.box-body -->
+<script src="js/orderUtil.js"></script>
+<!-- DataTables -->
+<link rel="stylesheet" href="plugins/datatables/media/css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css">
+<link rel="stylesheet" href="plugins/datatables/extensions/Responsive/css/responsive.bootstrap.min.css">
+<script src="plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables/media/js/dataTables.bootstrap.min.js"></script>
+<script src="plugins/datatables/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+<script src="plugins/datatables/extensions/Responsive/js/responsive.bootstrap.min.js"></script>
+<script src="plugins/datatables/extensions/Buttons/js/dataTables.buttons.min.js"></script>
+<script src="plugins/datatables/extensions/Buttons/js/buttons.bootstrap.min.js"></script>
+<script src="plugins/datatables/extensions/Select/js/dataTables.select.min.js"></script>
+
+<!-- page script -->
+<script>
+    $(function () {
+        App.Utils.DataTablesHelper.pipelineNoCache();
+        var table = $('#tblOrderList').DataTable({
+            ajax: $.fn.dataTable.pipelineNoCache({
+                url: App.Constants.API_BASE + '/order/page'
+            }),
+            columns: [
+                {data: 'id'},
+                {data: 'counselingType.name'},
+                {data: 'user.name'},
+                {data: 'counselor.name'},
+                {data: 'amount'},
+                {
+                    data: 'status',
+                    render: App.Utils.OrderUtil.getStatusTag
+                },
+                {
+                    data: 'scheduledDate',
+                    render: function (data, type, full, meta) {
+                        if (data.length > 10) {
+                            data = data.substr(0, 10);
+                        }
+                        return data;
+                    }
+                },
+                {data: 'paymentPlatform'},
+                {data: 'paymentTime'},
+                {data: 'createTime'},
+                {
+                    data: 'id',
+                    className: 'center',
+                    render: function (data, type, full, meta) {
+                        var order = full;
+                        var items = [{
+                            text: '查看',
+                            operation: 'view'
+                        }];
+                        if (order.status == 'NEW') {
+                            items.push({
+                                text: '关闭',
+                                operation: 'close'
+                            });
+                        }
+                        if (order.status == 'PAID') {
+                            items.push({
+                                text: '完成订单',
+                                operation: 'complete'
+                            });
+                        }
+                        return App.Utils.DataTablesHelper.buildOperationButtons(items, full);
+                    }
+                }
+            ],
+            processing: true,
+            serverSide: true,
+            language: App.Utils.DataTablesHelper.language(),
+            select: true,
+            paging: true,
+            responsive: true
+        });
+
+        //init events
+        $('#btnRefreshTable').click(function () {
+            refreshTable()
+        });
+
+        App.Utils.DataTablesHelper.onOperationButtonClick('#tblOrderList', function (data) {
+            switch (data.operation) {
+                case  'view':
+                    edit(data);
+                    break;
+                case  'complete':
+                    complete(data);
+                    break;
+                case  'close':
+                    close(data);
+                    break;
+            }
+        });
+
+        // state functions
+        function view(data) {
+            App.loadPage('pages/transaction/order.html?id=' + data.id);
+        }
+
+        function complete(data) {
+            if (confirm('确定要完成这个订单吗？(该操作不可恢复)')) {
+                $.ajax({
+                    url: App.Constants.API_BASE + '/order/' + data.id + '/complete',
+                    type: 'PUT',
+                    success: function (result) {
+                        alert(result.header.message);
+                        if (result.header.success) {
+                            refreshTable(true);
+                        }
+                    }
+                });
+            }
+        }
+
+        function close(data) {
+            if (confirm('确定要关闭这个订单吗？(该操作不可恢复)')) {
+                $.ajax({
+                    url: App.Constants.API_BASE + '/order/' + data.id + '/close',
+                    type: 'PUT',
+                    success: function (result) {
+                        alert(result.header.message);
+                        if (result.header.success) {
+                            refreshTable(true);
+                        }
+                    }
+                });
+            }
+        }
+
+        function refreshTable(retain) {
+            var page = table.page.info().page;
+            table.ajax.reload(function () {
+                console.log(table.page.info().pages, page);
+                if (retain) {
+                    if (table.page.info().pages <= page) {
+                        page--;
+                    }
+                    table.page(page).draw('page');
+                }
+            });
+        }
+
+    });
+</script>
+</body>
+</html>

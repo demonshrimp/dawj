@@ -16,7 +16,7 @@ import pers.ksy.common.model.Result;
 import pers.ksy.common.orm.QueryCondition;
 import pers.ksy.common.orm.QueryConditionImpl;
 
-@RestController(value = "userOrderController")
+@RestController(value = "orderUserController")
 @RequestMapping(value = "/usr/order")
 public class OrderController extends BaseUserController {
 	@Autowired

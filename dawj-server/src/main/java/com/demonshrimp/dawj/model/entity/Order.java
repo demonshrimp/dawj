@@ -27,9 +27,11 @@ public class Order extends BaseSiteEntity {
 	private String contactMobile;
 	private String contactAddress;
 	private String remark;
-	private Date scheduledTime;
+	private Date scheduledDate;
 	private Date paymentTime;
 	private Date fulfillmentTime;
+	private Date refundApplyTime;
+	private Date closeTime;
 	private Status status;
 
 	private String thirdOrderId;
@@ -132,14 +134,14 @@ public class Order extends BaseSiteEntity {
 		this.remark = remark;
 	}
 
-	@Column(name = "scheduled_time", length = 19, nullable = false)
-	@Temporal(TemporalType.TIMESTAMP)
-	public Date getScheduledTime() {
-		return scheduledTime;
+	@Column(name = "scheduled_date", length = 10, nullable = false)
+	@Temporal(TemporalType.DATE)
+	public Date getScheduledDate() {
+		return scheduledDate;
 	}
 
-	public void setScheduledTime(Date scheduledTime) {
-		this.scheduledTime = scheduledTime;
+	public void setScheduledDate(Date scheduledDate) {
+		this.scheduledDate = scheduledDate;
 	}
 
 	@Column(name = "payment_time", length = 19)
@@ -159,6 +161,26 @@ public class Order extends BaseSiteEntity {
 
 	public void setFulfillmentTime(Date fulfillmentTime) {
 		this.fulfillmentTime = fulfillmentTime;
+	}
+	
+	@Column(name = "refund_apply_time", length = 19)
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getRefundApplyTime() {
+		return refundApplyTime;
+	}
+
+	public void setRefundApplyTime(Date refundApplyTime) {
+		this.refundApplyTime = refundApplyTime;
+	}
+	
+	@Column(name = "close_time", length = 19)
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getCloseTime() {
+		return closeTime;
+	}
+
+	public void setCloseTime(Date closeTime) {
+		this.closeTime = closeTime;
 	}
 
 	@Column(nullable = false)

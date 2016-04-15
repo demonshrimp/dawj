@@ -1,0 +1,151 @@
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">咨询文章信息</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body pad">
+        <form role="form" id="formCounselingArticle" action="javascript:void(0);">
+            <div class="form-group">
+                <label>类别</label>
+                <select name="counselingType.id" class="form-control">
+                    <option>请选择类别...</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>标签</label>
+                <input name="tag" type="text" class="form-control" placeholder="请输入文章标签 ...">
+            </div>
+            <div class="form-group">
+                <label>标题</label>
+                <input name="title" type="text" class="form-control" placeholder="请输入文章标题 ...">
+            </div>
+            <div class="form-group">
+                <label>描述</label>
+                <textarea name="description" class="form-control" rows="3" placeholder="请输入描述 ..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>图片</label>
+                <div class="row">
+                    <div class="col-sm-6" style="max-width: 400px">
+                        <img id="imgCounselingArticleImage" class="img-thumbnail" data-holder-rendered="true" >
+                        <div class="progress progress-striped active" role="progressbar" aria-valuemin="10"
+                             aria-valuemax="100" aria-valuenow="0">
+                            <div id="progressCounselingArticleImage" class="progress-bar progress-bar-success" style="width:0%;"></div>
+                        </div>
+                        <div class="caption" align="center">
+                            <span class="btn btn-primary fileinput-button">
+                            <span>上传</span>
+                            <input type="file" id="fileCounselingArticleImage" name="file" multiple>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <input name="image" type="hidden" />
+            </div>
+            <div class="form-group">
+                <label>正文</label>
+                <textarea id="editor" name="content" class="ueditor" type="text/plain"  style="height:500px;width:100%"></textarea>
+            </div>
+
+            <!-- /.box-body -->
+            <div class="box-footer">
+                <a type="button" href="javascript:history.go(-1);" class="btn btn-default">返回</a>
+                <button class="btn btn-info pull-right" id="btnSubmitCounselingArticle" disabled type="submit">保存
+                </button>
+            </div>
+        </form>
+    </div>
+    <!-- /.box-body -->
+</div>
+
+<!-- blueimp-file-upload -->
+<link rel="stylesheet" href="plugins/blueimp-file-upload/css/jquery.fileupload.css">
+<link rel="stylesheet" href="plugins/blueimp-file-upload/css/jquery.fileupload-ui.css">
+<!-- UEditor -->
+<script id="ueditorConfig" type="text/javascript" charset="utf-8" src="plugins/UEditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/UEditor/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="plugins/UEditor/lang/zh-cn/zh-cn.js"></script>
+<ueheader></ueheader>
+<!-- blueimp-file-upload -->
+<script src="plugins/blueimp-file-upload/js/vendor/jquery.ui.widget.js"></script>
+<script src="plugins/blueimp-file-upload/js/jquery.iframe-transport.js"></script>
+<script src="plugins/blueimp-file-upload/js/jquery.fileupload.js"></script>
+<!-- page script -->
+<script>
+    $(function () {
+        /************** init views **************/
+        var ue = UE.getEditor('editor');
+
+        $("#fileCounselingArticleImage").fileupload({
+            url: App.Constants.API_BASE + '/site/file-upload',
+            progressall: function (e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                $('#progressCounselingArticleImage').css(
+                        'width',
+                        progress + '%'
+                );
+            },
+            done: function (e, data) {
+                var info = data.result.body[0];
+                $("#imgCounselingArticleImage").attr('src', info.fullPath);
+                $("#formCounselingArticle [name=image]").val(info.path);
+            }
+        });
+
+
+        /************** init datas **************/
+        $.get(App.Constants.API_BASE + '/counseling-type/list', function (result) {
+            if (!result.header.success) {
+                alert(result.header.message);
+                return;
+            }
+            var select = $('#formCounselingArticle [name="counselingType.id"]');
+            var counselingTypes = result.body;
+            select.empty();
+            for(var i=0;i<counselingTypes.length;i++){
+                var option = $('<option>');
+                option.text(counselingTypes[i].name);
+                option.val(counselingTypes[i].id);
+                select.append(option);
+            }
+            $('#btnSubmitCounselingArticle').removeAttr('disabled');
+        });
+        var counselingArticleId = $.getUrlVar('id');
+        //if siteId!=null update else new
+        if (counselingArticleId) {
+            $.get(App.Constants.API_BASE + '/counseling-article/' + counselingArticleId, function (result) {
+                if (!result.header.success) {
+                    alert(result.header.message);
+                    return;
+                }
+                var counselingArticle = result.body;
+                App.Utils.FormUtil.setData('#formCounselingArticle', counselingArticle);
+                console.log(counselingArticle.fullImage);
+                $("#imgCounselingArticleImage").attr('src', counselingArticle.fullImage);
+                UE.getEditor('editor').setContent(counselingArticle.content);
+            });
+        }
+
+
+
+        /************** init events **************/
+        $('#formCounselingArticle').submit(function () {
+            var counselingArticle = App.Utils.FormUtil.toJson(this);
+            counselingArticle.id = counselingArticleId;
+            counselingArticle.content = UE.getEditor('editor').getContent();
+            $.ajax({
+                url: App.Constants.API_BASE + '/counseling-article/' + (counselingArticleId ? counselingArticleId : ''),
+                contentType: "application/json",
+                method: counselingArticleId ? 'PUT' : 'POST',
+                data: JSON.stringify(counselingArticle),
+                dataType: 'json',
+                success: function (result) {
+                    alert(result.header.message);
+                    if (result.header.success) {
+                        App.loadPage('pages/counseling/counseling-article-list.html');
+                    }
+                }
+            });
+        });
+    });
+</script>

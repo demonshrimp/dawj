@@ -236,7 +236,7 @@
     </div>
     <script type="text/javascript">
         $(function () {
-            $.get(App.Constants.API_BASE + '/counselor/page?orderBy=createTime&desc=true&start=0&length=8', function (result) {
+            $.get(App.Constants.API_BASE + '/counselor/page?orderBy=createTime&desc=true&pageIndex=0&length=8', function (result) {
                 if (result.header.success) {
                     var counselors = result.body.list;
                     var list = $('#counselorlist');
@@ -338,7 +338,7 @@
     </div>
     <script type="text/javascript">
         $(function () {
-            $.get(App.Constants.API_BASE + '/counseling-article/page?orderBy=createTime&desc=true&start=0&length=12', function (result) {
+            $.get(App.Constants.API_BASE + '/counseling-article/page?orderBy=createTime&desc=true&pageIndex=0&length=12', function (result) {
                 if (result.header.success) {
                     var counselingArticles = result.body.list;
                     var list = $('#counselingArticlelist');
