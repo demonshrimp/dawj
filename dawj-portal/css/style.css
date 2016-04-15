@@ -2852,7 +2852,7 @@ a.url:visited h4 {
     margin: 30px 0;
     text-align: center;
 }
-.service-item> span i {
+.service-item i {
     font-size: 20px;
     height: 100px;
     width: 110px;

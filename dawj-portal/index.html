@@ -183,349 +183,376 @@
         <div class="our-top">
             <div class="bs-glyphicons">
                 <div class="bs-glyphicons-list" id="ulConsultingTypes" style="padding-top: 40px;">
-
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="services">
+                                <div class="service-item">
+                                    <span class="icon icon-1 icon-1c"><i class="">心理</i></span>
+                                </div>
+                            </div> <!-- / .services -->
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="services">
+                                <div class="service-item">
+                                    <span class="icon icon-1 icon-1c"><i class="">心理</i></span>
+                                </div>
+                            </div> <!-- / .services -->
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="services">
+                                <div class="service-item">
+                                    <span class="icon icon-1 icon-1c"><i class="">心理</i></span>
+                                </div>
+                            </div> <!-- / .services -->
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="services">
+                                <div class="service-item">
+                                    <span class="icon icon-1 icon-1c"><i class="">心理</i></span>
+                                </div>
+                            </div> <!-- / .services -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <script type="text/javascript">
-        $(function () {
-            $.get(App.Constants.API_BASE + '/counseling-type/list', function (result) {
-                if (result.header.success) {
-                    var types = result.body;
-                    var ul = $('#ulConsultingTypes');
-                    ul.empty();
-                    ul.append(' <div class="row"><div class="col-md-3">');
-                    for (var i = 0; i < types.length; i++) {
-                        ul.append('<div class="services"><div class="service-item"><a href="counseling-type.html?id=' + types[i].id + '"> <span class="icon icon-1 icon-1c"><i class="">' + types[i].name + '</i></span></a></div></div>')
-                        if((i+1)%5 ==0 && i!= 0){
-                            ul.append('</div></div>');
-                        }
-                    }
-                }
-            });
-        });
-    </script>
-</div>
-<div class="portfolios entertain_box  wow fadeInUp" data-wow-delay="0.4s">
-    <div class="container">
-        <div class="blog-top">
-            <a href="counselors.html">
-                <h3> 心理咨询师
-                    <small>更多<img width="64px" src="images/more_horiz_128px.png"/></small>
-                </h3>
-            </a>
-        </div>
-        <div class="portfoliolist" id="counselorlist">
-            <!--<div class="portfolio app mix_all" data-cat="app" style="display: inline-block; opacity: 1;">
-                <div class="portfolio-wrapper" style="position: relative">
-                    <a href="images/p11.png" class="b-link-stripe b-animate-go swipebox" title="Image Title">
-                        <img src="images/p1.png"/>
-                        <div class="b-wrapper">
-                            <h2 class="b-animate b-from-left    b-delay03 ">
-                                <img src="images/add.png" alt=""/>
-                            </h2>
-                        </div>
-                    </a>
-                </div>
-                <div class="small-text">
-                    <p>咨询师姓名</p>
-                </div>
-            </div>-->
-        </div>
-    </div>
-    <script type="text/javascript">
-        $(function () {
-            $.get(App.Constants.API_BASE + '/counselor/page?orderBy=createTime&desc=true&start=0&length=8', function (result) {
-                if (result.header.success) {
-                    var counselors = result.body.list;
-                    var list = $('#counselorlist');
-                    list.empty();
-                    for (var i = 0; i < counselors.length; i++) {
-                        var counselor = counselors[i];
-                        list.append('<div class="portfolio" style="display: inline-block; opacity: 1;">'
-                                + '<div class="portfolio-wrapper">'
-                                + '<a href="counselor.html?id=' + counselor.id + '" class="b-link-stripe" title="' + counselor.name + '">'
-                                + '<img src="' + counselor.fullImage + '" class="img-responsive zoom-img" />'
-                                + '</a>'
-                                + '</div>'
-                                + '<div class="small-text">'
-                                + '<p>' + counselor.name + '</p>'
-                                + '</div>'
-                                + '</div>');
-                    }
-                }
-            });
-        });
-    </script>
-</div>
-<!-- our -->
-<!--<div class="types">
-    <div class="container">
-        <div class="blog-top">
-            <a href="counseling-articles.html">
-                <h3> 咨询类目 </h3>
-            </a>
-        </div>
-
-    </div>
-</div>-->
-<!-- Blog -->
-<div class="blog">
-    <div class="container">
-        <div class="blog-top">
-            <a href="counseling-articles.html">
-                <h3> 心理资讯
-                    <small>更多<img width="64px" src="images/more_horiz_128px.png"/></small>
-                </h3>
-            </a>
-        </div>
-        <div class="news-grids" id="counselingArticlelist">
-            <!--<div class="col-md-3 news-grid mask">
-                <a href="single.html"><h4>一女子追求鞭打中的快乐</h4></a>
-                <span>2016-04-05 10:36:08</span>
-                <a href="single.html" class="mask"><img src="/ctps_326_pp/images/img1.jpg" alt="image" class="img-responsive zoom-img"></a>
-                <div class="news-info">
-                    <p>本案例谈及的患者是一位24岁的独身女子。她曾在一家州立精神病院呆了七年之久。在那家精神病院里，她被诊断有精神分裂症的反应。因为这位年轻的姑娘有一种奇怪的嗜好，她会付钱给一些男子，让他们用有银色带扣的黑色皮带抽打她，她想通过此种方法来减轻自己的犯罪感。早在此次治疗之前，已有许多咨询师给她进行过诊断，而且还曾对她进行了休克治疗，但是，她觉得其中没有一种方法是特别有帮助的。.</p>
-                </div>
-            </div>-->
-            <div class="clearfix"></div>
-        </div>
-        <!--<div class="blog-content">
-
-           <div class="blog-content-left">
-               <div class="blog-articals" id="counselingArticlelist">
-                  <div class="blog-artical">
-                       <div class="blog-artical-basicinfo">
-                           <ul>
-                               <li class="post-date"><p><span>测试的类目1</span><label></label></p></li>
-                               <div class="clearfix"></div>
-                           </ul>
-                       </div>
-                       <div class="blog-artical-info">
-                           <div class="blog-artical-info-img">
-                               <a href="single.html"><img src="images/blog1.jpg" title="post-name"></a>
-                           </div>
-                           <div class="blog-artical-info-head">
-                               <h2><a href="single.html">咨询文章标题</a></h2>
-                               <ul>
-                                   <li><i class="fa fa-calendar-check-o"></i>2016-03-25 22:34:01</li>
-                                   <li><i class="fa fa-users"></i> 399</li>
-                                   <li>
-                                       <i class="fa fa-tag"></i>
-                                       <a href="#">Lorem</a>,
-                                       <a href="#">Ipsum</a>,
-                                       <a href="#">printer</a>,
-                                       <a href="#">unknown</a>
-                                   </li>
-                                   <div class="clearfix"></div>
-                               </ul>
-                           </div>
-                           <div class="blog-artical-info-text">
-                               <p>咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文.<a
-                                       href="#">[...]</a></p>
-                           </div>
-                       </div>
-                       <div class="clearfix"></div>
-                   </div>
-                </div>
-            </div>
-
-            <div class="clearfix"></div>
-
-        </div>
-        -->
-    </div>
-    <script type="text/javascript">
-        $(function () {
-            $.get(App.Constants.API_BASE + '/counseling-article/page?orderBy=createTime&desc=true&start=0&length=12', function (result) {
-                if (result.header.success) {
-                    var counselingArticles = result.body.list;
-                    var list = $('#counselingArticlelist');
-                    list.empty();
-                    for (var i = 0; i < counselingArticles.length; i++) {
-                        var counselingArticle = counselingArticles[i];
-                        list.append(buildItem(counselingArticle));
-                    }
-                }
-            });
-
-            function buildItem(counselingArticle) {
-                return '<div class="col-md-3  mask">'
-                        + '<div class="news-grid fadeInLeft">'
-                        + '       <a href="counseling-article.html?id=' + counselingArticle.id + '" class="mask"><img src="' + counselingArticle.fullImage + '" alt="image" class="img-responsive"></a>'
-                        + ' <a class="url" href="counseling-article.html?id=' + counselingArticle.id + '"><h4>' + counselingArticle.title + '</h4></a>'
-                        + '       <div class="news-info">'
-                        + '          <p>' + counselingArticle.description + '</p>'
-                        + '      </div>'
-                        + '       <span>' + counselingArticle.createTime + '</span>'
-                        + '</div>'
-                        + '</div>'
-            }
-
-            function buildItem_old(counselingArticle) {
-                return '<div class="blog-artical">'
-                        + '<div class="blog-artical-basicinfo">'
-                        + '<ul>'
-                        + '<li class="post-date"><p><span>' + counselingArticle.counselingType.name + '</span><label></label></p></li>'
-                        + '<div class="clearfix"></div>'
-                        + '</ul>'
-                        + '</div>'
-                        + '<div class="blog-artical-info">'
-                        + '<div class="blog-artical-info-img">'
-                        + ' <a href="counseling-article.html?id=' + counselingArticle.id + '"><img src="' + counselingArticle.fullImage + '" title="post-name"></a>'
-                        + ' </div>'
-                        + '     <div class="blog-artical-info-head">'
-                        + '      <h2><a href="counseling-article.html?id=' + counselingArticle.id + '">' + counselingArticle.title + '</a></h2>'
-                        + '         <ul>'
-                        + '             <li><i class="fa fa-calendar-check-o"></i>' + counselingArticle.createTime + '</li>'
-                        + '             <li><i class="fa fa-users"></i> ' + counselingArticle.visited + '</li>'
-                        + '             <li>'
-                        + '                 <i class="fa fa-tag"></i>'
-                        + '                 <a href="#">Lorem</a>,'
-                        + '                 <a href="#">Ipsum</a>,'
-                        + '                 <a href="#">printer</a>,'
-                        + '                 <a href="#">unknown</a>'
-                        + '             </li>'
-                        + '             <div class="clearfix"></div>'
-                        + '         </ul>'
-                        + '     </div>'
-                        + ' <div class="blog-artical-info-text">'
-                        + '    <p>' + counselingArticle.description + '<a href="counseling-article.html?id=' + counselingArticle.id + '">......</a></p>'
-                        + '   </div>'
-                        + '  </div>'
-                        + ' <div class="clearfix"></div>'
-                        + '</div>'
-            }
-        });
-    </script>
-</div>
-<!-- /Blog -->
-<!-- recnt -->
-<!-- what -->
-<div class="what hidden">
-    <div class="container">
-        <h6>TESTIMONIALS</h6>
-        <h3>WHAT PEOPLES ARE SAYING</h3>
-        <section class="slider">
-            <div class="flexslider">
-                <ul class="slides">
-                    <li>
-                        <div class="what-top">
-                            <p>Jobify offer an amazing service and I couldn’t be happier! They are dedicated to
-                                helping
-                                recruiters find great candidates, wonderful service!</p>
-                            <h5>Eftakher Alam,<span> Product Designer</span></h5>
-                            <div class="what-bottom">
-                                <img src="images/man.png" class="img-responsive" alt="">
-                            </div>
-                        </div>
-
-                    </li>
-                    <li>
-                        <div class="what-top">
-                            <p>Jobify offer an amazing service and I couldn’t be happier! They are dedicated to
-                                helping
-                                recruiters find great candidates, wonderful service!</p>
-                            <h5>Eftakher Alam,<span> Product Designer</span></h5>
-                            <div class="what-bottom">
-                                <img src="images/man.png" class="img-responsive" alt="">
-                            </div>
-                        </div>
-
-                    </li>
-                    <li>
-                        <div class="what-top">
-                            <p>Jobify offer an amazing service and I couldn’t be happier! They are dedicated to
-                                helping
-                                recruiters find great candidates, wonderful service!</p>
-                            <h5>Eftakher Alam,<span> Product Designer</span></h5>
-                            <div class="what-bottom">
-                                <img src="images/man.png" class="img-responsive" alt="">
-                            </div>
-                        </div>
-
-                    </li>
-                    <li>
-                        <div class="what-top">
-                            <p>Jobify offer an amazing service and I couldn’t be happier! They are dedicated to
-                                helping
-                                recruiters find great candidates, wonderful service!</p>
-                            <h5>Eftakher Alam,<span> Product Designer</span></h5>
-                            <div class="what-bottom">
-                                <img src="images/man.png" class="img-responsive" alt="">
-                            </div>
-                        </div>
-
-                    </li>
-                    <div class="clearfix"></div>
-                </ul>
-            </div>
-        </section>
-        <!-- FlexSlider -->
-        <script defer src="js/jquery.flexslider.js"></script>
         <script type="text/javascript">
             $(function () {
-                SyntaxHighlighter.all();
-            });
-            $(window).load(function () {
-                $('.flexslider').flexslider({
-                    animation: "slide",
-                    start: function (slider) {
-                        $('body').removeClass('loading');
+                $.get(App.Constants.API_BASE + '/counseling-type/list', function (result) {
+                    if (result.header.success) {
+                        var types = result.body;
+                        var ul = $('#ulConsultingTypes');
+                        ul.empty();
+
+                        ul.append(' <div class="row">');
+                        for (var i = 0; i < types.length; i++) {
+                            ul.append('<div class="col-md-3"><div class="services"><div class="service-item"><a href="counseling-type.html?id=' + types[i].id + '"> <span class="icon icon-1 icon-1c"><i class="">' + types[i].name + '</i></span></a></div></div></div>')
+                        }
+                        ul.append('</div>');
                     }
                 });
             });
         </script>
-        <!-- FlexSlider -->
+    </div>
+    <div class="portfolios entertain_box  wow fadeInUp" data-wow-delay="0.4s">
+        <div class="container">
+            <div class="blog-top">
+                <a href="counselors.html">
+                    <h3> 心理咨询师
+                        <small>更多<img width="64px" src="images/more_horiz_128px.png"/></small>
+                    </h3>
+                </a>
+            </div>
+            <div class="portfoliolist" id="counselorlist">
+                <!--<div class="portfolio app mix_all" data-cat="app" style="display: inline-block; opacity: 1;">
+                    <div class="portfolio-wrapper" style="position: relative">
+                        <a href="images/p11.png" class="b-link-stripe b-animate-go swipebox" title="Image Title">
+                            <img src="images/p1.png"/>
+                            <div class="b-wrapper">
+                                <h2 class="b-animate b-from-left    b-delay03 ">
+                                    <img src="images/add.png" alt=""/>
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="small-text">
+                        <p>咨询师姓名</p>
+                    </div>
+                </div>-->
+            </div>
+        </div>
+        <script type="text/javascript">
+            $(function () {
+                $.get(App.Constants.API_BASE + '/counselor/page?orderBy=createTime&desc=true&start=0&length=8', function (result) {
+                    if (result.header.success) {
+                        var counselors = result.body.list;
+                        var list = $('#counselorlist');
+                        list.empty();
+                        for (var i = 0; i < counselors.length; i++) {
+                            var counselor = counselors[i];
+                            list.append('<div class="portfolio" style="display: inline-block; opacity: 1;">'
+                                    + '<div class="portfolio-wrapper">'
+                                    + '<a href="counselor.html?id=' + counselor.id + '" class="b-link-stripe" title="' + counselor.name + '">'
+                                    + '<img src="' + counselor.fullImage + '" class="img-responsive zoom-img" />'
+                                    + '</a>'
+                                    + '</div>'
+                                    + '<div class="small-text">'
+                                    + '<p>' + counselor.name + '</p>'
+                                    + '</div>'
+                                    + '</div>');
+                        }
+                    }
+                });
+            });
+        </script>
+    </div>
+    <!-- our -->
+    <!--<div class="types">
+        <div class="container">
+            <div class="blog-top">
+                <a href="counseling-articles.html">
+                    <h3> 咨询类目 </h3>
+                </a>
+            </div>
 
-    </div>
-</div>
-<!-- what -->
-<!-- footer-top -->
-<div class="footer-top">
-    <div class="container">
-        <div class="col-md-4 foo-left">
-            <a href="index.html"><img src="images/logo1.png" class="img-responsive" alt=""></a>
-            <p>大爱无疆心理咨询有限公司是在教育部政策（教思政厅[2011]1号）的影响下应运而生的全国目前唯一一家无区域执业的心理咨询公司。</p>
-            <p>公司具备资质：心理咨询；教育咨询；非学历短期培训（国内基本已停止审批）；人力中介服务（国内基本已停止审批）；教育文化交流活动组织策划；教育软件技术开发等。以上资质全国范围内均可使用。</p>
         </div>
-        <div class="col-md-4 foo-left">
-            <h3>公司概况</h3>
-            <h6>成立情况</h6>
-            <p>2016年1月由中国工商总局核名后注册成立。</p>
-            <p>2016年3月份正式运营。</p>
-            <h6>荣誉</h6>
-            <p> 河南电视台法制频道优秀心理咨询机构。</p>
-            <p>河南大象融媒集团心理咨询模范单位。</p>
-        </div>
-        <div class="col-md-4 foo-left">
-            <h3>联系我们</h3>
-            <ul>
-                <li><a><span class="glyphicon glyphicon-phone-alt" style="font-size: 17px;margin: 0 4px"></span>0371-55601221</a>
-                </li>
-                <li><a href="mailto:info@dawjxlzx.com"><i class="mail"></i>info@dawjxlzx.com</a></li>
-                <li><a><span class="glyphicon glyphicon-home" style="font-size: 17px;margin: 0 4px"></span>河南省郑州市金水区经三路66号金成国际广场4号楼2单元1102</a>
-                </li>
-                <!--<li class="active"><a href="index.html">首页</a></li>
-                <li class="active"><a href="about.html">关于我们</a></li>
-                <li><a href="#">咨询师 </a></li>
-                <li><a href="#">心理咨询 </a></li>
-                <li><a href="blog.html">联系我们</a></li>
-                <li><a href=" 404.html">个人中心</a></li>-->
+    </div>-->
+    <!-- Blog -->
+    <div class="blog">
+        <div class="container">
+            <div class="blog-top">
+                <a href="counseling-articles.html">
+                    <h3> 心理资讯
+                        <small>更多<img width="64px" src="images/more_horiz_128px.png"/></small>
+                    </h3>
+                </a>
+            </div>
+            <div class="news-grids" id="counselingArticlelist">
+                <!--<div class="col-md-3 news-grid mask">
+                    <a href="single.html"><h4>一女子追求鞭打中的快乐</h4></a>
+                    <span>2016-04-05 10:36:08</span>
+                    <a href="single.html" class="mask"><img src="/ctps_326_pp/images/img1.jpg" alt="image" class="img-responsive zoom-img"></a>
+                    <div class="news-info">
+                        <p>本案例谈及的患者是一位24岁的独身女子。她曾在一家州立精神病院呆了七年之久。在那家精神病院里，她被诊断有精神分裂症的反应。因为这位年轻的姑娘有一种奇怪的嗜好，她会付钱给一些男子，让他们用有银色带扣的黑色皮带抽打她，她想通过此种方法来减轻自己的犯罪感。早在此次治疗之前，已有许多咨询师给她进行过诊断，而且还曾对她进行了休克治疗，但是，她觉得其中没有一种方法是特别有帮助的。.</p>
+                    </div>
+                </div>-->
                 <div class="clearfix"></div>
-            </ul>
+            </div>
+            <!--<div class="blog-content">
+
+               <div class="blog-content-left">
+                   <div class="blog-articals" id="counselingArticlelist">
+                      <div class="blog-artical">
+                           <div class="blog-artical-basicinfo">
+                               <ul>
+                                   <li class="post-date"><p><span>测试的类目1</span><label></label></p></li>
+                                   <div class="clearfix"></div>
+                               </ul>
+                           </div>
+                           <div class="blog-artical-info">
+                               <div class="blog-artical-info-img">
+                                   <a href="single.html"><img src="images/blog1.jpg" title="post-name"></a>
+                               </div>
+                               <div class="blog-artical-info-head">
+                                   <h2><a href="single.html">咨询文章标题</a></h2>
+                                   <ul>
+                                       <li><i class="fa fa-calendar-check-o"></i>2016-03-25 22:34:01</li>
+                                       <li><i class="fa fa-users"></i> 399</li>
+                                       <li>
+                                           <i class="fa fa-tag"></i>
+                                           <a href="#">Lorem</a>,
+                                           <a href="#">Ipsum</a>,
+                                           <a href="#">printer</a>,
+                                           <a href="#">unknown</a>
+                                       </li>
+                                       <div class="clearfix"></div>
+                                   </ul>
+                               </div>
+                               <div class="blog-artical-info-text">
+                                   <p>咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文咨询文章正文.<a
+                                           href="#">[...]</a></p>
+                               </div>
+                           </div>
+                           <div class="clearfix"></div>
+                       </div>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+            </div>
+            -->
         </div>
-        <div class="clearfix"></div>
+        <script type="text/javascript">
+            $(function () {
+                $.get(App.Constants.API_BASE + '/counseling-article/page?orderBy=createTime&desc=true&start=0&length=12', function (result) {
+                    if (result.header.success) {
+                        var counselingArticles = result.body.list;
+                        var list = $('#counselingArticlelist');
+                        list.empty();
+                        for (var i = 0; i < counselingArticles.length; i++) {
+                            var counselingArticle = counselingArticles[i];
+                            list.append(buildItem(counselingArticle));
+                        }
+                    }
+                });
+
+                function buildItem(counselingArticle) {
+                    return '<div class="col-md-3  mask">'
+                            + '<div class="news-grid fadeInLeft">'
+                            + '       <a href="counseling-article.html?id=' + counselingArticle.id + '" class="mask"><img src="' + counselingArticle.fullImage + '" alt="image" class="img-responsive"></a>'
+                            + ' <a class="url" href="counseling-article.html?id=' + counselingArticle.id + '"><h4>' + counselingArticle.title + '</h4></a>'
+                            + '       <div class="news-info">'
+                            + '          <p>' + counselingArticle.description + '</p>'
+                            + '      </div>'
+                            + '       <span>' + counselingArticle.createTime + '</span>'
+                            + '</div>'
+                            + '</div>'
+                }
+
+                function buildItem_old(counselingArticle) {
+                    return '<div class="blog-artical">'
+                            + '<div class="blog-artical-basicinfo">'
+                            + '<ul>'
+                            + '<li class="post-date"><p><span>' + counselingArticle.counselingType.name + '</span><label></label></p></li>'
+                            + '<div class="clearfix"></div>'
+                            + '</ul>'
+                            + '</div>'
+                            + '<div class="blog-artical-info">'
+                            + '<div class="blog-artical-info-img">'
+                            + ' <a href="counseling-article.html?id=' + counselingArticle.id + '"><img src="' + counselingArticle.fullImage + '" title="post-name"></a>'
+                            + ' </div>'
+                            + '     <div class="blog-artical-info-head">'
+                            + '      <h2><a href="counseling-article.html?id=' + counselingArticle.id + '">' + counselingArticle.title + '</a></h2>'
+                            + '         <ul>'
+                            + '             <li><i class="fa fa-calendar-check-o"></i>' + counselingArticle.createTime + '</li>'
+                            + '             <li><i class="fa fa-users"></i> ' + counselingArticle.visited + '</li>'
+                            + '             <li>'
+                            + '                 <i class="fa fa-tag"></i>'
+                            + '                 <a href="#">Lorem</a>,'
+                            + '                 <a href="#">Ipsum</a>,'
+                            + '                 <a href="#">printer</a>,'
+                            + '                 <a href="#">unknown</a>'
+                            + '             </li>'
+                            + '             <div class="clearfix"></div>'
+                            + '         </ul>'
+                            + '     </div>'
+                            + ' <div class="blog-artical-info-text">'
+                            + '    <p>' + counselingArticle.description + '<a href="counseling-article.html?id=' + counselingArticle.id + '">......</a></p>'
+                            + '   </div>'
+                            + '  </div>'
+                            + ' <div class="clearfix"></div>'
+                            + '</div>'
+                }
+            });
+        </script>
     </div>
-</div>
-<!-- footer-top -->
-<!-- footer-bottom -->
-<div class="footer-bottom">
-    <div class="container">
-        <p>Copyright &copy; 2016.大爱无疆 All rights reserved.</p>
+    <!-- /Blog -->
+    <!-- recnt -->
+    <!-- what -->
+    <div class="what hidden">
+        <div class="container">
+            <h6>TESTIMONIALS</h6>
+            <h3>WHAT PEOPLES ARE SAYING</h3>
+            <section class="slider">
+                <div class="flexslider">
+                    <ul class="slides">
+                        <li>
+                            <div class="what-top">
+                                <p>Jobify offer an amazing service and I couldn’t be happier! They are dedicated to
+                                    helping
+                                    recruiters find great candidates, wonderful service!</p>
+                                <h5>Eftakher Alam,<span> Product Designer</span></h5>
+                                <div class="what-bottom">
+                                    <img src="images/man.png" class="img-responsive" alt="">
+                                </div>
+                            </div>
+
+                        </li>
+                        <li>
+                            <div class="what-top">
+                                <p>Jobify offer an amazing service and I couldn’t be happier! They are dedicated to
+                                    helping
+                                    recruiters find great candidates, wonderful service!</p>
+                                <h5>Eftakher Alam,<span> Product Designer</span></h5>
+                                <div class="what-bottom">
+                                    <img src="images/man.png" class="img-responsive" alt="">
+                                </div>
+                            </div>
+
+                        </li>
+                        <li>
+                            <div class="what-top">
+                                <p>Jobify offer an amazing service and I couldn’t be happier! They are dedicated to
+                                    helping
+                                    recruiters find great candidates, wonderful service!</p>
+                                <h5>Eftakher Alam,<span> Product Designer</span></h5>
+                                <div class="what-bottom">
+                                    <img src="images/man.png" class="img-responsive" alt="">
+                                </div>
+                            </div>
+
+                        </li>
+                        <li>
+                            <div class="what-top">
+                                <p>Jobify offer an amazing service and I couldn’t be happier! They are dedicated to
+                                    helping
+                                    recruiters find great candidates, wonderful service!</p>
+                                <h5>Eftakher Alam,<span> Product Designer</span></h5>
+                                <div class="what-bottom">
+                                    <img src="images/man.png" class="img-responsive" alt="">
+                                </div>
+                            </div>
+
+                        </li>
+                        <div class="clearfix"></div>
+                    </ul>
+                </div>
+            </section>
+            <!-- FlexSlider -->
+            <script defer src="js/jquery.flexslider.js"></script>
+            <script type="text/javascript">
+                $(function () {
+                    SyntaxHighlighter.all();
+                });
+                $(window).load(function () {
+                    $('.flexslider').flexslider({
+                        animation: "slide",
+                        start: function (slider) {
+                            $('body').removeClass('loading');
+                        }
+                    });
+                });
+            </script>
+            <!-- FlexSlider -->
+
+        </div>
     </div>
-</div>
-<!-- footer-bottom -->
+    <!-- what -->
+    <!-- footer-top -->
+    <div class="footer-top">
+        <div class="container">
+            <div class="col-md-4 foo-left">
+                <a href="index.html"><img src="images/logo1.png" class="img-responsive" alt=""></a>
+                <p>大爱无疆心理咨询有限公司是在教育部政策（教思政厅[2011]1号）的影响下应运而生的全国目前唯一一家无区域执业的心理咨询公司。</p>
+                <p>公司具备资质：心理咨询；教育咨询；非学历短期培训（国内基本已停止审批）；人力中介服务（国内基本已停止审批）；教育文化交流活动组织策划；教育软件技术开发等。以上资质全国范围内均可使用。</p>
+            </div>
+            <div class="col-md-4 foo-left">
+                <h3>公司概况</h3>
+                <h6>成立情况</h6>
+                <p>2016年1月由中国工商总局核名后注册成立。</p>
+                <p>2016年3月份正式运营。</p>
+                <h6>荣誉</h6>
+                <p> 河南电视台法制频道优秀心理咨询机构。</p>
+                <p>河南大象融媒集团心理咨询模范单位。</p>
+            </div>
+            <div class="col-md-4 foo-left">
+                <h3>联系我们</h3>
+                <ul>
+                    <li><a><span class="glyphicon glyphicon-phone-alt" style="font-size: 17px;margin: 0 4px"></span>0371-55601221</a>
+                    </li>
+                    <li><a href="mailto:info@dawjxlzx.com"><i class="mail"></i>info@dawjxlzx.com</a></li>
+                    <li><a><span class="glyphicon glyphicon-home" style="font-size: 17px;margin: 0 4px"></span>河南省郑州市金水区经三路66号金成国际广场4号楼2单元1102</a>
+                    </li>
+                    <!--<li class="active"><a href="index.html">首页</a></li>
+                    <li class="active"><a href="about.html">关于我们</a></li>
+                    <li><a href="#">咨询师 </a></li>
+                    <li><a href="#">心理咨询 </a></li>
+                    <li><a href="blog.html">联系我们</a></li>
+                    <li><a href=" 404.html">个人中心</a></li>-->
+                    <div class="clearfix"></div>
+                </ul>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <!-- footer-top -->
+    <!-- footer-bottom -->
+    <div class="footer-bottom">
+        <div class="container">
+            <p>Copyright &copy; 2016.大爱无疆 All rights reserved.</p>
+        </div>
+    </div>
+    <!-- footer-bottom -->
 </body>
 </html>
