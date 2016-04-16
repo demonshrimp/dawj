@@ -12,12 +12,15 @@ import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "user", uniqueConstraints = { @UniqueConstraint(name = "UK_mobile", columnNames = "mobile") })
+@Table(name = "user", uniqueConstraints = { @UniqueConstraint(name = "UK_mobile", columnNames = "mobile"),
+		@UniqueConstraint(name = "UK_mobile", columnNames = "qq_open_id"),
+		@UniqueConstraint(name = "UK_mobile", columnNames = "wechat_user_id") })
 public class User extends BaseSiteEntity {
 
 	private String name;
 	private String mobile;
 	private String qq;
+	private String qqOpenId;
 	private String wechatUserId;
 	private Sex sex;
 	private String password;
@@ -61,7 +64,17 @@ public class User extends BaseSiteEntity {
 		this.qq = qq;
 	}
 
-	@Column
+	@Column(name = "qq_open_id")
+	public String getQqOpenId() {
+		return qqOpenId;
+	}
+
+	public void setQqOpenId(String qqOpenId) {
+		this.qqOpenId = qqOpenId;
+	}
+
+
+	@Column(name = "wechat_user_id")
 	public String getWechatUserId() {
 		return wechatUserId;
 	}
@@ -125,8 +138,6 @@ public class User extends BaseSiteEntity {
 	public void setToken(String token) {
 		this.token = token;
 	}
-
-
 
 	public enum Sex {
 		MALE, FEMALE;

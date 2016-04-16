@@ -87,6 +87,7 @@
     <div class="container">
         <div class="register">
             <form id="formRegister">
+                <input type="hidden" name="qqOpenId"/>
                 <div class="register-top-grid">
                     <h3>个人信息</h3>
                     <div class="wow fadeInLeft form-group" data-wow-delay="0.4s">
@@ -166,9 +167,11 @@
         <div class="col-md-4 foo-left">
             <h3>联系我们</h3>
             <ul>
-                <li><a><span class="glyphicon glyphicon-phone-alt" style="font-size: 17px;margin: 0 4px"></span>0371-55601221</a></li>
+                <li><a><span class="glyphicon glyphicon-phone-alt" style="font-size: 17px;margin: 0 4px"></span>0371-55601221</a>
+                </li>
                 <li><a href="mailto:info@dawjxlzx.com"><i class="mail"></i>info@dawjxlzx.com</a></li>
-                <li><a><span class="glyphicon glyphicon-home" style="font-size: 17px;margin: 0 4px"></span>河南省郑州市金水区经三路66号金成国际广场4号楼2单元1102</a></li>
+                <li><a><span class="glyphicon glyphicon-home" style="font-size: 17px;margin: 0 4px"></span>河南省郑州市金水区经三路66号金成国际广场4号楼2单元1102</a>
+                </li>
                 <!--<li class="active"><a href="index.html">首页</a></li>
                 <li class="active"><a href="about.html">关于我们</a></li>
                 <li><a href="#">咨询师 </a></li>
@@ -189,6 +192,9 @@
     </div>
 </div>
 <!-- footer-bottom -->
+
+<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101307982"
+        data-redirecturi="http://www.dawjxlzx.com/qqlogin-redirect.html" charset="utf-8"></script>
 <script>
     $(function () {
 
@@ -273,6 +279,21 @@
             }
         });
         var validator = form.data('bootstrapValidator');
+
+        QC.Login({}, function (oInfo, oOpts) {
+            QC.Login.getMe(function (openId, accessToken) {
+                form.find('[name="qqOpenId"]').val(openId);
+            });
+            form.find('[name="name"]').val(oInfo.nickname);
+            if (oInfo.gender == '男') {
+                form.find('[name="sex"]')[0].checked = true;
+            } else if (oInfo.gender == '女') {
+                form.find('[name="sex"]')[1].checked = true;
+            }
+            if (oInfo.year) {
+                form.find('[name="birthday"]').val(oInfo.year + '-01-01');
+            }
+        });
 
         //init evens
         $('#btnSendMobileCaptcha').click(function () {

@@ -3,6 +3,9 @@ package com.demonshrimp.dawj.service.impl;
 import java.util.Date;
 import java.util.UUID;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +20,9 @@ import com.demonshrimp.dawj.model.entity.User;
 import com.demonshrimp.dawj.service.CaptchaService;
 import com.demonshrimp.dawj.service.MessageService;
 import com.demonshrimp.dawj.service.MessageService.Type;
+import com.demonshrimp.dawj.service.UserService;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.demonshrimp.dawj.service.UserService;
 
 import pers.ksy.common.orm.QueryCondition;
 
@@ -27,7 +30,7 @@ import pers.ksy.common.orm.QueryCondition;
 @Service
 public class UserServiceImpl extends BaseServiceImpl<User, String> implements UserService {
 	private String TMPL_CAPTCHA = "【大爱无疆】尊敬的用户，你的手机验证码是：%P%，30分钟内有效。请不要把此验证码泄露给任何人，以便你能安全使用。";
-	
+
 	@Autowired
 	private UserDao userDao;
 	@Autowired
@@ -55,7 +58,8 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements Us
 
 	@Override
 	public User update(User user) throws ServiceException {
-		User u = update(user, false, "integralAccount", "mobile", "password", "lastLoginTime");
+		User u = update(user, false, "integralAccount", "mobile", "password", "lastLoginTime", "qqOpenId",
+				"wechatUserId");
 		return u;
 	}
 
@@ -78,10 +82,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements Us
 		if (!user.getPassword().equals(password)) {
 			throw new ServiceException("密码错误");
 		}
-		String token = UUID.randomUUID().toString().replaceAll("-", "");
-		user.setToken(token);
-		user.setLastLoginTime(new Date());
-		userDao.update(user);
+		user = loginHandle(user);
 		return user;
 	}
 
@@ -123,6 +124,36 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements Us
 	@Override
 	public boolean checkCaptcha(String contactInfo, int captcha) {
 		return captchaService.checkCaptcha(contactInfo, captcha, true);
+	}
+
+	@Override
+	public User qqLogin(String accessToken) {
+		User user = null;
+		HttpClient httpClient = new HttpClient();
+		HttpMethod method = new GetMethod("https://graph.qq.com/oauth2.0/me?access_token=" + accessToken);
+		try {
+			httpClient.executeMethod(method);
+			String json = method.getResponseBodyAsString();
+			json = json.replace("callback(", "").replace(");", "");
+			JsonObject jsonObject = new Gson().fromJson(json, JsonObject.class);
+			String openid = jsonObject.get("openid").getAsString();
+			user = userDao.getByProperty("qqOpenId", openid);
+			if (null != user) {
+				user = loginHandle(user);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServiceException(e.getMessage());
+		}
+		return user;
+	}
+
+	private User loginHandle(User user) {
+		String token = UUID.randomUUID().toString().replaceAll("-", "");
+		user.setToken(token);
+		user.setLastLoginTime(new Date());
+		userDao.update(user);
+		return user;
 	}
 
 	private String buildCaptchaContent(int captcha) {

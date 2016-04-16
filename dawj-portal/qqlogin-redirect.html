@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>QQ登录成功</title>
+    <script src="js/vendor/jquery.min.js"></script>
+    <script src="js/main.js"></script>
+    <script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101307982"
+            data-redirecturi="http://www.dawjxlzx.com/qqlogin-redirect.html" charset="utf-8"></script>
+    <script>
+        $(function () {
+            QC.Login.getMe(function (openId, accessToken) {
+                $.get(App.Constants.API_BASE + '/user/qq-login?accessToken=' + accessToken, function (result) {
+                    if (!result.header.success) {
+                        alert(result.header.message);
+                        window.close();
+                        return;
+                    }
+                    var user = result.body;
+                    if (user) {
+                        App.setCurrentLoginSite(user);
+                        window.location.href = 'index.html';
+                    } else {
+                        window.location.href = 'register.html';
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+</body>
+</html>

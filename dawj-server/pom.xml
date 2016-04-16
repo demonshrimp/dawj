@@ -100,8 +100,14 @@
 			<artifactId>commons-codec</artifactId>
 			<version>1.6</version>
 		</dependency>
-		<!-- 3rd libs -->
 		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
+		</dependency>
+
+		<!-- 3rd libs -->
+		<!-- <dependency>
 			<groupId>com.alipay.api</groupId>
 			<artifactId>alipay-sdk</artifactId>
 			<version>1.5</version>
@@ -110,7 +116,7 @@
 			<groupId>com.qq</groupId>
 			<artifactId>qq-connect-sdk</artifactId>
 			<version>1.0</version>
-		</dependency>
+		</dependency> -->
 		<!-- javaee base -->
 		<dependency>
 			<groupId>javax</groupId>

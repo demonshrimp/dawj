@@ -61,4 +61,12 @@ public interface UserService extends BaseService<User,String>{
 	public boolean checkCaptcha(String contactInfo, int captcha);
 
 
+	/**
+	 * QQ登录
+	 * @param accessToken
+	 * @return
+	 */
+	User qqLogin(String accessToken);
+
+
 }

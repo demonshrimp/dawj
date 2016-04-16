@@ -7,10 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alipay.api.AlipayApiException;
-import com.alipay.api.AlipayClient;
-import com.alipay.api.request.AlipayTradeRefundRequest;
-import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.demonshrimp.dawj.exception.ServiceException;
 import com.demonshrimp.dawj.model.dao.BaseDao;
 import com.demonshrimp.dawj.model.dao.OrderDao;
@@ -19,8 +15,6 @@ import com.demonshrimp.dawj.model.entity.Order.PaymentPlatform;
 import com.demonshrimp.dawj.model.entity.Order.Status;
 import com.demonshrimp.dawj.model.entity.Site;
 import com.demonshrimp.dawj.service.OrderService;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 @Transactional
 @Service
@@ -28,8 +22,8 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, String> implements 
 	@Autowired
 	private OrderDao orderDao;
 
-	@Autowired
-	private AlipayClient alipayClient;
+	/*@Autowired
+	private AlipayClient alipayClient;*/
 
 	@Override
 	public Order addOrder(Order order, String siteId) {
@@ -95,13 +89,13 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, String> implements 
 		if (order.getStatus() != Status.REFUNDABLE) {
 			throw new ServiceException("不能对该状态的订单进行退款操作");
 		}
-		switch (order.getPaymentPlatform()) {
+		/*switch (order.getPaymentPlatform()) {
 		case ALIPAY:
 			refundFromAlipay(order);
 			break;
 		default:
 			throw new ServiceException(order.getPaymentPlatform() + "平台暂不支持退款操作");
-		}
+		}*/
 		order.setCloseTime(new Date());
 		order.setStatus(Order.Status.CLOSED);
 		orderDao.update(order);
@@ -140,7 +134,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, String> implements 
 	 * 
 	 * @throws AlipayApiException
 	 */
-	private void refundFromAlipay(Order order) {
+	/*private void refundFromAlipay(Order order) {
 		AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
 		JsonObject jsonObject = new JsonObject();
 		jsonObject.addProperty("out_trade_no", order.getId());
@@ -151,6 +145,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, String> implements 
 			AlipayTradeRefundResponse response = alipayClient.execute(request);
 			JsonObject responseJson = new Gson().fromJson(response.getBody(), JsonObject.class);
 			responseJson = responseJson.getAsJsonObject("alipay_trade_refund_response");
+			System.out.println(responseJson);
 			if (responseJson.get("code").getAsString() != "10000") {
 				throw new ServiceException("支付宝退款失败：" + responseJson.get("msg") + responseJson.get("sub_msg"));
 			}
@@ -158,5 +153,5 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, String> implements 
 			e.printStackTrace();
 			throw new ServiceException("支付宝退款失败：" + e.getMessage());
 		}
-	}
+	}*/
 }

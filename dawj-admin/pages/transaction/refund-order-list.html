@@ -34,6 +34,55 @@
         </div>
     </div>
 </div>
+<div class="not-show">
+    <div class="modal fade" id="refundTipsDialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">订单退款操作</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info" role="alert">
+                        <p href="#" class="alert-link">复制订单号可用于在支付平台快速找到退款订单</p>
+                    </div>
+                    <p><strong>订单号：</strong><span id="refundOrderId"></span></p>
+                    <p><strong>退款注意：</strong>跳转到支付平台服务器窗为订单作退款操作，该订单付款平台为：</p>
+                    <select class="form-control" id="selectRefundPlatform">
+                        <option value="WECHAT">微信</option>
+                        <option value="ALIPAY">支付宝</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="btnGotoRefund" data-dismiss="modal">退款</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <div class="modal fade" id="refundConfirmDialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">订单退款确认操作</h4>
+                </div>
+                <div class="modal-body">
+                    <p>退款操作完成了吗？</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">退款遇到问题</button>
+                    <button type="button" class="btn btn-primary" id="btnRefund" data-dismiss="modal">已经完成退款</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
 </div>
 <!-- /.box-body -->
 <script src="js/orderUtil.js"></script>
@@ -100,6 +149,40 @@
             refreshTable()
         });
 
+        $('#btnGotoRefund').click(function () {
+            var order = $('#selectRefundPlatform').data();
+            var platform = $('#selectRefundPlatform').val();
+            switch (platform) {
+                case 'ALIPAY':
+                    window.open('https://mbillexprod.alipay.com/enterprise/tradeOrder.htm');
+                    break;
+                default:
+                    alert('not support!');
+                    return;
+            }
+            $('#btnRefund').data(order);
+            $('#refundConfirmDialog').modal({
+                keyboard: false
+            });
+        });
+
+        $('#btnRefund').click(function () {
+            var order = $(this).data();
+            if (!order.id) {
+                alert('订单信息丢失，请重试！');
+            }
+            $.ajax({
+                url: App.Constants.API_BASE + '/order/' + order.id + '/refund',
+                type: 'PUT',
+                success: function (result) {
+                    alert(result.header.message);
+                    if (result.header.success) {
+                        refreshTable(true);
+                    }
+                }
+            });
+        });
+
         App.Utils.DataTablesHelper.onOperationButtonClick('#tblRefundOrderList', function (data) {
             switch (data.operation) {
                 case  'refund':
@@ -109,18 +192,13 @@
         });
 
         function refund(data) {
-            if (confirm('确定要退款这个订单吗？(该操作不可恢复)')) {
-                $.ajax({
-                    url: App.Constants.API_BASE + '/order/' + data.id + '/refund',
-                    type: 'PUT',
-                    success: function (result) {
-                        alert(result.header.message);
-                        if (result.header.success) {
-                            refreshTable(true);
-                        }
-                    }
-                });
-            }
+            console.log(data);
+            $('#refundOrderId').text(data.id);
+            $('#selectRefundPlatform').val(data.paymentplatform);
+            $('#selectRefundPlatform').data(data);
+            $('#refundTipsDialog').modal({
+                keyboard: false
+            });
         }
 
 
@@ -137,7 +215,8 @@
             });
         }
 
-    });
+    })
+    ;
 </script>
 </body>
 </html>
