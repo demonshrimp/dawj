@@ -178,11 +178,11 @@
 </div>
 <!-- our -->
 <div class="our">
-    <div class="container">
+    <div class="container" style="padding-bottom: 40px">
         <h5>咨询分类</h5>
         <div class="our-top">
             <div class="bs-glyphicons">
-                <div class="bs-glyphicons-list" id="ulConsultingTypes" style="padding-top: 40px;">
+                <div class="bs-glyphicons-list" id="ulConsultingTypes"">
                     <div class="row">
                         <div class="col-sm-4">
                             <div class="services">
@@ -226,7 +226,7 @@
 
                         ul.append(' <div class="row">');
                         for (var i = 0; i < types.length; i++) {
-                            ul.append('<div class="col-md-3"><div class="services"><div class="service-item"><a href="counseling-type.html?id=' + types[i].id + '"> <span class="icon icon-1 icon-1c"><i class="">' + types[i].name + '</i></span></a></div></div></div>')
+                            ul.append('<div class="col-md-3 col-sm-6"><div class="services"><div class="service-item"><a href="counseling-type.html?id=' + types[i].id + '"> <span class="icon icon-1 icon-1c"><i class="">' + types[i].name + '</i></span></a></div></div></div>')
                         }
                         ul.append('</div>');
                     }
@@ -237,7 +237,7 @@
     <div class="portfolios entertain_box  wow fadeInUp" data-wow-delay="0.4s">
         <div class="container">
             <div class="blog-top">
-                <a href="counselors.html">
+                <a href="counselors.html" style="text-decoration: none">
                     <h3> 心理咨询师
                         <small>更多<img width="64px" src="images/more_horiz_128px.png"/></small>
                     </h3>
@@ -383,7 +383,7 @@
                 return '<div class="col-md-3  mask">'
                         + '<div class="news-grid fadeInLeft">'
                         + '       <a href="counseling-article.html?id=' + counselingArticle.id + '" class="mask"><img src="' + counselingArticle.fullImage + '" alt="image" class="img-responsive"></a>'
-                        + ' <a class="url" href="counseling-article.html?id=' + counselingArticle.id + '"><h4>' + counselingArticle.title + '</h4></a>'
+                        + ' <a class="uri" href="counseling-article.html?id=' + counselingArticle.id + '"><h4>' + counselingArticle.title + '</h4></a>'
                         + '       <div class="news-info">'
                         + '          <p>' + counselingArticle.description + '</p>'
                         + '      </div>'

@@ -2835,7 +2835,7 @@ img.zoom-img:hover {
     margin-top: 10px;
 }
 
-a.url:link h4 {
+a.uri:link h4 {
     color: #333;
     text-decoration: none;
     margin-top: 15px;
@@ -2843,7 +2843,7 @@ a.url:link h4 {
     margin-right: 10px;
 }
 
-a.url:visited h4 {
+a.uri:visited h4 {
     color: #333;
     text-decoration: none;
 }
