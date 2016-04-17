@@ -180,7 +180,7 @@
 
         //fs
         function loadPage(start) {
-            $.get(App.Constants.API_BASE + '/counselor/page?orderBy=createTime&desc=true&length=6&pageIndex=' + start, function (result) {
+            $.get(App.Constants.API_BASE + '/counselor/page?orderBy=createTime&desc=true&length=8&pageIndex=' + start, function (result) {
                 if (result.header.success) {
                     console.log(result);
                     var pageInfo = result.body;
@@ -196,7 +196,7 @@
                                 + '</a>'
                                 + '</div>'
                                 + '<div class="small-text">'
-                                + '<p>' + counselor.name + '</p>'
+                                + '<p class="text">' + counselor.name + '</p>'
                                 + '</div>'
                                 + '</div>');
                     }

@@ -12,7 +12,153 @@
     <script src="js/main.js"></script>
     <link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen"/>
     <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.css" rel="stylesheet">
-    <link href="css/animate.min.css" rel="stylesheet" />
+    <link href="css/animate.min.css" rel="stylesheet"/>
+    <style>
+
+
+        .blog-articals, .b-tag-weight {
+            background-color: #FFFFFF;
+            padding: 10px;
+        }
+
+        /*main-container-list*/
+        .list {
+            width: 100%;
+            border-bottom: 2px dashed #f2f1f1;
+            padding: 30px 0px;
+            position: relative;
+        }
+
+        .mecc {
+            width: calc(100% - 205px);
+            float: right;
+        }
+
+        .mecc em {
+            color: #ff5f1a;
+            font-style: normal;
+            padding: 0px 3px;
+        }
+
+        .mecctitle {
+            height: 20px;
+            line-height: 18px;
+        }
+
+        .mecctitle a {
+            font-size: 18px;
+            font-weight: bold;
+            color: #383838;
+            padding-right: 25px;
+            background-position: center right;
+            right: 0px;
+            transition: all 0.5s ease-out;
+        }
+
+        .mecctitle a:hover {
+            color: #d6623d;
+            padding-right: 25px;
+            background-position: center right;
+            right: 0px
+        }
+
+        .meccaddress {
+            color: #a2a2a2;
+            margin-top: 12px;
+            font-style: normal;
+            display: block;
+        }
+
+        .meccaddress a {
+            color: #a2a2a2;
+        }
+
+        .meccaddress a:hover {
+            color: #d6623d;
+        }
+
+        .meccaddress time img {
+            width: 20px;
+            display: none;
+        }
+
+        .zan {
+            background: #d6623d;
+            display: inline-block;
+            color: #fff;
+            border-radius: 2px;
+            width: 30px;
+            height: 15px;
+            text-align: center;
+            font-size: 11px;
+            line-height: 14px;
+        }
+
+        .titleimg {
+            display: block;
+            float: left;
+            margin-right: 25px;
+            width: 180px;
+            height: 110px;
+            overflow: hidden;
+            background: url(images/xxx.gif);
+            background-size: 180px auto;
+        }
+
+        .titleimg img {
+            width: 180px;
+            height: 110px;
+            transition: All 0.4s ease-in-out;
+        }
+
+        .titleimg img:hover {
+            transform: scale(1.3);
+            -webkit-transform: scale(1.3);
+        }
+
+        .list p {
+            width: calc(100% - 210px);
+            line-height: 30px;
+            margin-top: 6px;
+            float: right;
+            margin-right: 5px;
+        }
+
+        .list address {
+            margin-bottom: 0px;
+        }
+
+        .up {
+            position: absolute;
+            top: 31px;
+            right: 20px;
+            width: 40px;
+            height: 18px;
+            line-height: 17px;
+            color: #b8b8b8;
+            text-indent: 23px;
+            background: url(images/cmt.png) no-repeat;
+            display: block;
+        }
+
+        /*main-container-list*/
+
+        @media (max-width: 765px) {
+
+            .mecctitle {
+                height: auto;
+            }
+
+            .mecctitle a {
+                font-size: 16px;
+                font-weight: 100;
+            }
+
+            .list p {
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body>
 <!-- header -->
@@ -73,7 +219,8 @@
                     <li><a href="login.html">登录</a></li>
                     <li><a href="register.html">注册</a></li>
                 </ul>
-                <p id="unLoginPanel" class="hidden">欢迎，<a id="userName" href="user-center.html">用户</a>　<a href="user-center.html">[个人中心]</a><a href="#login.html">[注销]</a></p>
+                <p id="unLoginPanel" class="hidden">欢迎，<a id="userName" href="user-center.html">用户</a>　<a
+                        href="user-center.html">[个人中心]</a><a href="#login.html">[注销]</a></p>
             </div>
             <div class="clearfix"></div>
         </div>
@@ -87,7 +234,7 @@
             <h3> 咨询文章 </h3>
         </div>
         <div class="blog-content">
-            <div class="blog-content-left">
+            <div class="col-md-9">
                 <div class="blog-articals" id="counselingArticlelist">
                     <!--<div class="blog-artical">
                         <div class="blog-artical-basicinfo">
@@ -138,7 +285,7 @@
                 </div>
                 <!--//End-blog-pagenate-->
             </div>
-            <div class="blog-content-right hidden">
+            <div class="col-md-3 visible-md visible-lg">
                 <div class="b-search">
                     <form>
                         <input type="text" value="Search" onfocus="this.value = '';"
@@ -166,20 +313,18 @@
                 <!--//End-twitter-weight-->
                 <!-- start-tag-weight-->
                 <div class="b-tag-weight">
-                    <h3>Tags</h3>
+                    <h3>标签</h3>
                     <ul>
-                        <li><a href="#">Lorem</a></li>
-                        <li><a href="#">consectetur</a></li>
-                        <li><a href="#">dolore</a></li>
-                        <li><a href="#">aliqua</a></li>
-                        <li><a href="#">sit amet</a></li>
-                        <li><a href="#">ipsum</a></li>
-                        <li><a href="#">Lorem</a></li>
-                        <li><a href="#">consectetur</a></li>
-                        <li><a href="#">dolore</a></li>
-                        <li><a href="#">aliqua</a></li>
-                        <li><a href="#">sit amet</a></li>
-                        <li><a href="#">ipsum</a></li>
+                        <li><a href="#">生活</a></li>
+                        <li><a href="#">家庭</a></li>
+                        <li><a href="#">婚姻</a></li>
+                        <li><a href="#">子女教育</a></li>
+                        <li><a href="#">两性</a></li>
+                        <li><a href="#">智力</a></li>
+                        <li><a href="#">郁闷</a></li>
+                        <li><a href="#">心情</a></li>
+                        <li><a href="#">情绪</a></li>
+                        <li><a href="#">精神疾病</a></li>
                     </ul>
                 </div>
                 <!---- //End-tag-weight---->
@@ -211,9 +356,11 @@
         <div class="col-md-4 foo-left">
             <h3>联系我们</h3>
             <ul>
-                <li><a><span class="glyphicon glyphicon-phone-alt" style="font-size: 17px;margin: 0 4px"></span>0371-55601221</a></li>
+                <li><a><span class="glyphicon glyphicon-phone-alt" style="font-size: 17px;margin: 0 4px"></span>0371-55601221</a>
+                </li>
                 <li><a href="mailto:info@dawjxlzx.com"><i class="mail"></i>info@dawjxlzx.com</a></li>
-                <li><a><span class="glyphicon glyphicon-home" style="font-size: 17px;margin: 0 4px"></span>河南省郑州市金水区经三路66号金成国际广场4号楼2单元1102</a></li>
+                <li><a><span class="glyphicon glyphicon-home" style="font-size: 17px;margin: 0 4px"></span>河南省郑州市金水区经三路66号金成国际广场4号楼2单元1102</a>
+                </li>
                 <!--<li class="active"><a href="index.html">首页</a></li>
                 <li class="active"><a href="about.html">关于我们</a></li>
                 <li><a href="#">咨询师 </a></li>
@@ -255,7 +402,7 @@
 
         //fs
         function loadPage(start) {
-            $.get(App.Constants.API_BASE + '/counseling-article/page?orderBy=createTime&desc=true&length=3&pageIndex=' + start, function (result) {
+            $.get(App.Constants.API_BASE + '/counseling-article/page?orderBy=createTime&desc=true&length=5&pageIndex=' + start, function (result) {
                 if (result.header.success) {
                     var pageInfo = result.body;
                     var counselingArticles = pageInfo.list;
@@ -263,38 +410,7 @@
                     list.empty();
                     for (var i = 0; i < counselingArticles.length; i++) {
                         var counselingArticle = counselingArticles[i];
-                        list.append('<div class="blog-artical">'
-                                + '<div class="blog-artical-basicinfo">'
-                                + '<ul>'
-                                + '<li class="post-date"><p><span>' + counselingArticle.counselingType.name + '</span><label></label></p></li>'
-                                + '<div class="clearfix"></div>'
-                                + '</ul>'
-                                + '</div>'
-                                + '<div class="blog-artical-info">'
-                                + '<div class="blog-artical-info-img">'
-                                + ' <a href="counseling-article.html?id=' + counselingArticle.id + '"><img src="' + counselingArticle.fullImage + '" title="post-name"></a>'
-                                + ' </div>'
-                                + '     <div class="blog-artical-info-head">'
-                                + '      <h2><a href="counseling-article.html?id=' + counselingArticle.id + '">' + counselingArticle.title + '</a></h2>'
-                                + '         <ul>'
-                                + '             <li><i class="fa fa-calendar-check-o"></i>' + counselingArticle.createTime + '</li>'
-                                + '             <li><i class="fa fa-users"></i> ' + counselingArticle.visited + '</li>'
-                                + '             <li>'
-                                + '                 <i class="fa fa-tag"></i>'
-                                + '                 <a href="#">Lorem</a>,'
-                                + '                 <a href="#">Ipsum</a>,'
-                                + '                 <a href="#">printer</a>,'
-                                + '                 <a href="#">unknown</a>'
-                                + '             </li>'
-                                + '             <div class="clearfix"></div>'
-                                + '         </ul>'
-                                + '     </div>'
-                                + ' <div class="blog-artical-info-text">'
-                                + '    <p>' + counselingArticle.description + '<a href="counseling-article.html?id=' + counselingArticle.id + '">......</a></p>'
-                                + '   </div>'
-                                + '  </div>'
-                                + ' <div class="clearfix"></div>'
-                                + '</div>');
+                        list.append(buildItem(counselingArticle));
                     }
 
                     var pages = $('#pages');
@@ -310,6 +426,62 @@
                     window.scrollTo(0, 0)
                 }
             });
+        }
+
+        function buildItem(counselingArticle) {
+            return '<section class="list">'
+                    + '      <div class="mecc">'
+                    + '         <h2 class="mecctitle"> '
+                    + '          <a href="counseling-article.html?id=' + counselingArticle.id + '" target="_blank">' + counselingArticle.title + '</a>'
+                    + '      </h2>'
+                    + '     <address class="meccaddress">'
+                    + '             <time>' + counselingArticle.createTime.substr(5, 10) + '</time> '
+                    + '             - <a href="#" rel="category tag">' + counselingArticle.counselingType.name + '</a>'
+                    + '             - 阅  ' + counselingArticle.visited
+                    + '     </address>'
+                    + '    </div>'
+                    + '    <span class="titleimg">'
+                    + '        <a href="counseling-article.html?id=' + counselingArticle.id + '" target="_blank">'
+                    + '         <img width="600" height="366" src="' + counselingArticle.fullImage + '" class="attachment- Large wp-post-image" alt="efefef">' + +'         </a>'
+                    + '   </span>'
+                    + '     <p>' + counselingArticle.description.substr(0, (counselingArticle.description.length < 82 ? counselingArticle.description.length : 82)) + '...</p>'
+                    + '   <div class="clear"></div>'
+                    + ' </section>'
+        }
+
+        function buildItemOld(counselingArticle) {
+            return '<div class="blog-artical">'
+                    + '<div class="blog-artical-basicinfo">'
+                    + '<ul>'
+                    + '<li class="post-date"><p><span>' + counselingArticle.counselingType.name + '</span><label></label></p></li>'
+                    + '<div class="clearfix"></div>'
+                    + '</ul>'
+                    + '</div>'
+                    + '<div class="blog-artical-info">'
+                    + '<div class="blog-artical-info-img">'
+                    + ' <a href="counseling-article.html?id=' + counselingArticle.id + '"><img src="' + counselingArticle.fullImage + '" title="post-name"></a>'
+                    + ' </div>'
+                    + '     <div class="blog-artical-info-head">'
+                    + '      <h2><a href="counseling-article.html?id=' + counselingArticle.id + '">' + counselingArticle.title + '</a></h2>'
+                    + '         <ul>'
+                    + '             <li><i class="fa fa-calendar-check-o"></i>' + counselingArticle.createTime + '</li>'
+                    + '             <li><i class="fa fa-users"></i> ' + counselingArticle.visited + '</li>'
+                    + '             <li>'
+                    + '                 <i class="fa fa-tag"></i>'
+                    + '                 <a href="#">Lorem</a>,'
+                    + '                 <a href="#">Ipsum</a>,'
+                    + '                 <a href="#">printer</a>,'
+                    + '                 <a href="#">unknown</a>'
+                    + '             </li>'
+                    + '             <div class="clearfix"></div>'
+                    + '         </ul>'
+                    + '     </div>'
+                    + ' <div class="blog-artical-info-text">'
+                    + '    <p>' + counselingArticle.description + '<a href="counseling-article.html?id=' + counselingArticle.id + '">......</a></p>'
+                    + '   </div>'
+                    + '  </div>'
+                    + ' <div class="clearfix"></div>'
+                    + '</div>'
         }
     });
 </script>

@@ -1,11 +1,33 @@
 package com.demonshrimp.dawj.service.impl;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
+import java.net.URLEncoder;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.demonshrimp.dawj.exception.ServiceException;
 import com.demonshrimp.dawj.model.dao.BaseDao;
@@ -16,14 +38,18 @@ import com.demonshrimp.dawj.model.entity.Order.Status;
 import com.demonshrimp.dawj.model.entity.Site;
 import com.demonshrimp.dawj.service.OrderService;
 
+import pers.ksy.common.MD5Util;
+import pers.ksy.common.StringUtil;
+
 @Transactional
 @Service
 public class OrderServiceImpl extends BaseServiceImpl<Order, String> implements OrderService {
 	@Autowired
 	private OrderDao orderDao;
 
-	/*@Autowired
-	private AlipayClient alipayClient;*/
+	/*
+	 * @Autowired private AlipayClient alipayClient;
+	 */
 
 	@Override
 	public Order addOrder(Order order, String siteId) {
@@ -82,20 +108,18 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, String> implements 
 		order.setStatus(Order.Status.REFUNDABLE);
 		orderDao.update(order);
 	}
-	
+
 	@Override
 	public void refund(String orderId) {
 		Order order = orderDao.load(orderId);
 		if (order.getStatus() != Status.REFUNDABLE) {
 			throw new ServiceException("不能对该状态的订单进行退款操作");
 		}
-		/*switch (order.getPaymentPlatform()) {
-		case ALIPAY:
-			refundFromAlipay(order);
-			break;
-		default:
-			throw new ServiceException(order.getPaymentPlatform() + "平台暂不支持退款操作");
-		}*/
+		/*
+		 * switch (order.getPaymentPlatform()) { case ALIPAY:
+		 * refundFromAlipay(order); break; default: throw new
+		 * ServiceException(order.getPaymentPlatform() + "平台暂不支持退款操作"); }
+		 */
 		order.setCloseTime(new Date());
 		order.setStatus(Order.Status.CLOSED);
 		orderDao.update(order);
@@ -112,13 +136,125 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, String> implements 
 		}
 		return result;
 	}
-	
 
 	@Override
 	public void selfOrderCheck(String orderId, String userId) {
 		Order order = orderDao.load(orderId);
-		if(order.getUser().getId()!=userId){
+		if (order.getUser().getId() != userId) {
 			throw new ServiceException("非法操作其他订单");
+		}
+	}
+
+	@Override
+	public String createWechatPayment(String orderId) {
+		Order order = orderDao.load(orderId);
+		if (order.getStatus() != Status.NEW) {
+			throw new ServiceException("不能对该状态的订单进行付款操作");
+		}
+		// 组装参数
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+				.getRequest();
+		TreeMap<String, String> params = new TreeMap<>();
+		params.put("appid", "wxc086c323ecb8c170");
+		params.put("mch_id", "1315067001");
+		params.put("out_trade_no", order.getId());
+		params.put("device_info", order.getSite().getId());
+		params.put("body", "zixunshifuwu");
+		params.put("product_id", order.getCounselor().getId());
+		params.put("total_fee", (int) (order.getAmount() * 100) + "");
+		params.put("spbill_create_ip", request.getServerName());
+		params.put("notify_url",
+				"http://" + request.getServerName() + "/dawj-server/api/admin/order/wechat-pay-callback");
+		params.put("trade_type", "NATIVE");
+		params.put("nonce_str", UUID.randomUUID().toString().replaceAll("-", ""));
+
+		// 计算sign
+		String sign = wechatSign(params);
+		// 构建xml参数
+		Document requestDocument = DocumentHelper.createDocument();
+		// 创建文档的 根元素节点
+		Element requestRoot = DocumentHelper.createElement("xml");
+		requestDocument.setRootElement(requestRoot);
+		for (String key : params.keySet()) {
+			requestRoot.addElement(key).setText(params.get(key));
+		}
+		requestRoot.addElement("sign").setText(sign);
+
+		HttpClient httpClient = new HttpClient();
+		PostMethod method = new PostMethod("https://api.mch.weixin.qq.com/pay/unifiedorder");
+		try {
+			method.setRequestBody(new String(requestRoot.asXML().getBytes(), "ISO8859-1"));
+			httpClient.executeMethod(method);
+			String responseStr = new String(method.getResponseBody(), "utf-8");
+			System.out.println(responseStr);
+			Document responseDocument = DocumentHelper.parseText(responseStr);
+			Element responseRoot = responseDocument.getRootElement();
+			String return_code = responseRoot.element("return_code").getText();
+			if (!return_code.equals("SUCCESS")) {
+				throw new ServiceException(
+						"微信交易创建失败:" + return_code + "," + responseRoot.element("return_msg").getText());
+			}
+			return responseRoot.element("code_url").getText();
+		} catch (IOException | DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new ServiceException("微信交易创建失败:" + e.getMessage());
+		}
+	}
+	
+	
+
+	/**
+	 * 
+	 * @param wechatResult 示例：
+ 		<xml><appid><![CDATA[wxc086c323ecb8c170]]></appid>
+		<bank_type><![CDATA[CFT]]></bank_type>
+		<cash_fee><![CDATA[1]]></cash_fee>
+		<device_info><![CDATA[root_site]]></device_info>
+		<fee_type><![CDATA[CNY]]></fee_type>
+		<is_subscribe><![CDATA[Y]]></is_subscribe>
+		<mch_id><![CDATA[1315067001]]></mch_id>
+		<nonce_str><![CDATA[8e3b4545841348739dc3764bf8bdcf1c]]></nonce_str>
+		<openid><![CDATA[of_lRwp74TYQX-BGs8wPFYMd6ZNU]]></openid>
+		<out_trade_no><![CDATA[e5499fb55423ab19015423ad21690000]]></out_trade_no>
+		<result_code><![CDATA[SUCCESS]]></result_code>
+		<return_code><![CDATA[SUCCESS]]></return_code>
+		<sign><![CDATA[199E9EE0054953DE96AC10952CB2794C]]></sign>
+		<time_end><![CDATA[20160417180405]]></time_end>
+		<total_fee>1</total_fee>
+		<trade_type><![CDATA[NATIVE]]></trade_type>
+		<transaction_id><![CDATA[4006082001201604174935897990]]></transaction_id>
+		</xml>
+	 */
+	@Override
+	public void wechatPayComplete(String wechatResult) {
+		try {
+			Document responseDocument = DocumentHelper.parseText(wechatResult);
+			Element responseRoot = responseDocument.getRootElement();
+			String return_code = responseRoot.element("return_code").getText();
+			if (!return_code.equals("SUCCESS")) {
+				return;
+			}
+			String sign = responseRoot.element("sign").getText();
+			String out_trade_no = responseRoot.element("out_trade_no").getText();
+			String transaction_id = responseRoot.element("transaction_id").getText();
+
+			Iterator<Element> iterator = responseRoot.elementIterator();
+			TreeMap<String, String> params = new TreeMap<>();
+			while (iterator.hasNext()) {
+				Element element = iterator.next();
+				if (!element.getName().equals("sign")) {
+					params.put(element.getName(), element.getText());
+				}
+			}
+			if (!sign.equals(wechatSign(params))) {
+				return;
+			}
+
+			// 校验通过开始业务操作
+			pay(out_trade_no, transaction_id, PaymentPlatform.WECHAT);
+		} catch (DocumentException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -134,24 +270,66 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, String> implements 
 	 * 
 	 * @throws AlipayApiException
 	 */
-	/*private void refundFromAlipay(Order order) {
-		AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
-		JsonObject jsonObject = new JsonObject();
-		jsonObject.addProperty("out_trade_no", order.getId());
-		jsonObject.addProperty("trade_no", order.getThirdOrderId());
-		jsonObject.addProperty("refund_amount", order.getAmount());
-		request.setBizContent(jsonObject.toString());
-		try {
-			AlipayTradeRefundResponse response = alipayClient.execute(request);
-			JsonObject responseJson = new Gson().fromJson(response.getBody(), JsonObject.class);
-			responseJson = responseJson.getAsJsonObject("alipay_trade_refund_response");
-			System.out.println(responseJson);
-			if (responseJson.get("code").getAsString() != "10000") {
-				throw new ServiceException("支付宝退款失败：" + responseJson.get("msg") + responseJson.get("sub_msg"));
-			}
-		} catch (AlipayApiException e) {
-			e.printStackTrace();
-			throw new ServiceException("支付宝退款失败：" + e.getMessage());
-		}
-	}*/
+	/*
+	 * private void refundFromAlipay(Order order) { AlipayTradeRefundRequest
+	 * request = new AlipayTradeRefundRequest(); JsonObject jsonObject = new
+	 * JsonObject(); jsonObject.addProperty("out_trade_no", order.getId());
+	 * jsonObject.addProperty("trade_no", order.getThirdOrderId());
+	 * jsonObject.addProperty("refund_amount", order.getAmount());
+	 * request.setBizContent(jsonObject.toString()); try {
+	 * AlipayTradeRefundResponse response = alipayClient.execute(request);
+	 * JsonObject responseJson = new Gson().fromJson(response.getBody(),
+	 * JsonObject.class); responseJson =
+	 * responseJson.getAsJsonObject("alipay_trade_refund_response");
+	 * System.out.println(responseJson); if
+	 * (responseJson.get("code").getAsString() != "10000") { throw new
+	 * ServiceException("支付宝退款失败：" + responseJson.get("msg") +
+	 * responseJson.get("sub_msg")); } } catch (AlipayApiException e) {
+	 * e.printStackTrace(); throw new ServiceException("支付宝退款失败：" +
+	 * e.getMessage()); } }
+	 */
+	
+	private String wechatSign(TreeMap<String, String> params){
+		// 计算sign
+		String pramStr = getUrl(params, "utf-8");
+		pramStr += "&key=u73qa4oj48trzgn00atrbztl2jradgqw";
+		String sign = MD5Util.MD5(pramStr).toUpperCase();
+		return sign;
+	}
+	
+	/** 
+     * 据Map生成URL字符串 
+     * @param map Map 
+     * @param valueEnc  URL编码 
+     * @return  URL 
+     */  
+	private final static String EMPTY = "";
+    private static final String URL_PARAM_CONNECT_FLAG = "&";  
+    private static String getUrl(Map<String, String> map, String valueEnc) {  
+        if (null == map || map.keySet().size() == 0) {  
+            return (EMPTY);  
+        }  
+        StringBuffer url = new StringBuffer();  
+        Set<String> keys = map.keySet();  
+        for (Iterator<String> it = keys.iterator(); it.hasNext();) {  
+            String key = it.next();  
+            if (map.containsKey(key)) {  
+                String val = map.get(key);  
+                String str = val != null ? val : EMPTY;  
+                /*try {  
+                    str = URLEncoder.encode(str, valueEnc);  
+                } catch (UnsupportedEncodingException e) {  
+                    e.printStackTrace();  
+                }*/
+                url.append(key).append("=").append(str).append(URL_PARAM_CONNECT_FLAG);  
+            }  
+        }  
+        String strURL = EMPTY;  
+        strURL = url.toString();  
+        if (URL_PARAM_CONNECT_FLAG.equals(EMPTY + strURL.charAt(strURL.length() - 1))) {  
+            strURL = strURL.substring(0, strURL.length() - 1);  
+        }  
+        return (strURL);  
+    }
+    
 }

@@ -55,5 +55,11 @@ public class OrderController extends BaseUserController {
 		//qc.addOrder(pers.ksy.common.orm.Order.desc("createTime"));
 		return Result.successResult(orderService.findByPage(qc, pageIndex, pageSize), null);
 	}
+	
+	@RequestMapping(path = "/{orderId}/create-wechat-payment", method = RequestMethod.GET)
+	public Object createWechatPayment(@PathVariable String orderId) {
+		String qrCode = orderService.createWechatPayment(orderId);
+		return Result.successResult(qrCode, null);
+	}
 
 }

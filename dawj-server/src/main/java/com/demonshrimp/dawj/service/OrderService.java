@@ -71,4 +71,19 @@ public interface OrderService extends BaseService<Order,String>{
 	 */
 	void selfOrderCheck(String orderId, String userId);
 
+
+	/**
+	 * 创建微信支付
+	 * @param orderId
+	 * @return 支付二维码链接
+	 */
+	String createWechatPayment(String orderId);
+
+
+	/**
+	 * 微信支付完成通知接口
+	 * @param wechatResult
+	 */
+	public void wechatPayComplete(String wechatResult);
+
 }

@@ -1072,7 +1072,7 @@ li.dolla {
     z-index: 999;
     padding: 0;
     margin: 0% 0 0 0;
-    left: 49%;
+    left: 46.5%;
 }
 
 @media screen and (max-width: 600px) {
@@ -1559,17 +1559,24 @@ div.portfoliolist {
     text-align: left;
 }
 
+.small-text p.text {
+    margin: auto 0;
+    height: 21px;
+    line-height: 21px;
+    text-align: center;
+}
+
 .small-text {
     padding: 10px 10px;
     width: 100%;
     background-color: rgba(102, 102, 102, 1);
 }
 
-.small-text p {
+/*.small-text p {
     position: relative;
     text-align: center;
     vertical-align: middle;
-}
+}*/
 
 /*-- blog --*/
 .blog {
@@ -2712,7 +2719,8 @@ div.register-bottom-grid {
     margin-top: 10px;
     overflow: hidden;
     text-overflow: ellipsis;
-    height: 52px
+    height: 52px;
+    text-align: left;
 }
 
 a.mask {
@@ -2760,6 +2768,20 @@ img.zoom-img:hover {
     -ms-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;
     transition: all 0.3s ease;
+}
+
+/*友情链接*/
+.friendly-link{
+    background-color: transparent;
+    padding-left: 0;
+}
+.friendly-link li {
+    display: inline-block;
+}
+
+.friendly-link > li + li:before {
+    content: "| ";
+    font-size: 13px;
 }
 
 @-webkit-keyframes fadeInLeft {
@@ -2852,6 +2874,7 @@ a.uri:visited h4 {
     margin: 30px 0;
     text-align: center;
 }
+
 .service-item i {
     font-size: 20px;
     height: 100px;

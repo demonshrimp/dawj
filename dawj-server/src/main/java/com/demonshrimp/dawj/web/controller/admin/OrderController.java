@@ -2,8 +2,11 @@ package com.demonshrimp.dawj.web.controller.admin;
 
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,13 +56,13 @@ public class OrderController extends BaseAdminController {
 		orderService.close(orderId);
 		return Result.successResult("订单关闭成功!");
 	}
-	
+
 	@RequestMapping(path = "/{orderId}/complete", method = RequestMethod.PUT)
 	public Object complete(@PathVariable String orderId) {
 		orderService.complete(orderId);
 		return Result.successResult("订单完成成功!");
 	}
-	
+
 	@RequestMapping(path = "/{orderId}/refund", method = RequestMethod.PUT)
 	public Object refund(@PathVariable String orderId) {
 		orderService.refund(orderId);
@@ -80,4 +83,9 @@ public class OrderController extends BaseAdminController {
 		return Result.successResult(data, null);
 	}
 
+	@RequestMapping(path = "/wechat-pay-callback", method = { RequestMethod.GET, RequestMethod.POST })
+	public void wechatPayCallback(HttpServletRequest request, @RequestBody(required = false) String wechatResult) {
+		System.out.println(wechatResult);
+		orderService.wechatPayComplete(wechatResult);
+	}
 }

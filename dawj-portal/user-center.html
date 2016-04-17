@@ -315,8 +315,29 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="weichatPayModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">微信扫码支付</h4>
+            </div>
+            <div class="modal-body">
+                <p><label>请扫描下面的二维码：</label></p>
+                <div style="width: 256px;height: 256px;" class="center-block" id="imgWechatPayCode">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">支付遇到问题</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">支付完成</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- footer-bottom -->
 <script src="js/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/vendor/jquery.qrcode.min.js"></script>
 <script src="js/orderUtil.js"></script>
 <script>
     $(function () {
@@ -425,8 +446,6 @@
             validator.validate();
             if (validator.isValid()) {
                 var user = App.Utils.FormUtil.toJson(form);
-
-
                 user.birthday = user.birthday + ' 00:00:00';
                 user.password = App.Utils.StringUtil.md5(user.password);
                 $.ajax({
@@ -474,7 +493,7 @@
                     success: function (result) {
                         if (result.header.success) {
                             loadPage(0);
-                        }else{
+                        } else {
                             alert(result.header.message);
                         }
                     }
@@ -491,7 +510,7 @@
                     success: function (result) {
                         if (result.header.success) {
                             loadPage(0);
-                        }else{
+                        } else {
                             alert(result.header.message);
                         }
                     }
@@ -502,11 +521,31 @@
 
         $('#btnSubmitPay').click(function () {
             var payment = App.Utils.FormUtil.toJson('#formPayment');
-            $('#myModal').modal('hide');
-            if (payment.paymentType == 'alipay') {
-                var url = App.Constants.API_BASE;
-                window.open(url.substr(0, url.length - 8) + '/alipay/orderpay.jsp?orderId=' + payment.orderId);
+            switch (payment.paymentType) {
+                case 'alipay' :
+                    var url = App.Constants.API_BASE;
+                    window.open(url.substr(0, url.length - 8) + '/alipay/orderpay.jsp?orderId=' + payment.orderId);
+                    $('#myModal').modal('hide');
+                    break;
+                case 'wechat' :
+                    $.get(App.Constants.API_BASE + '/order/' + payment.orderId + '/create-wechat-payment', function (result) {
+                        $('#myModal').modal('hide');
+                        if (!result.header.success) {
+                            alert(result.header.message);
+                            return;
+                        }
+                        $('#imgWechatPayCode').empty();
+                        $('#imgWechatPayCode').qrcode(result.body);
+                        $('#weichatPayModal').modal({
+                            keyboard: false
+                        });
+                    });
+                    break;
             }
+        });
+
+        $('#weichatPayModal').on('hidden.bs.modal', function (e) {
+            loadPage(0);
         });
 
         //state methods
@@ -550,12 +589,12 @@
                                 + ' <div class="panel-body order-body">'
                                 + '     <div class="col-md-6">'
                                 + '         <div class="col-md-6">'
-                                + '             <a href="#" class="thumbnail">'
+                                + '             <a href="counselor.html?id=' + order.counselor.id + '" class="thumbnail">'
                                 + '                 <img src="' + order.counselor.fullImage + '" alt="...">'
                                 + '             </a>'
                                 + '         </div>'
                                 + '         <div class="col-md-6">'
-                                + '             <p><strong>咨询师：</strong><a href="#">' + order.counselor.name + '</a></p>'
+                                + '             <p><strong>咨询师：</strong><a href="counselor.html?id=' + order.counselor.id + '">' + order.counselor.name + '</a></p>'
                                 + '             <p>　</p>'
                                 + '             <p><strong>费率：</strong>' + order.counselor.fees + '元/小时</p>'
                                 + '             <p>　</p>'
