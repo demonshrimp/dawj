@@ -143,13 +143,16 @@ var App = {
 
 
     App.Utils.DataTablesHelper = {
-        buildOperationButtons: function (buttons, data) {
+        buildOperationButtons: function (buttons, data, meta) {
             var btns = "";
             for (var i = 0; i < buttons.length; i++) {
                 var button = buttons[i];
                 var a = $('<a  href="javascript:void(0);" class="btn-operation"></a>');
                 for (var p in data) {
                     a.attr("data-" + p, data[p]);
+                }
+                if (meta) {
+                    a.attr("data-row", meta.row);
                 }
                 a.attr("data-operation", button.operation);
                 a.text(button.text);
@@ -325,7 +328,7 @@ var App = {
                 }, opts);
 
                 return function (request, drawCallback, settings) {
-                    request.pageIndex = request.start / request.length ;
+                    request.pageIndex = request.start / request.length;
                     settings.jqXHR = $.ajax({
                         "type": conf.method,
                         "url": conf.url,

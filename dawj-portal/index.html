@@ -455,9 +455,9 @@
         <!-- FlexSlider -->
         <script defer src="js/jquery.flexslider.js"></script>
         <script type="text/javascript">
-            $(function () {
-                SyntaxHighlighter.all();
-            });
+            /*$(function () {
+             SyntaxHighlighter.all();
+             });*/
             $(window).load(function () {
                 $('.flexslider').flexslider({
                     animation: "slide",
@@ -477,20 +477,23 @@
     <div class="container">
         <div class="col-md-12 foo-left">
             <h3>友情链接</h3>
-            <ol class="breadcrumb friendly-link">
-                <li><a href="#">友情站点1</a></li>
-                <li><a href="#">友情站点1</a></li>
-                <li><a href="#">友情站点1</a></li>
-                <li><a href="#">友情站点1</a></li>
-                <li><a href="#">友情站点1</a></li>
-                <li><a href="#">友情站点1</a></li>
-                <li><a href="#">友情站点1</a></li>
-                <li><a href="#">友情站点1</a></li>
-                <li><a href="#">友情站点1</a></li>
-                <li><a href="#">友情站点1</a></li>
-                <li><a href="#">友情站点1</a></li>
-                <li><a href="#">友情站点1</a></li>
+            <ol class="breadcrumb friendly-link" id="friendshipSiteList">
             </ol>
+            <script type="text/javascript">
+                $(function () {
+                    $.get(App.Constants.API_BASE + '/friendship-site/list', function (result) {
+                        if (result.header.success) {
+                            var friendshipSites = result.body;
+                            var list = $('#friendshipSiteList');
+                            list.empty();
+                            for (var i = 0; i < friendshipSites.length; i++) {
+                                var friendshipSite = friendshipSites[i];
+                                list.append('<li><a href="' + friendshipSite.url + '" target="_blank">' + friendshipSite.name + '</a></li>');
+                            }
+                        }
+                    });
+                })
+            </script>
         </div>
         <div class="col-md-4 foo-left">
             <h3>公司简介</h3>

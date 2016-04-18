@@ -82,6 +82,12 @@
         "name": "子站管理",
         "icon": "fa-sitemap",
         "url": "pages/sys/site-list.html"
+      },
+      {
+        "no": "22",
+        "name": "友情站点管理",
+        "icon": "fa-sitemap",
+        "url": "pages/sys/friendship-site-list.html"
       }
     ]
   }

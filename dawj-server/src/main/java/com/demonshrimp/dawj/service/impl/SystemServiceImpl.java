@@ -12,8 +12,10 @@ import org.springframework.util.Assert;
 
 import com.demonshrimp.dawj.exception.ServiceException;
 import com.demonshrimp.dawj.model.dao.BaseDao;
+import com.demonshrimp.dawj.model.dao.FriendshipSiteDao;
 import com.demonshrimp.dawj.model.dao.SiteDao;
 import com.demonshrimp.dawj.model.dao.UserDao;
+import com.demonshrimp.dawj.model.entity.FriendshipSite;
 import com.demonshrimp.dawj.model.entity.Site;
 import com.demonshrimp.dawj.model.entity.Site.Status;
 import com.demonshrimp.dawj.service.SystemService;
@@ -31,6 +33,8 @@ public class SystemServiceImpl extends BaseServiceImpl<Site, String> implements 
 	private UserDao userDao;
 	@Autowired
 	private SiteDao siteDao;
+	@Autowired
+	private FriendshipSiteDao friendshipSiteDao;
 
 	@Override
 	public BaseDao<Site, String> getDao() {
@@ -97,7 +101,7 @@ public class SystemServiceImpl extends BaseServiceImpl<Site, String> implements 
 			throw new ServiceException("令牌无效", "900");
 		}
 		long diffTime = System.currentTimeMillis() - site.getLastLoginTime().getTime();
-		if (diffTime > 1000 * 60 * 60 * 1) {
+		if (diffTime > 1000 * 60 * 60 * 3) {
 			throw new ServiceException("令牌无效", "901");
 		}
 		return site;
@@ -106,8 +110,48 @@ public class SystemServiceImpl extends BaseServiceImpl<Site, String> implements 
 	@Override
 	public Site getSiteByPath(String path) {
 		Site site = siteDao.getByProperty("path", path);
-		Assert.notNull(site,"站点不存在");
+		Assert.notNull(site, "站点不存在");
 		return site;
+	}
+
+	@Override
+	public FriendshipSite addFriendshipSite(FriendshipSite friendshipSite) {
+		friendshipSite.setCreateTime(new Date());
+		friendshipSiteDao.save(friendshipSite);
+		return friendshipSite;
+	}
+
+	@Override
+	public FriendshipSite updateFriendshipSite(FriendshipSite friendshipSite) {
+		friendshipSiteDao.update(friendshipSite, "name", "url", "description", "lastModifyTime");
+		return friendshipSite;
+	}
+
+	@Override
+	public FriendshipSite getFriendshipSite(String friendshipSiteId) {
+		return friendshipSiteDao.load(friendshipSiteId);
+	}
+
+	@Override
+	public void delFriendshipSite(String friendshipSiteId) {
+		friendshipSiteDao.deleteById(friendshipSiteId);
+	}
+
+	@Override
+	public List<FriendshipSite> friendshipSiteList() {
+		return friendshipSiteDao.findAll();
+	}
+
+	@Override
+	public void batchSaveFriendshipSites(List<FriendshipSite> friendshipSites) {
+		int length = friendshipSiteDao.deleteNotIn(friendshipSites);
+		for (FriendshipSite friendshipSite : friendshipSites) {
+			if (StringUtil.isEmpty(friendshipSite.getId())) {
+				addFriendshipSite(friendshipSite);
+			} else {
+				updateFriendshipSite(friendshipSite);
+			}
+		}
 	}
 
 }

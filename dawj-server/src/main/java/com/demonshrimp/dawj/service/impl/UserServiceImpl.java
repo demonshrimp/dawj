@@ -98,7 +98,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements Us
 			throw new ServiceException("令牌无效", "900");
 		}
 		long diffTime = System.currentTimeMillis() - user.getLastLoginTime().getTime();
-		if (diffTime > 1000 * 60 * 60 * 1) {
+		if (diffTime > 1000 * 60 * 60 * 3) {
 			throw new ServiceException("令牌无效", "901");
 		}
 		return user;
