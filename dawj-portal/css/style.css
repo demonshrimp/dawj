@@ -1639,6 +1639,11 @@ div.portfoliolist {
     text-decoration: none;
 }
 
+.blog-articals, .b-tag-weight {
+    background-color: #FFFFFF;
+    padding: 10px;
+}
+
 .b-tag-weight ul {
     margin: 0;
     padding: 0;

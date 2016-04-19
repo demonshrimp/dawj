@@ -72,7 +72,8 @@
                     <li><a href="login.html">登录</a></li>
                     <li><a href="register.html">注册</a></li>
                 </ul>
-                <p id="unLoginPanel" class="hidden">欢迎，<a id="userName" href="user-center.html">用户</a>　<a href="user-center.html">[个人中心]</a><a href="#login.html">[注销]</a></p>
+                <p id="unLoginPanel" class="hidden">欢迎，<a id="userName" href="user-center.html">用户</a>　<a
+                        href="user-center.html">[个人中心]</a><a href="#login.html">[注销]</a></p>
             </div>
             <div class="clearfix"></div>
         </div>
@@ -84,10 +85,10 @@
     <div class="container">
         <div class="single">
             <div class="col-md-8 single-top">
-                <div class="col-md-12 single-title" >
-                <h2 id="title"></h2>
-                <img id="image" class="img-responsive" alt="">
-                <p class="sin" id="description"></p>
+                <div class="col-md-12 single-title">
+                    <h2 id="title"></h2>
+                    <img id="image" class="img-responsive" alt="">
+                    <p class="sin" id="description"></p>
                 </div>
                 <div class="respon">
                     <div id="content"></div>
@@ -96,36 +97,87 @@
                             <li><i class="fa fa-calendar-check-o"></i><span id="createTime"></span></li>
                         </ul>
                     </div>
+                    <nav>
+                        <ul class="pager">
+                            <li class="previous"><a href="#" id="before">上一篇：<label></label></a></li>
+                            <li class="next"><a href="#" id="after">下一篇：<label></label></a></li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
-            <div class="blog-content-right hidden">
+            <div class="col-md-3 visible-md visible-lg">
                 <div class="b-search">
                     <form>
-                        <input type="text" value="Search" onfocus="this.value = '';"
-                               onblur="if (this.value == '') {this.value = 'Search';}">
+                        <input type="text" value="Search" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search';}">
                         <input type="submit" value="">
                     </form>
                 </div>
+                <!--start-twitter-weight-->
+                <!--<div class="twitter-weights">
+                    <h3>Tweet Widget</h3>
+                    <div class="twitter-weight-grid">
+                        <h4><span> </span>John Doe</h4>
+                        <p>Lorem ipsum dolor sit amet, consectetur elit,labore et dolore magna aliqua. <a href="#">http://t.co/h12k</a>
+                        </p>
+                        <i><a href="#">2 days ago</a></i>
+                    </div>
+                    <div class="twitter-weight-grid">
+                        <h4><span> </span>John Doe</h4>
+                        <p>Lorem ipsum dolor sit amet, consectetur elit,labore et dolore magna aliqua. <a href="#">http://t.co/h12k</a>
+                        </p>
+                        <i><a href="#">2 days ago</a></i>
+                    </div>
+                    <a class="twittbtn" href="#">See all Tweets</a>
+                </div>-->
                 <!--//End-twitter-weight-->
                 <!-- start-tag-weight-->
                 <div class="b-tag-weight">
-                    <h3>Tags Weight</h3>
+                    <h3>标签</h3>
                     <ul>
-                        <li><a href="#">Lorem</a></li>
-                        <li><a href="#">consectetur</a></li>
-                        <li><a href="#">dolore</a></li>
-                        <li><a href="#">aliqua</a></li>
-                        <li><a href="#">sit amet</a></li>
-                        <li><a href="#">ipsum</a></li>
-                        <li><a href="#">Lorem</a></li>
-                        <li><a href="#">consectetur</a></li>
-                        <li><a href="#">dolore</a></li>
-                        <li><a href="#">aliqua</a></li>
-                        <li><a href="#">sit amet</a></li>
-                        <li><a href="#">ipsum</a></li>
+                        <li><a href="#">生活</a></li>
+                        <li><a href="#">家庭</a></li>
+                        <li><a href="#">婚姻</a></li>
+                        <li><a href="#">子女教育</a></li>
+                        <li><a href="#">两性</a></li>
+                        <li><a href="#">智力</a></li>
+                        <li><a href="#">郁闷</a></li>
+                        <li><a href="#">心情</a></li>
+                        <li><a href="#">情绪</a></li>
+                        <li><a href="#">精神疾病</a></li>
                     </ul>
                 </div>
                 <!---- //End-tag-weight---->
+                <div class="b-tag-weight">
+                    <h3>咨询师推荐</h3>
+                    <div id="recommendCounselorList" class="row">
+                        <!--<div class="col-md-12">
+                            <div class="thumbnail">
+                                <img data-src="holder.js/100%x200" alt="100%x200"
+                                     src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTU0MmYxNzI3YjkgdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNTQyZjE3MjdiOSI+PHJlY3Qgd2lkdGg9IjI0MiIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI4OS44NTkzNzUiIHk9IjEwNS4xIj4yNDJ4MjAwPC90ZXh0PjwvZz48L2c+PC9zdmc+"
+                                     data-holder-rendered="true" style="height: 100px; width: 100%; display: block;">
+                                <div class="caption">
+                                    <h3>Thumbnail label</h3>
+                                    <p><a href="#" class="btn btn-primary" role="button">Button</a>
+                                        <a href="#" class="btn btn-default" role="button">Button</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="thumbnail">
+                                <img data-src="holder.js/100%x200" alt="100%x200"
+                                     src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTU0MmYxNzI3YjkgdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNTQyZjE3MjdiOSI+PHJlY3Qgd2lkdGg9IjI0MiIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI4OS44NTkzNzUiIHk9IjEwNS4xIj4yNDJ4MjAwPC90ZXh0PjwvZz48L2c+PC9zdmc+"
+                                     data-holder-rendered="true" style="height: 100px; width: 100%; display: block;">
+                                <div class="caption">
+                                    <h3>Thumbnail label</h3>
+                                    <p><a href="#" class="btn btn-primary" role="button">Button</a>
+                                        <a href="#" class="btn btn-default" role="button">Button</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>-->
+                    </div>
+                </div>
             </div>
             <div class="clearfix"></div>
         </div>
@@ -153,9 +205,11 @@
         <div class="col-md-4 foo-left">
             <h3>联系我们</h3>
             <ul>
-                <li><a><span class="glyphicon glyphicon-phone-alt" style="font-size: 17px;margin: 0 4px"></span>0371-55601221</a></li>
+                <li><a><span class="glyphicon glyphicon-phone-alt" style="font-size: 17px;margin: 0 4px"></span>0371-55601221</a>
+                </li>
                 <li><a href="mailto:info@dawjxlzx.com"><i class="mail"></i>info@dawjxlzx.com</a></li>
-                <li><a><span class="glyphicon glyphicon-home" style="font-size: 17px;margin: 0 4px"></span>河南省郑州市金水区经三路66号金成国际广场4号楼2单元1102</a></li>
+                <li><a><span class="glyphicon glyphicon-home" style="font-size: 17px;margin: 0 4px"></span>河南省郑州市金水区经三路66号金成国际广场4号楼2单元1102</a>
+                </li>
                 <!--<li class="active"><a href="index.html">首页</a></li>
                 <li class="active"><a href="about.html">关于我们</a></li>
                 <li><a href="#">咨询师 </a></li>
@@ -192,10 +246,58 @@
                 $('#content').html(article.content);
             }
         });
+
+        $.get(App.Constants.API_BASE + '/counseling-article/' + id + '/before-and-after', function (result) {
+            if (result.header.success) {
+                buildPageFooter('before',result.body[0]);
+                buildPageFooter('after',result.body[1]);
+            }
+        });
+
+        $.get(App.Constants.API_BASE + '/counselor/page?orderBy=certificated&desc=true&length=5&pageIndex=0', function (result) {
+            if (result.header.success) {
+                console.log(result);
+                var pageInfo = result.body;
+                var counselors = pageInfo.list;
+                var list = $('#recommendCounselorList');
+                list.empty();
+                for (var i = 0; i < counselors.length; i++) {
+                    var counselor = counselors[i];
+                    list.append(' <div class="col-md-12">'
+                            + '     <a href="counselor.html?id="+counselor.id>'
+                            + '     <div class="thumbnail">'
+                            + '         <img data-src="holder.js/100%x200" alt="100%x200" src="' + counselor.fullImage + '" '
+                            + '             data-holder-rendered="true" style="height: 100px; width: 100%; display: block;">'
+                            + '             <div class="caption">'
+                            + '                 <h3 style="color: #333;text-align: center">' + counselor.name + '</h3>'
+                            + '              </div>'
+                            + '      </div>'
+                            + '       </a>'
+                            + '  </div>');
+                }
+                var pages = $('#pages');
+                pages.empty();
+                for (var i = 0; i < pageInfo.amount; i++) {
+                    if (i == start) {
+                        pages.append('<li><a class="current-page" href="#start=' + i + '" >' + (i + 1) + '</a></li>');
+                    } else {
+                        pages.append('<li><a class="go-page" href="#start=' + i + '" data-start="' + i + '">' + (i + 1) + '</a></li>');
+                    }
+                }
+            }
+        });
         //init events
 
         //fs
-
+        function buildPageFooter(id, article) {
+            var a = $('#' + id);
+            if (article) {
+                a.attr('href', 'counseling-article.html?id=' + article.id);
+                a.find('label').text(article.title);
+            } else {
+                a.find('label').text('没有了');
+            }
+        }
     });
 </script>
 </body>

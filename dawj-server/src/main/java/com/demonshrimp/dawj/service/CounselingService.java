@@ -138,4 +138,11 @@ public interface CounselingService extends BaseService<Site, String> {
 	 */
 	public Page<Counselor> findCounselorPage(String siteId, QueryCondition qc, int pageIndex, int pageSize);
 
+	/**
+	 * 查询前一篇和后一篇文章
+	 * @param counselingArticleId
+	 * @return
+	 */
+	CounselingArticle[] findBeforeAndAfterArticle(String counselingArticleId);
+
 }

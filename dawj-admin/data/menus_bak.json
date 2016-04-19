@@ -53,6 +53,23 @@
         "name": "用户管理",
         "icon": "fa-users",
         "url": "pages/user/user-list.html"
+      },
+      {
+        "no": "15",
+        "name": "在线答题管理",
+        "icon": "fa-book",
+        "children": [
+          {
+            "no": "151",
+            "name": "题库管理",
+            "url": "pages/test/question-list.html"
+          },
+          {
+            "no": "152",
+            "name": "得分管理",
+            "url": "pages/test/score-set.html"
+          }
+        ]
       }
     ]
   },

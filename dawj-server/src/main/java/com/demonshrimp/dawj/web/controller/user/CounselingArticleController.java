@@ -42,4 +42,10 @@ public class CounselingArticleController extends BaseUserController {
 		return Result.successResult(counselingService.getCounselingArticle(counselingArticleId), null);
 	}
 
+	@RequestMapping(path = "/{counselingArticleId}/before-and-after", method = RequestMethod.GET)
+	@SerializationFilter(target = CounselingArticle.class, fields = { "site", "content" })
+	public Object findBeforeAndAfter(@PathVariable String counselingArticleId) {
+		return Result.successResult(counselingService.findBeforeAndAfterArticle(counselingArticleId), null);
+	}
+
 }

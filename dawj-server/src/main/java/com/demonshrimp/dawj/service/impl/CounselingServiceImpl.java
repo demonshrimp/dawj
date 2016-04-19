@@ -123,6 +123,10 @@ public class CounselingServiceImpl extends BaseServiceImpl<Site, String> impleme
 		return counselingArticleDao.get(counselingArticleId);
 	}
 	
+	@Override
+	public CounselingArticle[] findBeforeAndAfterArticle(String counselingArticleId){
+		return counselingArticleDao.findBeforeAndAfter(counselingArticleId);
+	}
 	
 	@Override
 	public List<Counselor> counselorList(String siteId) {
@@ -167,7 +171,5 @@ public class CounselingServiceImpl extends BaseServiceImpl<Site, String> impleme
 		qc.eq("site.id", siteId);
 		return counselorDao.findByPage(qc, pageIndex, pageSize);
 	}
-
-	
 	
 }

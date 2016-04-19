@@ -2,29 +2,30 @@
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
-                <h3 class="box-title">站点列表</h3>
+                <h3 class="box-title">用户列表</h3>
+                <div class="box-tools pull-right">
+                    <button id="btnRefreshTable" type="button" class="btn btn-box-tool" title="刷新">
+                        <i class="fa fa-refresh"></i>
+                        刷新
+                    </button>
+                </div>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-                <table id="tblUserList" class="table table-bordered table-striped">
+                <table id="tblCounselingArticleList" class="table table-bordered table-hover nowrap datatables">
                     <thead>
                     <tr>
-                        <th>站点名称</th>
-                        <th>城市</th>
-                        <th>访问路径</th>
+                        <th>手机</th>
+                        <th>姓名</th>
+                        <th>注册站点</th>
+                        <th>积分</th>
+                        <th>性别</th>
+                        <th>生日</th>
                         <th>创建时间</th>
-                        <th>最后修改时间</th>
+                        <th>最后登录时间</th>
+                        <th>操作</th>
                     </tr>
                     </thead>
-                    <tfoot>
-                    <tr>
-                        <th>站点名称</th>
-                        <th>城市</th>
-                        <th>访问路径</th>
-                        <th>创建时间</th>
-                        <th>最后修改时间</th>
-                    </tr>
-                    </tfoot>
                 </table>
             </div>
         </div>
@@ -33,98 +34,126 @@
 </div>
 <!-- /.box-body -->
 <!-- DataTables -->
+<link rel="stylesheet" href="plugins/datatables/media/css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css">
+<link rel="stylesheet" href="plugins/datatables/extensions/Responsive/css/responsive.bootstrap.min.css">
 <script src="plugins/datatables/media/js/jquery.dataTables.min.js"></script>
 <script src="plugins/datatables/media/js/dataTables.bootstrap.min.js"></script>
+<script src="plugins/datatables/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+<script src="plugins/datatables/extensions/Responsive/js/responsive.bootstrap.min.js"></script>
 <script src="plugins/datatables/extensions/Buttons/js/dataTables.buttons.min.js"></script>
 <script src="plugins/datatables/extensions/Buttons/js/buttons.bootstrap.min.js"></script>
 <script src="plugins/datatables/extensions/Select/js/dataTables.select.min.js"></script>
-<script src="plugins/datatables/extensions/Editor/js/dataTables.editor.min.js"></script>
-<script src="plugins/datatables/extensions/Editor/js/editor.bootstrap.min.js"></script>
+<style>
+    table.dataTable tbody tr.selected {
+        background-color: #B0BED9;
+    }
+</style>
 <!-- page script -->
 <script>
     $(function () {
-        var editor = new $.fn.dataTable.Editor( {
-            ajax: "../php/staff.php",
-            table: "#tblUserList",
-            i18n :{
-                create:{
-                    title : '新增站点',
-                    submit : '新增'
-                },
-                edit:{
-                    title : '编辑站点',
-                    submit : '编辑'
-                },
-                remove:{
-                    title:'删除站点',
-                    submit : '删除'
-                }
-            },
-            fields: [ {
-                label: "名称",
-                name: "name"
-            }, {
-                label: "城市",
-                name: "city"
-            }, {
-                label: "访问路径",
-                name: "path",
-                type: "date"
-            } ]
-        } );
-        var table = $('#tblUserList').DataTable({
-            "ajax": {
-                "url": App.Constants.API_BASE + "/site/page?pageIndex=0&pageSize=10",
-                "dataSrc": function (result) {
-                    return result.list;
-                }
-            },
-            "columns": [
-                {"data": "name"},
-                {"data": "city"},
+        App.Utils.DataTablesHelper.pipelineNoCache();
+        var table = $('#tblCounselingArticleList').DataTable({
+            ajax: $.fn.dataTable.pipelineNoCache({
+                url: App.Constants.API_BASE + '/user/page'
+            }),
+            columns: [
+                {data: 'mobile'},
+                {data: 'name'},
+                {data: 'site.city'},
+                {data: 'points'},
                 {
-                    "data": "path",
-                    "render": function (data, type, full, meta) {
-                        if (!data) {
-                            data = '/';
+                    data: 'sex',
+                    render: function (data, type, full, meta) {
+                        var sex = '';
+                        if ('MALE' == data) {
+                            sex = '男';
+                        } else if ('FEMALE' == data) {
+                            sex = '女';
                         }
-                        var url = getRoot() + data;
-                        return '<a href="' + url + '">' + url + '</a>';
+                        return sex;
                     }
                 },
-                {"data": "createTime"},
-                {"data": "lastModifyTime"}
+                {
+                    data: 'birthday',
+                    render: function (data, type, full, meta) {
+                        if (data) {
+                            return data.substr(0, 10);
+                        }
+                        return '';
+                    }
+                },
+                {data: 'createTime'},
+                {data: 'lastLoginTime'},
+                {
+                    data: 'id',
+                    className: 'center',
+                    render: function (data, type, full, meta) {
+                        return App.Utils.DataTablesHelper.buildOperationButtons([{
+                            text: '查看',
+                            operation: 'viw'
+                        }], full);
+                    }
+                }
             ],
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": true
+            processing: true,
+            serverSide: true,
+            language: App.Utils.DataTablesHelper.language(),
+            select: true,
+            paging: true,
+            responsive: true
         });
 
-        // Display the buttons
-        new $.fn.dataTable.Buttons( table, [
-            { dom: "测试", extend: "create", editor: editor },
-            { extend: "edit",   editor: editor },
-            { extend: "remove", editor: editor }
-        ] );
+        //init events
+        $('#btnRefreshTable').click(function () {
+            refreshTable()
+        });
+        $('#btnAddCounselingType').click(function () {
+            App.loadPage('pages/counseling/counseling-article.html');
+        });
+        App.Utils.DataTablesHelper.onOperationButtonClick('#tblCounselingArticleList', function (data) {
+            switch (data.operation) {
+                case  'edit':
+                    edit(data);
+                    break;
+                case  'remove':
+                    remove(data);
+                    break;
+            }
+        });
 
-        table.buttons().container()
-                .appendTo( $('.col-sm-6:eq(0)', table.table().container() ) );
-
-        function getRoot() {
-            //获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
-            var curWwwPath = window.document.location.href;
-            //获取主机地址之后的目录，如： uimcardprj/share/meun.jsp
-            var pathName = window.document.location.pathname;
-            var pos = curWwwPath.indexOf(pathName);
-            //获取主机地址，如： http://localhost:8083
-            var localhostPaht = curWwwPath.substring(0, pos);
-            //获取带"/"的项目名，如：/uimcardprj
-            var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-            return (localhostPaht + projectName);
+        function edit(data) {
+            App.loadPage('pages/counseling/counseling-article.html?id=' + data.id);
         }
+
+        function remove(data) {
+            if (confirm('确定要删除这个站点吗？')) {
+                $.ajax({
+                    url: App.Constants.API_BASE + '/counseling-article/' + data.id,
+                    type: 'DELETE',
+                    success: function (result) {
+                        alert(result.header.message);
+                        if (result.header.success) {
+                            refreshTable(true);
+                        }
+                    }
+                });
+            }
+        }
+
+        function refreshTable(retain) {
+            var page = table.page.info().page;
+            table.ajax.reload(function () {
+                console.log(table.page.info().pages, page);
+                if (retain) {
+                    if (table.page.info().pages <= page) {
+                        page--;
+                    }
+                    table.page(page).draw('page');
+                }
+            });
+        }
+
     });
 </script>
 </body>
