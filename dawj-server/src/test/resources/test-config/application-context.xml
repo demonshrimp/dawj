@@ -40,6 +40,11 @@
 		<property name="pas" value="etfuny4g" />
 	</bean>
 
+	<!-- 微信api配置 -->
+	<bean class="pers.ksy.common.wechat.api.WechatApiClient">
+		<constructor-arg index="0" value="wxc086c323ecb8c170" />
+		<constructor-arg index="1" value="1eebbe52d813e066ec09233e957629ef" />
+	</bean>
 	<!-- alipay sdk -->
 	<!-- <bean id="alipayClient" class="com.alipay.api.DefaultAlipayClient">
 		<constructor-arg name="serverUrl"

@@ -1935,6 +1935,7 @@ i.adm1 {
 
 .b-tag-weight ul li {
     display: inline-block;
+    margin: 0 2px;
 }
 
 .b-tag-weight ul li a {
@@ -2776,10 +2777,11 @@ img.zoom-img:hover {
 }
 
 /*友情链接*/
-.friendly-link{
+.friendly-link {
     background-color: transparent;
     padding-left: 0;
 }
+
 .friendly-link li {
     display: inline-block;
 }

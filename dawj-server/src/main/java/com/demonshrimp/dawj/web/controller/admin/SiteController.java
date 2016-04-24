@@ -37,6 +37,14 @@ public class SiteController extends BaseAdminController {
 	@Autowired
 	private SystemService systemService;
 
+	@RequestMapping(path = "/check-site", method = RequestMethod.GET)
+	@SerializationFilter(target = Site.class, fields = { "id", "certificated", "status", "password", "lastLoginTime",
+			"token", "createTime", "lastModifyTime" })
+	public Object checkSite(String name) {
+		Site site = systemService.getSiteByName(name);
+		return Result.successResult(site, null);
+	}
+
 	@RequestMapping(path = "/login", method = RequestMethod.POST)
 	public Object login(String name, String password, HttpServletResponse response) {
 		Site site = systemService.siteAdminLogin(name, password);

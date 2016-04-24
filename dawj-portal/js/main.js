@@ -37,7 +37,7 @@ var App = {
         } else if (compulsive) {
             var pageUrl = window.location.toString();
             pageUrl = encodeURI(pageUrl);
-            window.location.href = 'login.html?page_url='+pageUrl;
+            window.location.href = 'login.html?page_url=' + pageUrl;
         }
     };
 

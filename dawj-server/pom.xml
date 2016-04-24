@@ -83,7 +83,7 @@
 		<dependency>
 			<groupId>pers.ksy</groupId>
 			<artifactId>common-util</artifactId>
-			<version>1.5.1-REALEASE</version>
+			<version>1.5.2-REALEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -105,7 +105,11 @@
 			<artifactId>commons-httpclient</artifactId>
 			<version>3.1</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.2</version>
+		</dependency>
 		<!-- 3rd libs -->
 		<!-- <dependency>
 			<groupId>com.alipay.api</groupId>

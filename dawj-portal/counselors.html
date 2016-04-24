@@ -1,12 +1,13 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>大爱无疆-我们的咨询师</title>
+    <title>找心理咨询师_心理医生在线咨询_找心理专家_心理咨询师_大爱无疆心理网</title>
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
     <link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="keywords" content="心理咨询,咨询,心理,大爱无疆"/>
+    <meta name="keywords" content="心理咨询师,心理医生,心理专家,专业心理咨询师,专业心理医生，心理咨询室"/>
+    <meta name="description" content="大爱无疆心理网,汇聚国内专业心理咨询师，在线帮您解决心理困惑，是您找专业心理咨询师、专业心理医生的首选。"/>
     <link href='http://fonts.useso.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
     <link href="css/animate.min.css" rel="stylesheet"/>
     <script src="js/jquery.min.js"></script>
@@ -86,8 +87,7 @@
         <div class="portfolio-top animated slideInDown">
             <h3> 我们的咨询师</h3>
         </div>
-        <div></div>
-        <div id="counselorlist" class="portfoliolist">
+        <div id="counselorlist" class="portfoliolist col-md-9">
             <!--<div class="portfolio app mix_all" data-cat="app" style="display: inline-block; opacity: 1;">
                 <div class="portfolio-wrapper">
                     <a href="images/p11.png" class="b-link-stripe b-animate-go   swipebox" title="Image Title">
@@ -102,6 +102,51 @@
                         consectetur</p>
                 </div>
             </div>-->
+        </div>
+        <div class="col-md-3 visible-md visible-lg" style="margin-top: 39px">
+            <div class="b-search">
+                <form action="javascript:window.location.href='counseling-articles.html?keywords='+escape(document.getElementById('inputSearch').value)">
+                    <input id="inputSearch" type="text" value="Search"
+                           onfocus="this.data=this.value;this.value = '';" name="keywords"
+                           onblur="if (this.value == '') {this.value = this.data ? this.data :'Search';}">
+                    <input type="submit" value="">
+                </form>
+            </div>
+            <!--start-twitter-weight-->
+            <!--<div class="twitter-weights">
+                <h3>Tweet Widget</h3>
+                <div class="twitter-weight-grid">
+                    <h4><span> </span>John Doe</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur elit,labore et dolore magna aliqua. <a href="#">http://t.co/h12k</a>
+                    </p>
+                    <i><a href="#">2 days ago</a></i>
+                </div>
+                <div class="twitter-weight-grid">
+                    <h4><span> </span>John Doe</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur elit,labore et dolore magna aliqua. <a href="#">http://t.co/h12k</a>
+                    </p>
+                    <i><a href="#">2 days ago</a></i>
+                </div>
+                <a class="twittbtn" href="#">See all Tweets</a>
+            </div>-->
+            <!--//End-twitter-weight-->
+            <!-- start-tag-weight-->
+            <div class="b-tag-weight">
+                <h3>分类</h3>
+                <ul id="counselingTagList">
+                    <li><a href="#">生活</a></li>
+                    <li><a href="#">家庭</a></li>
+                    <li><a href="#">婚姻</a></li>
+                    <li><a href="#">子女教育</a></li>
+                    <li><a href="#">两性</a></li>
+                    <li><a href="#">智力</a></li>
+                    <li><a href="#">郁闷</a></li>
+                    <li><a href="#">心情</a></li>
+                    <li><a href="#">情绪</a></li>
+                    <li><a href="#">精神疾病</a></li>
+                </ul>
+            </div>
+            <!---- //End-tag-weight---->
         </div>
         <div class="clear"></div>
         <div class="blog-pagenat">
@@ -137,9 +182,11 @@
         <div class="col-md-4 foo-left">
             <h3>联系我们</h3>
             <ul>
-                <li><a><span class="glyphicon glyphicon-phone-alt" style="font-size: 17px;margin: 0 4px"></span>0371-55601221</a></li>
+                <li><a><span class="glyphicon glyphicon-phone-alt" style="font-size: 17px;margin: 0 4px"></span>0371-55601221</a>
+                </li>
                 <li><a href="mailto:info@dawjxlzx.com"><i class="mail"></i>info@dawjxlzx.com</a></li>
-                <li><a><span class="glyphicon glyphicon-home" style="font-size: 17px;margin: 0 4px"></span>河南省郑州市金水区经三路66号金成国际广场4号楼2单元1102</a></li>
+                <li><a><span class="glyphicon glyphicon-home" style="font-size: 17px;margin: 0 4px"></span>河南省郑州市金水区经三路66号金成国际广场4号楼2单元1102</a>
+                </li>
                 <!--<li class="active"><a href="index.html">首页</a></li>
                 <li class="active"><a href="about.html">关于我们</a></li>
                 <li><a href="#">咨询师 </a></li>
@@ -165,6 +212,18 @@
 
         //init datas
         loadPage(0);
+        $.get(App.Constants.API_BASE + '/counseling-type/list', function (result) {
+
+            if (result.header.success) {
+                var types = result.body;
+                var ul = $('#counselingTagList');
+                ul.empty();
+
+                for (var i = 0; i < types.length; i++) {
+                    ul.append('<li><a href="counseling-articles.html?counselingTypeId=' + types[i].id + '">' + types[i].name + '</a></li>');
+                }
+            }
+        });
         //init events
         $('.blog-pagenat').on('click', '.go-page', function () {
             var start = $(this).data('start');
@@ -181,7 +240,7 @@
 
         //fs
         function loadPage(start) {
-            $.get(App.Constants.API_BASE + '/counselor/page?orderBy=createTime&desc=true&length=8&pageIndex=' + start, function (result) {
+            $.get(App.Constants.API_BASE + '/counselor/page?orderBy=createTime&desc=true&length=6&pageIndex=' + start, function (result) {
                 if (result.header.success) {
                     console.log(result);
                     var pageInfo = result.body;
@@ -190,7 +249,7 @@
                     list.empty();
                     for (var i = 0; i < counselors.length; i++) {
                         var counselor = counselors[i];
-                        list.append('<div class="portfolio" style="display: inline-block; opacity: 1;">'
+                        list.append('<div class="portfolio" style="display: inline-block; opacity: 1;width: 33%">'
                                 + '<div class="portfolio-wrapper">'
                                 + '<a href="counselor.html?id=' + counselor.id + '" class="b-link-stripe" title="' + counselor.name + '">'
                                 + '<img src="' + counselor.fullImage + '"/>'

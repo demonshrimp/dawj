@@ -1,12 +1,13 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>心理测试</title>
+    <title>心理测试_心理测试题_心理压力测试_心理健康测试_大爱无疆心理网</title>
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
     <link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="keywords" content="心理咨询,咨询,心理,大爱无疆"/>
+    <meta name="keywords" content="心理测试,心理压力测试,心理健康测试,心理测试题"/>
+    <meta name="description" content="大爱无疆心理网,国内第一家专业心理测试网站，我们有最全的心理测试题，可在线进行心理测试、心理压力测试和心理健康测试。"/>
     <link href='http://fonts.useso.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
     <link href="css/animate.min.css" rel="stylesheet"/>
     <script src="js/jquery.min.js"></script>
@@ -176,6 +177,26 @@
             </ul>
         </div>
         <div class="clearfix"></div>
+        <div class="col-md-12 foo-left">
+            <h3>友情链接</h3>
+            <ol class="breadcrumb friendly-link" id="friendshipSiteList">
+            </ol>
+            <script type="text/javascript">
+                $(function () {
+                    $.get(App.Constants.API_BASE + '/friendship-site/list', function (result) {
+                        if (result.header.success) {
+                            var friendshipSites = result.body;
+                            var list = $('#friendshipSiteList');
+                            list.empty();
+                            for (var i = 0; i < friendshipSites.length; i++) {
+                                var friendshipSite = friendshipSites[i];
+                                list.append('<li><a href="' + friendshipSite.url + '" target="_blank">' + friendshipSite.name + '</a></li>');
+                            }
+                        }
+                    });
+                })
+            </script>
+        </div>
     </div>
 </div>
 <!-- footer-top -->

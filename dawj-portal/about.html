@@ -235,6 +235,26 @@
             </ul>
         </div>
         <div class="clearfix"></div>
+        <div class="col-md-12 foo-left">
+            <h3>友情链接</h3>
+            <ol class="breadcrumb friendly-link" id="friendshipSiteList">
+            </ol>
+            <script type="text/javascript">
+                $(function () {
+                    $.get(App.Constants.API_BASE + '/friendship-site/list', function (result) {
+                        if (result.header.success) {
+                            var friendshipSites = result.body;
+                            var list = $('#friendshipSiteList');
+                            list.empty();
+                            for (var i = 0; i < friendshipSites.length; i++) {
+                                var friendshipSite = friendshipSites[i];
+                                list.append('<li><a href="' + friendshipSite.url + '" target="_blank">' + friendshipSite.name + '</a></li>');
+                            }
+                        }
+                    });
+                })
+            </script>
+        </div>
     </div>
 </div>
 <!-- footer-top -->

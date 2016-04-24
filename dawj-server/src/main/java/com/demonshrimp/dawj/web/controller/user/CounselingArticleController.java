@@ -13,6 +13,9 @@ import com.demonshrimp.dawj.service.CounselingService;
 import pers.ksy.common.StringUtil;
 import pers.ksy.common.annotation.SerializationFilter;
 import pers.ksy.common.model.Result;
+import pers.ksy.common.orm.Conditions;
+import pers.ksy.common.orm.JoinType;
+import pers.ksy.common.orm.MatchMode;
 import pers.ksy.common.orm.Order;
 import pers.ksy.common.orm.QueryCondition;
 import pers.ksy.common.orm.QueryConditionImpl;
@@ -26,12 +29,24 @@ public class CounselingArticleController extends BaseUserController {
 	@RequestMapping(path = "/page", method = RequestMethod.GET)
 	@SerializationFilter(target = CounselingArticle.class, fields = { "site", "content" })
 	public Object page(@RequestParam(name = "pageIndex") int pageIndex, @RequestParam(name = "length") int pageSize,
-			String orderBy, @RequestParam(defaultValue = "false") Boolean desc) {
+			String orderBy, @RequestParam(defaultValue = "false") Boolean desc, String keywords,
+			String counselingTypeId) {
 		QueryCondition qc = new QueryConditionImpl(CounselingArticle.class);
 		if (StringUtil.notEmpty(orderBy)) {
 			qc.addOrder(Order.add(orderBy, !desc));
 		}
 		qc.addOrder(Order.desc("createTime"));
+		if (StringUtil.notEmpty(keywords)) {
+			qc.createAlias("counselingType", "counselingType",JoinType.LEFT_OUTER_JOIN);
+			qc.or(Conditions.like("title", keywords, MatchMode.ANYWHERE),
+					Conditions.like("content", keywords, MatchMode.ANYWHERE),
+					Conditions.like("description", keywords, MatchMode.ANYWHERE),
+					Conditions.like("tag", keywords, MatchMode.ANYWHERE),
+					Conditions.like("counselingType.name", keywords, MatchMode.ANYWHERE));
+		}
+		if (StringUtil.notEmpty(counselingTypeId)) {
+			qc.eq("counselingType.id", counselingTypeId);
+		}
 		return Result.successResult(
 				counselingService.findCounselingArticlePage(getCurrentSite().getId(), qc, pageIndex, pageSize), null);
 	}

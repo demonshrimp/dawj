@@ -40,7 +40,7 @@
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
-        <p class="login-box-msg">总站</p>
+        <p class="login-box-msg" id="siteName">总站</p>
 
         <form id="formLogin" action="javascript:void(0);">
             <div class="form-group has-feedback">
@@ -63,7 +63,7 @@
             </div>
         </form>
 
-        <div class="social-auth-links text-center">
+        <div class="social-auth-links text-center hidden">
             <p>- OR -</p>
             <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-qq"></i> 使用QQ账号登录</a>
             <a href="#" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-weibo"></i> 使用微博账号登录</a>
@@ -86,6 +86,23 @@
 <script src="js/main.js"></script>
 <script>
     $(function () {
+        var site = App.Utils.UrlUtil.getUrlParameter('site');
+        if (!site) {
+            site = 'root'
+        }
+        $.ajax({
+            url: App.Constants.API_BASE + '/site/check-site',
+            data: {name: site},
+            type: 'get',
+            async: false,
+            success: function (result) {
+                if (!result.header.success) {
+                    alert(result.header.message + ',将自动跳转到总站');
+                    window.location.href = 'login.html';
+                }
+                $('#siteName').text(result.body.city);
+            }
+        });
         $('input').iCheck({
             checkboxClass: 'icheckbox_square-blue',
             radioClass: 'iradio_square-blue',
@@ -93,12 +110,12 @@
         });
         $('#formLogin').submit(function () {
             var password = App.Utils.StringUtil.md5($(this).find('[name=password]').val());
-            $.post(App.Constants.API_BASE + '/site/login', {name: 'admin', password: password}, function (result) {
+            $.post(App.Constants.API_BASE + '/site/login', {name: site, password: password}, function (result) {
                 if (!result.header.success) {
                     alert(result.header.message);
                 } else {
                     window.sessionStorage.setItem(App.Constants.KEY_CURRENT_USER, JSON.stringify(result.body));
-                    window.location.href = 'index.html';
+                    window.location.href = 'index.html?site=' + site;
                 }
             });
         });

@@ -466,7 +466,8 @@
         var site = App.getCurrentLoginSite();
         $.ajaxSetup({
             headers: {
-                '_stoken': App.getCurrentLoginSite().token
+                '_stoken': App.getCurrentLoginSite().token,
+                '_sname': getSiteName()
             },
             beforeSend: function (request, settings) {
                 //request.setRequestHeader("dataType","abc");
@@ -481,7 +482,7 @@
                     if (result.header) {
                         if (result.header.errorCode == "900" || result.header.errorCode == "901") {
                             alert(result.header.message);
-                            window.location.href = 'login.html';
+                            toLoginPage();
                         }
                     }
                 })
@@ -503,16 +504,28 @@
         var site = App.getCurrentLoginSite();
         if (!site) {
             if (window.location.href.toString().indexOf('/login.html') < 0) {
-                window.location.href = App.Utils.UrlUtil.getProjectRoot() + "/login.html";
+                toLoginPage();
             }
         } else {
             $('.user-name').text(site.name);
             $('.user-detail').text(site.city);
             $('.user-logoff').click(function () {
                 window.sessionStorage.removeItem(App.Constants.KEY_CURRENT_USER);
-                window.location.href = App.Utils.UrlUtil.getProjectRoot() + "/login.html";
+                toLoginPage();
             });
         }
+    }
 
+    function toLoginPage() {
+        var site = getSiteName();
+        window.location.href = App.Utils.UrlUtil.getProjectRoot() + '/login.html?site=' + site;
+    }
+
+    function getSiteName() {
+        var site = App.Utils.UrlUtil.getUrlParameter('site');
+        if (!site) {
+            site = 'root';
+        }
+        return site;
     }
 })(jQuery, $.AdminLTE, App);

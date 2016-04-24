@@ -24,7 +24,7 @@
             <div class="head-left">
                 <ul class="number">
                     <li><span><i class="phone"> </i>0371-55601221</span></li>
-                    <li><a href="mailto:info@dawjxlzx.com"><i class="mail"> </i>info@dawjxlzx.com</a></li>
+                    <li><a href="mailto:info@dawjxlzx.com"><i class="mail"></i>info@dawjxlzx.com</a></li>
                     <div class="clearfix"></div>
                 </ul>
             </div>
@@ -475,26 +475,6 @@
 <!-- footer-top -->
 <div class="footer-top">
     <div class="container">
-        <div class="col-md-12 foo-left">
-            <h3>友情链接</h3>
-            <ol class="breadcrumb friendly-link" id="friendshipSiteList">
-            </ol>
-            <script type="text/javascript">
-                $(function () {
-                    $.get(App.Constants.API_BASE + '/friendship-site/list', function (result) {
-                        if (result.header.success) {
-                            var friendshipSites = result.body;
-                            var list = $('#friendshipSiteList');
-                            list.empty();
-                            for (var i = 0; i < friendshipSites.length; i++) {
-                                var friendshipSite = friendshipSites[i];
-                                list.append('<li><a href="' + friendshipSite.url + '" target="_blank">' + friendshipSite.name + '</a></li>');
-                            }
-                        }
-                    });
-                })
-            </script>
-        </div>
         <div class="col-md-4 foo-left">
             <h3>公司简介</h3>
             <a href="index.html" class="hidden"><img src="images/logo1.png" class="img-responsive" alt=""></a>
@@ -530,6 +510,27 @@
             </ul>
         </div>
         <div class="clearfix"></div>
+
+        <div class="col-md-12 foo-left">
+            <h3>友情链接</h3>
+            <ol class="breadcrumb friendly-link" id="friendshipSiteList">
+            </ol>
+            <script type="text/javascript">
+                $(function () {
+                    $.get(App.Constants.API_BASE + '/friendship-site/list', function (result) {
+                        if (result.header.success) {
+                            var friendshipSites = result.body;
+                            var list = $('#friendshipSiteList');
+                            list.empty();
+                            for (var i = 0; i < friendshipSites.length; i++) {
+                                var friendshipSite = friendshipSites[i];
+                                list.append('<li><a href="' + friendshipSite.url + '" target="_blank">' + friendshipSite.name + '</a></li>');
+                            }
+                        }
+                    });
+                })
+            </script>
+        </div>
     </div>
 </div>
 <!-- footer-top -->

@@ -56,12 +56,13 @@
 <!-- page script -->
 <script>
     $(function () {
-        $.fn.dataTable.ext.errMode = function(s,h,m){};
+        $.fn.dataTable.ext.errMode = function (s, h, m) {
+        };
         console.log(App.getCurrentLoginSite());
         var table = $('#tblUserList').DataTable({
             'ajax': {
                 url: App.Constants.API_BASE + '/site/list',
-                "dataSrc": ""
+                'dataSrc': ''
             },
             columns: [
                 {data: 'name'},
@@ -87,16 +88,16 @@
                     }
                 },
                 {
-                    data: 'path',
+                    data: 'name',
                     render: function (data, type, full, meta) {
-                        var url = App.Utils.UrlUtil.getRoot() + data;
+                        var url = App.Utils.UrlUtil.getRoot() + '/index.html?site=' + data;
                         return '<a href="' + url + '">' + url + '</a>';
                     }
                 },
                 {
-                    data: 'path',
+                    data: 'name',
                     render: function (data, type, full, meta) {
-                        var url = App.Utils.UrlUtil.getProjectRoot() + '?site=' + data;
+                        var url = App.Utils.UrlUtil.getProjectRoot() + '/index.html?site=' + data;
                         return '<a href="' + url + '">' + url + '</a>';
                     }
                 },

@@ -4,7 +4,7 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <dependent-module archiveName="common-util-1.5.1-REALEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/common_util/common_util">
+        <dependent-module archiveName="common-util-1.5.2-REALEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/common_util/common_util">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="dawj-server"/>

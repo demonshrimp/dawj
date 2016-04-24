@@ -87,5 +87,7 @@ public interface SystemService extends BaseService<Site,String>{
 	 */
 	public void batchSaveFriendshipSites(List<FriendshipSite> friendshipSites);
 
+	public Site getSiteByName(String name);
+
 	
 }

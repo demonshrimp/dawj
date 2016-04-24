@@ -154,4 +154,15 @@ public class SystemServiceImpl extends BaseServiceImpl<Site, String> implements 
 		}
 	}
 
+	@Override
+	public Site getSiteByName(String name) {
+		Site site = siteDao.getByProperty("name", name);
+		if(site==null){
+			throw new ServiceException("站点不存在!");
+		}
+		return site;
+	}
+	
+	
+
 }
