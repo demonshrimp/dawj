@@ -18,7 +18,7 @@
 		<filter-class>pers.ksy.common.cors.filter.SimpleCORSFilter</filter-class>
 		<init-param>
 			<param-name>allowHeaders</param-name>
-			<param-value>Content-Type,Cache-Control,Pragma,_stoken,_sname,_utoken</param-value>
+			<param-value>Content-Type,Cache-Control,Pragma,_stoken,_sname,_utoken,_psname</param-value>
 		</init-param>
 	</filter>
 	<filter>

@@ -342,6 +342,9 @@
             var sidebarMenu = $("#sidebarMenu");
             App.Utils.ArrayUtil.traverseTree(datas, function (node, level) {
                 var menu = node;
+                if (menu.no.indexOf(2) == 0 && getSiteName() != 'root') {
+                    return;
+                }
                 if (level == 0) {
                     sidebarMenu.append(buildMenuHeader(menu));
                 } else if (level == 1) {

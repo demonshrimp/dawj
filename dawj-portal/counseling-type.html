@@ -9,7 +9,8 @@
     <meta name="keywords" content="心理咨询,咨询,心理,大爱无疆"/>
     <link href='http://fonts.useso.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen"/>
-    <script src="js/jquery.min.js"></script>
+    <script src="js/vendor/jquery.min.js"></script>
+    <script src="js/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
     <style>
         .type-container {
@@ -37,12 +38,12 @@
         <div class="container">
             <div class="head-left">
                 <ul class="number">
-                    <li><span><i class="phone"> </i>+0123 456 789</span></li>
-                    <li><a href="mailto:info@example.com"><i class="mail"> </i>hello@address.com</a></li>
+                    <li><span><i class="phone"> </i>0371-55601221</span></li>
+                    <li><a href="mailto:info@dawjxlzx.com"><i class="mail"></i>info@dawjxlzx.com</a></li>
                     <div class="clearfix"></div>
                 </ul>
             </div>
-            <div class="head-right">
+            <div class="head-right hidden">
                 <ul>
                     <li><a href="#"><i class="fb"> </i></a></li>
                     <li><a href="#"><i class="twt"> </i></a></li>
@@ -60,7 +61,7 @@
     </div>
     <div class="header-bottom">
         <div class="container">
-            <div class="logo">
+            <div class="logo animated slideInDown hidden">
                 <a href="index.html"><img src="images/logo1.png" class="img-responsive" alt=""></a>
             </div>
             <div class="head-nav">
@@ -89,30 +90,15 @@
                     <li><a href="login.html">登录</a></li>
                     <li><a href="register.html">注册</a></li>
                 </ul>
-                <p id="unLoginPanel" class="hidden">欢迎，<a id="userName" href="user-center.html">用户</a>　<a
-                        href="user-center.html">[个人中心]</a><a href="#login.html">[注销]</a></p>
+                <p id="unLoginPanel" class="hidden">欢迎，
+                    <a id="userName" href="user-center.html">用户</a>　
+                    <a href="user-center.html">[个人中心]</a><a href="#login.html">[注销]</a>
+                </p>
+            </div>
+            <div class="header-right1">
+                <a id="selectSite" href="#"></a>
             </div>
             <div class="clearfix"></div>
-            <div class="col-md-12 foo-left">
-                <h3>友情链接</h3>
-                <ol class="breadcrumb friendly-link" id="friendshipSiteList">
-                </ol>
-                <script type="text/javascript">
-                    $(function () {
-                        $.get(App.Constants.API_BASE + '/friendship-site/list', function (result) {
-                            if (result.header.success) {
-                                var friendshipSites = result.body;
-                                var list = $('#friendshipSiteList');
-                                list.empty();
-                                for (var i = 0; i < friendshipSites.length; i++) {
-                                    var friendshipSite = friendshipSites[i];
-                                    list.append('<li><a href="' + friendshipSite.url + '" target="_blank">' + friendshipSite.name + '</a></li>');
-                                }
-                            }
-                        });
-                    })
-                </script>
-            </div>
         </div>
     </div>
 </div>

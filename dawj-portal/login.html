@@ -10,10 +10,11 @@
     <link href='http://fonts.useso.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
     <link href="js/vendor/bootstrapvalidator/dist/css/bootstrapValidator.min.css">
     <script src="js/vendor/jquery.min.js"></script>
+    <script src="js/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="js/vendor/bootstrapvalidator/dist/js/bootstrapValidator.js"></script>
     <script src="js/main.js"></script>
     <link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen"/>
-    <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body>
 <!-- header -->
@@ -23,11 +24,11 @@
             <div class="head-left">
                 <ul class="number">
                     <li><span><i class="phone"> </i>0371-55601221</span></li>
-                    <li><a href="mailto:info@dawjxlzx.com"><i class="mail"> </i>info@dawjxlzx.com</a></li>
+                    <li><a href="mailto:info@dawjxlzx.com"><i class="mail"></i>info@dawjxlzx.com</a></li>
                     <div class="clearfix"></div>
                 </ul>
             </div>
-            <div class="head-right">
+            <div class="head-right hidden">
                 <ul>
                     <li><a href="#"><i class="fb"> </i></a></li>
                     <li><a href="#"><i class="twt"> </i></a></li>
@@ -45,7 +46,7 @@
     </div>
     <div class="header-bottom">
         <div class="container">
-            <div class="logo">
+            <div class="logo animated slideInDown hidden">
                 <a href="index.html"><img src="images/logo1.png" class="img-responsive" alt=""></a>
             </div>
             <div class="head-nav">
@@ -74,7 +75,13 @@
                     <li><a href="login.html">登录</a></li>
                     <li><a href="register.html">注册</a></li>
                 </ul>
-                <p id="unLoginPanel" class="hidden">欢迎，<a id="userName" href="user-center.html">用户</a>　<a href="user-center.html">[个人中心]</a><a href="#login.html">[注销]</a></p>
+                <p id="unLoginPanel" class="hidden">欢迎，
+                    <a id="userName" href="user-center.html">用户</a>　
+                    <a href="user-center.html">[个人中心]</a><a href="#login.html">[注销]</a>
+                </p>
+            </div>
+            <div class="header-right1">
+                <a id="selectSite" href="#"></a>
             </div>
             <div class="clearfix"></div>
         </div>
@@ -112,7 +119,8 @@
                         <div class="pass-phoenix-btn clearfix" id="pass_phoenix_btn">
                             <ul class="bd-acc-list">
                                 <li class="bd-acc-qzone">
-                                    <a class="phoenix-btn-item" href="#" title="QQ帐号" id="qqLoginBtn"><i class="fa fa-qq"></i> QQ帐号</a>
+                                    <a class="phoenix-btn-item" href="#" title="QQ帐号" id="qqLoginBtn"><i
+                                            class="fa fa-qq"></i> QQ帐号</a>
                                 </li>
                                 <li class="bd-acc-tsina">
                                     <a class="phoenix-btn-item" href="#" title="新浪微博"><i class="fa fa-weibo"></i>
@@ -151,9 +159,11 @@
         <div class="col-md-4 foo-left">
             <h3>联系我们</h3>
             <ul>
-                <li><a><span class="glyphicon glyphicon-phone-alt" style="font-size: 17px;margin: 0 4px"></span>0371-55601221</a></li>
+                <li><a><span class="glyphicon glyphicon-phone-alt" style="font-size: 17px;margin: 0 4px"></span>0371-55601221</a>
+                </li>
                 <li><a href="mailto:info@dawjxlzx.com"><i class="mail"></i>info@dawjxlzx.com</a></li>
-                <li><a><span class="glyphicon glyphicon-home" style="font-size: 17px;margin: 0 4px"></span>河南省郑州市金水区经三路66号金成国际广场4号楼2单元1102</a></li>
+                <li><a><span class="glyphicon glyphicon-home" style="font-size: 17px;margin: 0 4px"></span>河南省郑州市金水区经三路66号金成国际广场4号楼2单元1102</a>
+                </li>
                 <!--<li class="active"><a href="index.html">首页</a></li>
                 <li class="active"><a href="about.html">关于我们</a></li>
                 <li><a href="#">咨询师 </a></li>
@@ -195,7 +205,8 @@
 </div>
 <!-- footer-bottom -->
 
-<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101307982" data-redirecturi="http://www.dawjxlzx.com/qqlogin-redirect.html" charset="utf-8"></script>
+<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101307982"
+        data-redirecturi="http://www.dawjxlzx.com/qqlogin-redirect.html" charset="utf-8"></script>
 <script>
     $(function () {
         var form = $('#formLogin').bootstrapValidator({
@@ -244,19 +255,19 @@
                     App.setCurrentLoginSite(result.body);
                     var pageUrl = App.Utils.UrlUtil.getUrlParameter('page_url');
                     pageUrl = decodeURI(pageUrl);
-                    if(pageUrl&&pageUrl!=''&&pageUrl!='null'){
+                    if (pageUrl && pageUrl != '' && pageUrl != 'null') {
                         window.location.href = pageUrl;
-                    }else{
+                    } else {
                         window.location.href = 'index.html';
                     }
                 });
             }
         });
 
-        $('#qqLoginBtn').click(function(){
+        $('#qqLoginBtn').click(function () {
             QC.Login.showPopup({
-                appId:"101307982",
-                redirectURI:"http://www.dawjxlzx.com/qqlogin-redirect.html"
+                appId: "101307982",
+                redirectURI: "http://www.dawjxlzx.com/qqlogin-redirect.html"
             });
         });
 

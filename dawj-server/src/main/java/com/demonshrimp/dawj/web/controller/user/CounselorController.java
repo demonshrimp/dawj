@@ -26,7 +26,6 @@ public class CounselorController extends BaseUserController {
 	@RequestMapping(path = "/list", method = RequestMethod.GET)
 	@SerializationFilter(target = Counselor.class, fields = { "site", "about", "consultingCase" })
 	public Object list() {
-		QueryCondition qc = new QueryConditionImpl(Counselor.class);
 		return Result.successResult(counselingService.counselorList(getCurrentSite().getId()), null);
 	}
 	

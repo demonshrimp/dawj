@@ -9,10 +9,13 @@ var App = {
 
     App.Constants.KEY_CURRENT_USER = "_ASDdawjuu";
 
+    App.Constants.KEY_HEADER_SITE = '_psname';
+
     App.initialize = function () {
+        initSites();
+        setupGlobalAjax();
         var user = App.getCurrentLoginUser();
         if (user) {
-            setupGlobalAjax();
             $('#loginPanel').hide();
             var panel = $('#unLoginPanel');
             panel.removeClass('hidden');
@@ -416,9 +419,14 @@ var App = {
 
     function setupGlobalAjax() {
         var user = App.getCurrentLoginUser();
+        var token = '';
+        if (user) {
+            token = user.token;
+        }
         $.ajaxSetup({
             headers: {
-                '_utoken': user.token
+                '_psname': getCurrentSite(),
+                '_utoken': token
             },
             beforeSend: function (request, settings) {
                 request.done(function (result) {
@@ -432,6 +440,49 @@ var App = {
                 })
             }
         });
+    }
+
+    function initSites() {
+        var nowSite = sessionStorage.getItem(App.Constants.KEY_HEADER_SITE);
+        if (!nowSite) {
+            nowSite = getCurrentSite();
+        }
+        $.get(App.Constants.API_BASE + '/site/list', function (result) {
+            if (!result.header.success) {
+                alert(result.header.message);
+                return;
+            }
+            var sites = result.body;
+            var wrapper = $('<div class="sites-wrapper"></div>');
+            for (var i = 0; i < sites.length; i++) {
+                if (sites[i].name == nowSite) {
+                    $('#selectSite').text('[' + sites[i].city + ']');
+                    wrapper.append('<a style="color: orangered;" data-site="' + sites[i].name + '" href="#">[' + sites[i].city + ']</a>');
+                } else {
+                    wrapper.append('<a data-site="' + sites[i].name + '" href="#">[' + sites[i].city + ']</a>');
+                }
+            }
+
+            $('#selectSite').popover({
+                html: true,
+                trigger: 'click',
+                placement: 'bottom',
+                title: '选择站点',
+                content: '<div class="popover-content"></div>' + wrapper[0].outerHTML
+            });
+        });
+        $('body').on('click', '.sites-wrapper a', function () {
+            sessionStorage.removeItem(App.Constants.KEY_HEADER_SITE);
+            location.href = 'index.html?site=' + $(this).data('site');
+        });
+    }
+
+    function getCurrentSite() {
+        var site = App.Utils.UrlUtil.getUrlParameter('site');
+        if (!site) {
+            site = 'root';
+        }
+        return site;
     }
 
     jQuery(App.initialize);

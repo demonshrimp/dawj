@@ -23,7 +23,7 @@ public abstract class BaseUserController extends BaseController {
 
 	public static final String KEY_TOKEN = "_utoken";
 
-	public static final String KEY_SITE_PATH = "_spath";
+	public static final String KEY_SITE_NAME = "_psname";
 
 	private static ThreadLocal<User> userHolder = new ThreadLocal<User>();
 	private static ThreadLocal<Site> siteHolder = new ThreadLocal<Site>();
@@ -40,8 +40,8 @@ public abstract class BaseUserController extends BaseController {
 	public Site getCurrentSite() {
 		Site site = siteHolder.get();
 		if (site == null) {
-			String path = getSitePath();
-			site = systemService.getSiteByPath(path);
+			String name = getSiteName();
+			site = systemService.getSiteByName(name);
 		}
 		return site;
 	}
@@ -51,13 +51,13 @@ public abstract class BaseUserController extends BaseController {
 		return request.getHeader(KEY_TOKEN);
 	}
 	
-	protected String getSitePath() {
+	protected String getSiteName() {
 		HttpServletRequest request = getRequest();
-		String path = request.getHeader(KEY_SITE_PATH);
-		if(StringUtil.isEmpty(path)){
-			path = "/";
+		String name = request.getHeader(KEY_SITE_NAME);
+		if(StringUtil.isEmpty(name)){
+			name = "root";
 		}
-		return path;
+		return name;
 	}
 
 	public HttpServletRequest getRequest() {
