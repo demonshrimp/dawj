@@ -5,7 +5,7 @@ var App = {
 (function ($, App) {
     "use strict";
 
-    App.Constants.API_BASE = "http://127.0.0.1:8080/dawj-server/api/usr";
+    App.Constants.API_BASE = "http://192.168.1.103:8080/dawj-server/api/usr";
 
     App.Constants.KEY_CURRENT_USER = "_ASDdawjuu";
 
@@ -26,6 +26,18 @@ var App = {
                 window.sessionStorage.removeItem(App.Constants.KEY_CURRENT_USER);
                 window.location.reload();
             });
+        } else {
+            var code = App.Utils.UrlUtil.getUrlParameter('code');
+            if (code) {
+                $.post(App.Constants.API_BASE + '/user/wechat-login', {code: code}, function (result) {
+                    if (!result.header.success) {
+                        alert(result.header.message);
+                        return;
+                    }
+                    App.setCurrentLoginSite(result.body);
+                    window.location.reload();
+                });
+            }
         }
     };
 
@@ -443,10 +455,7 @@ var App = {
     }
 
     function initSites() {
-        var nowSite = sessionStorage.getItem(App.Constants.KEY_HEADER_SITE);
-        if (!nowSite) {
-            nowSite = getCurrentSite();
-        }
+        var nowSite = getCurrentSite();
         $.get(App.Constants.API_BASE + '/site/list', function (result) {
             if (!result.header.success) {
                 alert(result.header.message);
@@ -458,6 +467,7 @@ var App = {
                 if (sites[i].name == nowSite) {
                     $('#selectSite').text('[' + sites[i].city + ']');
                     wrapper.append('<a style="color: orangered;" data-site="' + sites[i].name + '" href="#">[' + sites[i].city + ']</a>');
+                    sessionStorage.setItem(App.Constants.KEY_HEADER_SITE, nowSite);
                 } else {
                     wrapper.append('<a data-site="' + sites[i].name + '" href="#">[' + sites[i].city + ']</a>');
                 }
@@ -478,11 +488,14 @@ var App = {
     }
 
     function getCurrentSite() {
-        var site = App.Utils.UrlUtil.getUrlParameter('site');
-        if (!site) {
-            site = 'root';
+        var nowSite = sessionStorage.getItem(App.Constants.KEY_HEADER_SITE);
+        if (!nowSite) {
+            nowSite = App.Utils.UrlUtil.getUrlParameter('site');
+            if (!nowSite) {
+                nowSite = 'root';
+            }
         }
-        return site;
+        return nowSite;
     }
 
     jQuery(App.initialize);

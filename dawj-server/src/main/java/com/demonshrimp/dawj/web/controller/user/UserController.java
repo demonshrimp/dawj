@@ -72,4 +72,21 @@ public class UserController extends BaseUserController {
 		return Result.successResult(user, null);
 	}
 
+	@RequestMapping(path = "/wechat-login", method = { RequestMethod.GET, RequestMethod.POST })
+	public Object loginFromWechat(String code) {
+		User user = userService.loginFromWechat(code, getCurrentSite().getId());
+		return Result.successResult(user, null);
+	}
+
+	@RequestMapping(path = "/wechat-share-success", method = RequestMethod.GET)
+	public Object wechatShareSuccess() {
+		int points = userService.addSharePoints(getCurrentUser().getId());
+		return Result.successResult(points, "分享成功，获得" + points + "元奖励");
+	}
+	
+	@RequestMapping(path = "/psychological-test", method = RequestMethod.GET)
+	public Object psychologicalTest(){
+		userService.psychologicalTest(getCurrentUser().getId());
+		return Result.successResult();
+	}
 }

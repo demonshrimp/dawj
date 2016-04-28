@@ -83,7 +83,7 @@
 		<dependency>
 			<groupId>pers.ksy</groupId>
 			<artifactId>common-util</artifactId>
-			<version>1.5.2-REALEASE</version>
+			<version>1.5.3-REALEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>

@@ -25,6 +25,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import pers.ksy.common.orm.QueryCondition;
+import pers.ksy.common.wechat.WechatService;
+import pers.ksy.common.wechat.api.model.AccessToken;
+import pers.ksy.common.wechat.api.model.WechartUserInfo;
 
 @Transactional
 @Service
@@ -41,6 +44,8 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements Us
 	private CaptchaService captchaService;
 	@Autowired
 	private WeiMiSmsProvider weiMiSmsProvider;
+	@Autowired
+	private WechatService wechatService;
 
 	@Override
 	public BaseDao<User, String> getDao() {
@@ -146,6 +151,56 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements Us
 			throw new ServiceException(e.getMessage());
 		}
 		return user;
+	}
+
+	@Override
+	public User loginFromWechat(String code, String siteId) {
+		AccessToken accessToken = wechatService.getAccessToken(code);
+		if (accessToken.isInvalid()) {
+			throw new ServiceException(accessToken.getErrmsg());
+		}
+		User user = userDao.getByProperty("wechatUserId", accessToken.getOpenid());
+		if (null == user) {
+			WechartUserInfo userInfo = wechatService.getUserInfo(accessToken);
+			if (userInfo.isInvalid()) {
+				throw new ServiceException(userInfo.getErrmsg());
+			}
+			user = new User();
+			user.setWechatUserId(userInfo.getOpenid());
+			user.setName(userInfo.getNickname());
+			if (null != userInfo.getSex()) {
+				if ("1".equals(userInfo.getSex())) {
+					user.setSex(User.Sex.MALE);
+				}
+				if ("2".equals(userInfo.getSex())) {
+					user.setSex(User.Sex.FEMALE);
+				}
+				user = addUser(user, siteId);
+				user.setPoints(5);
+				userDao.update(user);
+			}
+		}
+		user = loginHandle(user);
+		return user;
+	}
+
+	@Override
+	public int addSharePoints(String userId) {
+		int points = (int) (Math.random() * 59) + 1;
+		User user = userDao.load(userId);
+		user.setPoints(user.getPoints() + points);
+		userDao.update(user);
+		return points;
+	}
+
+	@Override
+	public void psychologicalTest(String userId) {
+		User user = userDao.load(userId);
+		if (user.getPoints() < 10) {
+			throw new ServiceException("当前积分不足，无法进行评测！");
+		}
+		user.setPoints(user.getPoints() - 10);
+		userDao.update(user);
 	}
 
 	private User loginHandle(User user) {

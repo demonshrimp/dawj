@@ -8,6 +8,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="keywords" content="心理测试,心理压力测试,心理健康测试,心理测试题"/>
     <meta name="description" content="大爱无疆心理网,国内第一家专业心理测试网站，我们有最全的心理测试题，可在线进行心理测试、心理压力测试和心理健康测试。"/>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
     <link href='http://fonts.useso.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
     <link href="css/animate.min.css" rel="stylesheet"/>
     <script src="js/vendor/jquery.min.js"></script>
@@ -17,6 +20,16 @@
     <style>
         .question {
             margin: 40px 10px;
+        }
+
+        .blog-content {
+            padding-left: 50px;
+        }
+
+        @media (max-width: 765px) {
+            .blog-content {
+                padding-left: 0;
+            }
         }
     </style>
 </head>
@@ -98,7 +111,7 @@
         <div class="portfolio-top animated slideInDown">
             <h3>心理评测</h3>
         </div>
-        <div class="blog-content" style="padding-left: 50px;">
+        <div class="blog-content">
             <form id="form">
                 <div id="questions">
                     <!--<div class="question">
@@ -150,7 +163,8 @@
 <div class="footer-top">
     <div class="container">
         <div class="col-md-4 foo-left">
-            <a href="index.html"><img src="images/logo1.png" class="img-responsive" alt=""></a>
+            <h3>公司简介</h3>
+            <a href="index.html" class="hidden"><img src="images/logo1.png" class="img-responsive" alt=""></a>
             <p>大爱无疆心理咨询有限公司是在教育部政策（教思政厅[2011]1号）的影响下应运而生的全国目前唯一一家无区域执业的心理咨询公司。</p>
             <p>公司具备资质：心理咨询；教育咨询；非学历短期培训（国内基本已停止审批）；人力中介服务（国内基本已停止审批）；教育文化交流活动组织策划；教育软件技术开发等。以上资质全国范围内均可使用。</p>
         </div>
@@ -166,10 +180,12 @@
         <div class="col-md-4 foo-left">
             <h3>联系我们</h3>
             <ul>
-                <li><a><span class="glyphicon glyphicon-phone-alt" style="font-size: 17px;margin: 0 4px"></span>0371-55601221</a>
+                <li><p><span class="glyphicon glyphicon-phone-alt" style="font-size: 17px;margin: 0 4px"></span>0371-55601221
+                </p>
                 </li>
-                <li><a href="mailto:info@dawjxlzx.com"><i class="mail"></i>info@dawjxlzx.com</a></li>
-                <li><a><span class="glyphicon glyphicon-home" style="font-size: 17px;margin: 0 4px"></span>河南省郑州市金水区经三路66号金成国际广场4号楼2单元1102</a>
+                <li><p href="mailto:info@dawjxlzx.com"><i class="mail"></i>info@dawjxlzx.com</p></li>
+                <li><p><span class="glyphicon glyphicon-home" style="font-size: 17px;margin: 0 4px"></span>河南省郑州市金水区经三路66号金成国际广场4号楼2单元1102
+                </p>
                 </li>
                 <!--<li class="active"><a href="index.html">首页</a></li>
                 <li class="active"><a href="about.html">关于我们</a></li>
@@ -181,6 +197,7 @@
             </ul>
         </div>
         <div class="clearfix"></div>
+
         <div class="col-md-12 foo-left">
             <h3>友情链接</h3>
             <ol class="breadcrumb friendly-link" id="friendshipSiteList">
@@ -211,6 +228,7 @@
     </div>
 </div>
 <!-- footer-bottom -->
+
 <script>
     $(function () {
         var subjects = [];
@@ -277,9 +295,40 @@
                 if (max < result[i])max = result[i];
             }
             var index = result.indexOf(max);
-            window.location.href = 'psychological-test-result.html?result=' + map[index];
+            if (is_weixin()) {
+                $.get(App.Constants.API_BASE + '/user/psychological-test', function (result) {
+                    if (!result.header.success) {
+                        alert(result.header.message);
+                        return;
+                    }
+                    var user = App.getCurrentLoginUser();
+                    user.points = user.points - 10;
+                    App.setCurrentLoginSite(user);
+                    window.location.href = 'psychological-test-result.html?result=' + map[index];
+                });
+            } else {
+                window.location.href = 'psychological-test-result.html?result=' + map[index];
+            }
         });
+
+        function is_weixin() {
+            var ua = navigator.userAgent.toLowerCase();
+            if (ua.match(/MicroMessenger/i) == "micromessenger") {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        if (is_weixin()) {
+            var user = App.getCurrentLoginUser();
+            if (user.points < 10) {
+                alert('当前余额不足:' + user.points + ';通过分享咨询文章到朋友圈可以获得随机赠送金额哦(打开菜单心理案例->人选一篇文章->分享到朋友圈).');
+                $('#form').hide();
+            }
+        }
     });
+
 </script>
 </body>
 </html>

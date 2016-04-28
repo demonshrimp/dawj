@@ -1,7 +1,6 @@
 package com.demonshrimp.dawj.service;
 
 import com.demonshrimp.dawj.exception.ServiceException;
-import com.demonshrimp.dawj.model.entity.Site;
 import com.demonshrimp.dawj.model.entity.User;
 
 public interface UserService extends BaseService<User,String>{
@@ -67,6 +66,29 @@ public interface UserService extends BaseService<User,String>{
 	 * @return
 	 */
 	User qqLogin(String accessToken);
+
+
+	/**
+	 * 微信登录(如果没用户则注册)
+	 * @param code
+	 * @return
+	 */
+	public User loginFromWechat(String code, String siteId);
+
+
+	/**
+	 * 添加分享积分
+	 * @param userId
+	 * @return
+	 */
+	public int addSharePoints(String userId);
+
+
+	/**
+	 * 使用积分进行测评
+	 * @param userId
+	 */
+	public void psychologicalTest(String userId);
 
 
 }

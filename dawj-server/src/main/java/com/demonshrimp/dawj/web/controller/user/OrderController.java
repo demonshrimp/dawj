@@ -35,7 +35,7 @@ public class OrderController extends BaseUserController {
 		orderService.close(orderId);
 		return Result.successResult(null);
 	}
-	
+
 	@RequestMapping(path = "/{orderId}/refund-app", method = RequestMethod.PUT)
 	public Object refundApp(@PathVariable String orderId) {
 		orderService.selfOrderCheck(orderId, getCurrentUser().getId());
@@ -52,14 +52,19 @@ public class OrderController extends BaseUserController {
 		if (StringUtil.notEmpty(orderBy)) {
 			qc.addOrder(pers.ksy.common.orm.Order.add(orderBy, !desc));
 		}
-		//qc.addOrder(pers.ksy.common.orm.Order.desc("createTime"));
+		// qc.addOrder(pers.ksy.common.orm.Order.desc("createTime"));
 		return Result.successResult(orderService.findByPage(qc, pageIndex, pageSize), null);
 	}
-	
+
 	@RequestMapping(path = "/{orderId}/create-wechat-payment", method = RequestMethod.GET)
 	public Object createWechatPayment(@PathVariable String orderId) {
 		String qrCode = orderService.createWechatPayment(orderId);
 		return Result.successResult(qrCode, null);
+	}
+
+	@RequestMapping(path = "/{orderId}/wechat-payment-signature", method = RequestMethod.GET)
+	public Object getPaySignature(@PathVariable String orderId) {
+		return Result.successResult(orderService.getPaySignature(orderId), null);
 	}
 
 }

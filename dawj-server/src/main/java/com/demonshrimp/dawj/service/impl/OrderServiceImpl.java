@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.URLEncoder;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -202,6 +203,42 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, String> implements 
 		}
 	}
 	
+	@Override
+	public Map<String, String> getPaySignature(String orderId) {
+		Order order = orderDao.load(orderId);
+		if (order.getStatus() != Status.NEW) {
+			throw new ServiceException("不能对该状态的订单进行付款操作");
+		}
+		// 组装参数
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+				.getRequest();
+		TreeMap<String, String> params = new TreeMap<>();
+		params.put("appid", "wxc086c323ecb8c170");
+		params.put("mch_id", "1315067001");
+		params.put("out_trade_no", order.getId());
+		params.put("device_info", order.getSite().getId());
+		params.put("body", "zixunshifuwu");
+		params.put("product_id", order.getCounselor().getId());
+		params.put("total_fee", (int) (order.getAmount() * 100) + "");
+		params.put("spbill_create_ip", request.getServerName());
+		params.put("notify_url",
+				"http://" + request.getServerName() + "/dawj-server/api/admin/order/wechat-pay-callback");
+		params.put("trade_type", "JSAPI");
+		params.put("nonce_str", UUID.randomUUID().toString().replaceAll("-", ""));
+		params.put("openid", order.getUser().getWechatUserId());
+		
+		// 计算sign
+		String pramStr = getUrl(params, "utf-8");
+		String sign = MD5Util.MD5(pramStr + "&key=u73qa4oj48trzgn00atrbztl2jradgqw").toUpperCase();
+		Map<String,String> signature = new HashMap<>();
+		signature.put("timestamp", String.valueOf(System.currentTimeMillis()));
+		signature.put("nonceStr", params.get("nonce_str"));
+		signature.put("signType", "MD5");
+		signature.put("paySign", sign);
+		signature.put("package", pramStr);
+		return signature;
+	}
+	
 	
 
 	/**
@@ -331,5 +368,5 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, String> implements 
         }  
         return (strURL);  
     }
-    
+	
 }

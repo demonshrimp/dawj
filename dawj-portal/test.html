@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/vendor/jquery.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script>
+        $.get(App.Constants.API_BASE + '/wechat/jsapi-signature', function (data) {
+            wx.config({
+                debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: 'wxc086c323ecb8c170', // 必填，公众号的唯一标识
+                timestamp: data.timestamp, // 必填，生成签名的时间戳
+                nonceStr: data.nonceStr, // 必填，生成签名的随机串
+                signature: data.signature,// 必填，签名，见附录1
+                jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+            //jsApiList: ["menuItem:share:appMessage", "menuItem:share:timeline", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:facebook", "menuItem:share:QZone"] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+
+            wx.ready(function () {
+                wx.chooseWXPay({
+                    timestamp: '1461776431360', // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                    nonceStr: '06be2affc21048dda2e94a0a0479a9c9', // 支付签名随机串，不长于 32 位
+                    package: 'appid=wxc086c323ecb8c170&body=zixunshifuwu&device_info=root_site&mch_id=1315067001&nonce_str=06be2affc21048dda2e94a0a0479a9c9&notify_url=http://101.201.31.53/dawj-server/api/admin/order/wechat-pay-callback&openid=of_lRwp74TYQX-BGs8wPFYMd6ZNU&out_trade_no=e5499fb5545877520154587cc4fa0000&product_id=e5499fb553e52afe0153e54a399c0006&spbill_create_ip=101.201.31.53&total_fee=1&trade_type=JSAPI', // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+                    signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                    paySign: '6CE339025DECE4359A96E0F16F47A551', // 支付签名
+                    success: function (result) {
+                        alert(result);
+                    }
+                });
+            });
+            wx.error(function (res) {
+                alert('初始化错误：' + res.toString());
+                // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+            });
+
+        });
+
+    </script>
+</head>
+<body>
+<h3></h3>
+</body>
+</html>

@@ -1,5 +1,7 @@
 package com.demonshrimp.dawj.service;
 
+import java.util.Map;
+
 import com.demonshrimp.dawj.model.entity.Order;
 
 public interface OrderService extends BaseService<Order,String>{
@@ -85,5 +87,13 @@ public interface OrderService extends BaseService<Order,String>{
 	 * @param wechatResult
 	 */
 	public void wechatPayComplete(String wechatResult);
+
+
+	/**
+	 * 微信页面支付签名
+	 * @param orderId 订单ID
+	 * @return
+	 */
+	Map<String, String> getPaySignature(String orderId);
 
 }

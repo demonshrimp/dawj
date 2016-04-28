@@ -13,6 +13,9 @@ import com.demonshrimp.dawj.service.CounselingService;
 import pers.ksy.common.StringUtil;
 import pers.ksy.common.annotation.SerializationFilter;
 import pers.ksy.common.model.Result;
+import pers.ksy.common.orm.Conditions;
+import pers.ksy.common.orm.JoinType;
+import pers.ksy.common.orm.MatchMode;
 import pers.ksy.common.orm.Order;
 import pers.ksy.common.orm.QueryCondition;
 import pers.ksy.common.orm.QueryConditionImpl;
@@ -28,14 +31,25 @@ public class CounselorController extends BaseUserController {
 	public Object list() {
 		return Result.successResult(counselingService.counselorList(getCurrentSite().getId()), null);
 	}
-	
+
 	@RequestMapping(path = "/page", method = RequestMethod.GET)
 	@SerializationFilter(target = Counselor.class, fields = { "site", "about", "consultingCase" })
 	public Object page(@RequestParam(name = "pageIndex") int pageIndex, @RequestParam(name = "length") int pageSize,
-			String orderBy, @RequestParam(defaultValue = "false") Boolean desc) {
+			String orderBy, @RequestParam(defaultValue = "false") Boolean desc, String keywords,
+			String counselingTypeId) {
 		QueryCondition qc = new QueryConditionImpl(Counselor.class);
 		if (StringUtil.notEmpty(orderBy)) {
 			qc.addOrder(Order.add(orderBy, desc));
+		}
+		if (StringUtil.notEmpty(keywords)) {
+			qc.or(Conditions.like("name", keywords, MatchMode.ANYWHERE),
+					Conditions.like("title", keywords, MatchMode.ANYWHERE),
+					Conditions.like("about", keywords, MatchMode.ANYWHERE),
+					Conditions.like("consultingCase", keywords, MatchMode.ANYWHERE));
+		}
+		if (StringUtil.notEmpty(counselingTypeId)) {
+			qc.createAlias("counselingTypes", "counselingTypes", JoinType.INNER_JOIN);
+			qc.eq("counselingTypes.id", counselingTypeId);
 		}
 		qc.addOrder(Order.desc("createTime"));
 		return Result.successResult(

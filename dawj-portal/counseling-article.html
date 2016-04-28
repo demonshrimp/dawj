@@ -8,6 +8,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="keywords" content="心理咨询案例，心理学案例，心理案例分析"/>
     <meta name="description" content="大爱无疆心理网,专业的心理咨询网站，我们提供最详细的心理咨询案例、心理学案例和心理案例分析。"/>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
     <link href='http://fonts.useso.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
     <script src="js/vendor/jquery.min.js"></script>
     <script src="js/vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -197,7 +200,8 @@
 <div class="footer-top">
     <div class="container">
         <div class="col-md-4 foo-left">
-            <a href="index.html"><img src="images/logo1.png" class="img-responsive" alt=""></a>
+            <h3>公司简介</h3>
+            <a href="index.html" class="hidden"><img src="images/logo1.png" class="img-responsive" alt=""></a>
             <p>大爱无疆心理咨询有限公司是在教育部政策（教思政厅[2011]1号）的影响下应运而生的全国目前唯一一家无区域执业的心理咨询公司。</p>
             <p>公司具备资质：心理咨询；教育咨询；非学历短期培训（国内基本已停止审批）；人力中介服务（国内基本已停止审批）；教育文化交流活动组织策划；教育软件技术开发等。以上资质全国范围内均可使用。</p>
         </div>
@@ -213,10 +217,12 @@
         <div class="col-md-4 foo-left">
             <h3>联系我们</h3>
             <ul>
-                <li><a><span class="glyphicon glyphicon-phone-alt" style="font-size: 17px;margin: 0 4px"></span>0371-55601221</a>
+                <li><p><span class="glyphicon glyphicon-phone-alt" style="font-size: 17px;margin: 0 4px"></span>0371-55601221
+                </p>
                 </li>
-                <li><a href="mailto:info@dawjxlzx.com"><i class="mail"></i>info@dawjxlzx.com</a></li>
-                <li><a><span class="glyphicon glyphicon-home" style="font-size: 17px;margin: 0 4px"></span>河南省郑州市金水区经三路66号金成国际广场4号楼2单元1102</a>
+                <li><p href="mailto:info@dawjxlzx.com"><i class="mail"></i>info@dawjxlzx.com</p></li>
+                <li><p><span class="glyphicon glyphicon-home" style="font-size: 17px;margin: 0 4px"></span>河南省郑州市金水区经三路66号金成国际广场4号楼2单元1102
+                </p>
                 </li>
                 <!--<li class="active"><a href="index.html">首页</a></li>
                 <li class="active"><a href="about.html">关于我们</a></li>
@@ -228,6 +234,7 @@
             </ul>
         </div>
         <div class="clearfix"></div>
+
         <div class="col-md-12 foo-left">
             <h3>友情链接</h3>
             <ol class="breadcrumb friendly-link" id="friendshipSiteList">
@@ -258,6 +265,61 @@
     </div>
 </div>
 <!-- footer-bottom -->
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+    $.get(App.Constants.API_BASE + '/wechat/jsapi-signature', function (data) {
+        wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: 'wxc086c323ecb8c170', // 必填，公众号的唯一标识
+            timestamp: data.timestamp, // 必填，生成签名的时间戳
+            nonceStr: data.nonceStr, // 必填，生成签名的随机串
+            signature: data.signature,// 必填，签名，见附录1
+            jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        });
+        //jsApiList: ["menuItem:share:appMessage", "menuItem:share:timeline", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:facebook", "menuItem:share:QZone"] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+
+        wx.ready(function () {
+            // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+            var id = App.Utils.UrlUtil.getUrlParameter('id');
+            var shareData = {
+                title: '大爱无疆心理评测', // 分享标题
+                desc: '大爱无疆心理评测', // 分享描述
+                link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc086c323ecb8c170&redirect_uri=http%3A%2F%2Fwww.dawjxlzx.com%2Fcounseling-article.html%3Fid%3D' + id +
+                '&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect', // 分享链接
+                imgUrl: '', // 分享图标
+                type: '', // 分享类型,music、video或link，不填默认为link
+                dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                success: function () {
+                    $.get(App.Constants.API_BASE + '/user/wechat-share-success', function (result) {
+                        alert(result.header.message);
+                        if (result.header.success) {
+                            var user = App.getCurrentLoginUser();
+                            user.points += result.body;
+                            App.setCurrentLoginSite(user);
+                        }
+                    });
+                },
+                cancel: function () {
+                    alert(0);
+                    // 用户取消分享后执行的回调函数
+                }
+            };
+
+            wx.onMenuShareTimeline(shareData);
+            wx.onMenuShareAppMessage(shareData);
+            wx.onMenuShareQQ(shareData);
+            wx.onMenuShareWeibo(shareData);
+            wx.onMenuShareQZone(shareData);
+        });
+        wx.error(function (res) {
+            alert('初始化错误：' + res.toString());
+            // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+        });
+
+    });
+
+
+</script>
 <script type="text/javascript">
     $(function () {
         //init datas

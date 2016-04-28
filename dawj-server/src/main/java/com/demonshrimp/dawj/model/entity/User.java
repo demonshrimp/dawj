@@ -46,7 +46,7 @@ public class User extends BaseSiteEntity {
 		this.name = name;
 	}
 
-	@Column(nullable = false)
+	@Column(nullable = true)
 	public String getMobile() {
 		return mobile;
 	}
@@ -83,7 +83,7 @@ public class User extends BaseSiteEntity {
 		this.wechatUserId = wechatUserId;
 	}
 
-	@Column(nullable = false)
+	@Column(nullable = true)
 	@Enumerated(EnumType.ORDINAL)
 	public Sex getSex() {
 		return sex;
@@ -93,7 +93,7 @@ public class User extends BaseSiteEntity {
 		this.sex = sex;
 	}
 
-	@Column(nullable = false)
+	@Column(nullable = true)
 	public String getPassword() {
 		return password;
 	}

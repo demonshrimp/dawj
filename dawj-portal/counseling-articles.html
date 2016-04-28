@@ -157,6 +157,15 @@
             .list p {
                 display: none;
             }
+
+            .mecc {
+                width: 100%;;
+            }
+
+            .titleimg, .titleimg img {
+                width: 100%;
+                height: auto;
+            }
         }
     </style>
 </head>
@@ -238,6 +247,24 @@
         <div class="portfolio-top animated slideInDown">
             <h3> 咨询文章 </h3>
         </div>
+
+        <div class="b-tag-weight visible-xs" style="margin-left: 15px;margin-right: 15px;margin-bottom: 10px">
+            <h3 style="display: inline-block">搜索</h3>
+            <a style="float: right" class="btn btn-link" role="button" data-toggle="collapse" href="#collapse" aria-expanded="false"
+               aria-controls="collapse">
+                <i class="fa fa-bars"></i>
+            </a>
+            <div class="b-search">
+                <form action="javascript:window.location.href='counseling-articles.html?keywords='+escape(document.getElementById('inputSearch1').value)">
+                    <input id="inputSearch1" class="inputSearch" type="text" value="Search"
+                           onfocus="this.data=this.value;this.value = '';" name="keywords"
+                           onblur="if (this.value == '') {this.value = this.data ? this.data :'Search';}">
+                    <input type="submit" value="">
+                </form>
+            </div>
+            <ul class="counselingTagList collapse" id="collapse">
+            </ul>
+        </div>
         <div class="blog-content">
             <div class="col-md-9">
                 <div class="blog-articals" id="counselingArticlelist">
@@ -293,7 +320,7 @@
             <div class="col-md-3 visible-md visible-lg">
                 <div class="b-search">
                     <form action="javascript:window.location.href='counseling-articles.html?keywords='+escape(document.getElementById('inputSearch').value)">
-                        <input id="inputSearch" type="text" value="Search"
+                        <input id="inputSearch" class="inputSearch" type="text" value="Search"
                                onfocus="this.data=this.value;this.value = '';" name="keywords"
                                onblur="if (this.value == '') {this.value = this.data ? this.data :'Search';}">
                         <input type="submit" value="">
@@ -320,17 +347,7 @@
                 <!-- start-tag-weight-->
                 <div class="b-tag-weight">
                     <h3>分类</h3>
-                    <ul id="counselingTagList">
-                        <li><a href="#">生活</a></li>
-                        <li><a href="#">家庭</a></li>
-                        <li><a href="#">婚姻</a></li>
-                        <li><a href="#">子女教育</a></li>
-                        <li><a href="#">两性</a></li>
-                        <li><a href="#">智力</a></li>
-                        <li><a href="#">郁闷</a></li>
-                        <li><a href="#">心情</a></li>
-                        <li><a href="#">情绪</a></li>
-                        <li><a href="#">精神疾病</a></li>
+                    <ul class="counselingTagList">
                     </ul>
                 </div>
                 <!---- //End-tag-weight---->
@@ -378,7 +395,8 @@
 <div class="footer-top">
     <div class="container">
         <div class="col-md-4 foo-left">
-            <a href="index.html"><img src="images/logo1.png" class="img-responsive" alt=""></a>
+            <h3>公司简介</h3>
+            <a href="index.html" class="hidden"><img src="images/logo1.png" class="img-responsive" alt=""></a>
             <p>大爱无疆心理咨询有限公司是在教育部政策（教思政厅[2011]1号）的影响下应运而生的全国目前唯一一家无区域执业的心理咨询公司。</p>
             <p>公司具备资质：心理咨询；教育咨询；非学历短期培训（国内基本已停止审批）；人力中介服务（国内基本已停止审批）；教育文化交流活动组织策划；教育软件技术开发等。以上资质全国范围内均可使用。</p>
         </div>
@@ -394,10 +412,12 @@
         <div class="col-md-4 foo-left">
             <h3>联系我们</h3>
             <ul>
-                <li><a><span class="glyphicon glyphicon-phone-alt" style="font-size: 17px;margin: 0 4px"></span>0371-55601221</a>
+                <li><p><span class="glyphicon glyphicon-phone-alt" style="font-size: 17px;margin: 0 4px"></span>0371-55601221
+                </p>
                 </li>
-                <li><a href="mailto:info@dawjxlzx.com"><i class="mail"></i>info@dawjxlzx.com</a></li>
-                <li><a><span class="glyphicon glyphicon-home" style="font-size: 17px;margin: 0 4px"></span>河南省郑州市金水区经三路66号金成国际广场4号楼2单元1102</a>
+                <li><p href="mailto:info@dawjxlzx.com"><i class="mail"></i>info@dawjxlzx.com</p></li>
+                <li><p><span class="glyphicon glyphicon-home" style="font-size: 17px;margin: 0 4px"></span>河南省郑州市金水区经三路66号金成国际广场4号楼2单元1102
+                </p>
                 </li>
                 <!--<li class="active"><a href="index.html">首页</a></li>
                 <li class="active"><a href="about.html">关于我们</a></li>
@@ -409,6 +429,7 @@
             </ul>
         </div>
         <div class="clearfix"></div>
+
         <div class="col-md-12 foo-left">
             <h3>友情链接</h3>
             <ol class="breadcrumb friendly-link" id="friendshipSiteList">
@@ -447,7 +468,10 @@
         var counselingTypeId = App.Utils.UrlUtil.getUrlParameter('counselingTypeId');
 
         if (keywords) {
-            $('#inputSearch').val(keywords);
+            $('.inputSearch').val(keywords);
+        }
+        if (counselingTypeId) {
+            $('#collapse').collapse('show')
         }
         loadPage(0);
 
@@ -479,7 +503,7 @@
 
             if (result.header.success) {
                 var types = result.body;
-                var ul = $('#counselingTagList');
+                var ul = $('.counselingTagList');
                 ul.empty();
 
                 for (var i = 0; i < types.length; i++) {
@@ -554,7 +578,7 @@
                     + '    </div>'
                     + '    <span class="titleimg">'
                     + '        <a href="counseling-article.html?id=' + counselingArticle.id + '" target="_blank">'
-                    + '         <img width="600" height="366" src="' + counselingArticle.fullImage + '" class="attachment- Large wp-post-image" alt="efefef">' + +'         </a>'
+                    + '         <img width="600" height="366" src="' + counselingArticle.fullImage + '" class="attachment- Large wp-post-image" alt="efefef"></a>'
                     + '   </span>'
                     + '     <p>' + counselingArticle.description.substr(0, (counselingArticle.description.length < 82 ? counselingArticle.description.length : 82)) + '...</p>'
                     + '   <div class="clear"></div>'

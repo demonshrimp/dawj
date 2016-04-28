@@ -1454,7 +1454,7 @@ ul#filters {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     -o-box-sizing: border-box;
-    width: 25%;
+    width: 33%;
     display: none;
     float: left;
     overflow: hidden;
@@ -3723,8 +3723,9 @@ a.uri:visited h4 {
     }
 
     .head-nav span.menu {
-        top: 94px;
-        right: 206px;
+        top: 85px;
+        left: 20px;
+        width: 50px;
     }
 
     .error-404 h1 {
@@ -3744,8 +3745,9 @@ a.uri:visited h4 {
 /*-- responsive --*/
 @media (max-width: 480px) {
     .head-nav span.menu {
-        top: 80px;
-        right: 200px;
+        top: 85px;
+        left: 20px;
+        width: 50px;
     }
 
     .banner-info h1 {
@@ -4037,6 +4039,10 @@ a.uri:visited h4 {
     .callbacks_tabs {
         top: 100%;
         left: 42%;
+    }
+
+    .order .order-heading a, .order .order-heading p, .order .order-heading span {
+        font-size: 12px;
     }
 }
 
@@ -4350,5 +4356,9 @@ a.uri:visited h4 {
     .callbacks_tabs {
         top: 100%;
         left: 37%;
+    }
+
+    .order .order-heading a, .order .order-heading p, .order .order-heading span {
+        font-size: 12px;
     }
 }
