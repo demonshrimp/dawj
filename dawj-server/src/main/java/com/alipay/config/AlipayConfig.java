@@ -49,6 +49,9 @@ public class AlipayConfig {
 		
 	// 调用的接口名，无需修改
 	public static String service = "create_direct_pay_by_user";
+	
+	// 手机支付接口
+	public static String wap_service = "alipay.wap.create.direct.pay.by.user";
 
 
 //↑↑↑↑↑↑↑↑↑↑请在这里配置您的基本信息↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑

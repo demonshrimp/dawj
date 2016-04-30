@@ -4,7 +4,6 @@
 (function ($, AdminLTE, App) {
 
     loginCheck();
-    var menuTree;
     /**
      * List of all the available skins
      *
@@ -24,6 +23,15 @@
         "skin-purple-light",
         "skin-green-light"
     ];
+
+
+    var menuTree;
+    var map = [{url: 'pages/counseling/counseling-type.html', no: '121'},
+        {url: 'pages/counseling/counselor.html', no: '122'},
+        {url: 'pages/counseling/counseling-article.html', no: '123'},
+        {url: 'pages/sys/site.html', no: '21'}
+    ];
+
 
     //Create the new tab
     var tab_pane = $("<div />", {
@@ -338,7 +346,6 @@
     function loadSidebarMenus() {
         var url = window.location.toString();
         jQuery.get("data/menus.json", function (datas) {
-            menuTree = datas;
             var sidebarMenu = $("#sidebarMenu");
             App.Utils.ArrayUtil.traverseTree(datas, function (node, level) {
                 var menu = node;
@@ -354,6 +361,7 @@
                     ul.append(buildMenu(menu));
                 }
             });
+            buildNavigator(datas);
         });
     }
 
@@ -394,12 +402,6 @@
     }
 
 
-    var map = [{url: 'pages/counseling/counseling-type.html', no: '121'},
-        {url: 'pages/counseling/counselor.html', no: '122'},
-        {url: 'pages/counseling/counseling-article.html', no: '123'},
-        {url: 'pages/sys/site.html', no: '21'}
-    ];
-
     function initPageLoader() {
         var breadcrumb = $('#breadcrumb');
         if ($(window).hashchange) {
@@ -414,22 +416,7 @@
                             $("#wrapperContent").load('pages/home/404.html');
                             breadcrumb.append('<li><i class="fa fa-ban-circle"></i> 404</li>');
                         }
-                        var subPageMenuNo;
-                        for (var i = 0; i < map.length; i++) {
-                            if (page.indexOf(map[i].url) >= 0) {
-                                subPageMenuNo = map[i].no;
-                            }
-                        }
-                        if (subPageMenuNo) {
-                            buildFormMenuTree(menuTree, subPageMenuNo);
-                        } else {
-                            App.Utils.ArrayUtil.traverseTree(menuTree, function (node, level) {
-                                if (node.url == page) {
-                                    buildFormMenuTree(menuTree, node.no);
-                                    return false;
-                                }
-                            });
-                        }
+                        buildNavigator();
                     });
                 }
             });
@@ -451,6 +438,32 @@
                 $(this).parents("li").addClass("active");
             });
             loadSidebarMenus();
+        }
+    }
+
+    function buildNavigator(_menuTree) {
+        if (!menuTree) {
+            menuTree = _menuTree;
+        }
+        if (!menuTree) {
+            return;
+        }
+        var page = location.hash.substr(1);
+        var subPageMenuNo;
+        for (var i = 0; i < map.length; i++) {
+            if (page.indexOf(map[i].url) >= 0) {
+                subPageMenuNo = map[i].no;
+            }
+        }
+        if (subPageMenuNo) {
+            buildFormMenuTree(menuTree, subPageMenuNo);
+        } else {
+            App.Utils.ArrayUtil.traverseTree(menuTree, function (node, level) {
+                if (page.indexOf(node.url) >= 0) {
+                    buildFormMenuTree(menuTree, node.no);
+                    return false;
+                }
+            });
         }
     }
 
@@ -531,4 +544,5 @@
         }
         return site;
     }
+
 })(jQuery, $.AdminLTE, App);

@@ -5,7 +5,7 @@ var App = {
 (function ($, App) {
     "use strict";
 
-    App.Constants.API_BASE = "http://192.168.1.103:8080/dawj-server/api/usr";
+    App.Constants.API_BASE = "http://192.168.1.100:8080/dawj-server/api/usr";
 
     App.Constants.KEY_CURRENT_USER = "_ASDdawjuu";
 
@@ -211,6 +211,30 @@ var App = {
             s[8] = s[13] = s[18] = s[23] = "-";
             var uuid = s.join("");
             return uuid;
+        }
+    }
+    App.Utils.BrowserUtil = {
+        isMT: function () {
+            var userAgentInfo = navigator.userAgent;
+            var Agents = ["Android", "iPhone",
+                "SymbianOS", "Windows Phone",
+                "iPad", "iPod"];
+            var flag = false;
+            for (var v = 0; v < Agents.length; v++) {
+                if (userAgentInfo.indexOf(Agents[v]) > 0) {
+                    flag = true;
+                    break;
+                }
+            }
+            return flag;
+        },
+        isWechat: function () {
+            var ua = navigator.userAgent.toLowerCase();
+            if (ua.match(/MicroMessenger/i) == "micromessenger") {
+                return true;
+            } else {
+                return false;
+            }
         }
     }
     function md5(string) {
