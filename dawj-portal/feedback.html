@@ -1,18 +1,26 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>Single</title>
+    <title>问题反馈_大爱无疆心理网</title>
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
     <link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="keywords" content="心理咨询,咨询,心理,大爱无疆"/>
+    <meta name="keywords" content="心理测试,心理压力测试,心理健康测试,心理测试题"/>
+    <meta name="description" content="大爱无疆心理网,国内第一家专业心理测试网站，我们有最全的心理测试题，可在线进行心理测试、心理压力测试和心理健康测试。"/>
     <link href='http://fonts.useso.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href="css/animate.min.css" rel="stylesheet"/>
     <script src="js/vendor/jquery.min.js"></script>
     <script src="js/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
     <link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen"/>
-    <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.css" rel="stylesheet">
+    <style>
+        .feedback-block {
+            padding: 20px 0;
+            border-bottom: 1px #999 dashed;
+        }
+
+    </style>
 </head>
 <body>
 <!-- header -->
@@ -86,65 +94,47 @@
     </div>
 </div>
 <!-- header -->
-<!-- content -->
+<!-- 404 -->
 <div class="content-top">
     <div class="container">
+
+        <div class="portfolio-top animated slideInDown">
+            <h3> 在线答疑 </h3>
+        </div>
         <div class="single">
-            <div class="col-md-8 single-top">
-                <img id="image" src="images/blog1.jpg" class="img-responsive" alt="">
-                <p class="sin" id="description"></p>
-                <div class="sucss-bottom">
-                    <ul>
-                        <li><i class="fa fa-calendar-check-o"></i><span id="createTime">2016-04-01 00:00:00</span></li>
-                        <li><i class="fa fa-users"></i><span id="visited">1</span></li>
-                        <li>
-                            <i class="fa fa-tag"></i>
-                            <a href="#">Lorem</a>,
-                            <a href="#">Ipsum</a>,
-                            <a href="#">printer</a>,
-                            <a href="#">unknown</a>
-                        </li>
-                    </ul>
+            <div class="respon">
+                <div id="feedbacklist">
+
                 </div>
-                <div class="respon">
-                    <h2 id="title">文章标题</h2>
-                    <div id="content"></div>
-                </div>
-            </div>
-            <div class="blog-content-right">
-                <div class="b-search">
-                    <form>
-                        <input type="text" value="Search" onfocus="this.value = '';"
-                               onblur="if (this.value == '') {this.value = 'Search';}">
-                        <input type="submit" value="">
+                <div class="comment">
+                    <h2>我要提问</h2>
+                    <form id="formFeedback" action="javascript:void(0);">
+                        <input type="text" class="textbox" name="name" placeholder="昵称">
+                        <input type="text" class="textbox" name="mobile" placeholder="电话">
+                        <textarea name="question" placeholder="请输入问题..."></textarea>
+                        <div class="smt1">
+                            <input type="submit" value="提问">
+                        </div>
                     </form>
                 </div>
-                <!--//End-twitter-weight-->
-                <!-- start-tag-weight-->
-                <div class="b-tag-weight">
-                    <h3>Tags Weight</h3>
-                    <ul>
-                        <li><a href="#">Lorem</a></li>
-                        <li><a href="#">consectetur</a></li>
-                        <li><a href="#">dolore</a></li>
-                        <li><a href="#">aliqua</a></li>
-                        <li><a href="#">sit amet</a></li>
-                        <li><a href="#">ipsum</a></li>
-                        <li><a href="#">Lorem</a></li>
-                        <li><a href="#">consectetur</a></li>
-                        <li><a href="#">dolore</a></li>
-                        <li><a href="#">aliqua</a></li>
-                        <li><a href="#">sit amet</a></li>
-                        <li><a href="#">ipsum</a></li>
-                    </ul>
-                </div>
-                <!---- //End-tag-weight---->
             </div>
-            <div class="clearfix"></div>
         </div>
+        <!--start-blog-pagenate-->
+        <div class="blog-pagenat">
+            <ul>
+                <li><a class="frist" href="#"> <span> </span></a></li>
+                        <span id="pages">
+                            <li><a class="go-page" data-start="+" href="#">1</a></li>
+                        </span>
+                <li><a class="last" href="#"> <span> </span></a></li>
+                <div class="clearfix"></div>
+            </ul>
+        </div>
+        <!--//End-blog-pagenate-->
+        <div class="clearfix"></div>
     </div>
 </div>
-<!-- content -->
+<!-- 404 -->
 
 <!-- footer-top -->
 <div class="footer-top">
@@ -215,26 +205,105 @@
     </div>
 </div>
 <!-- footer-bottom -->
-<script type="text/javascript">
+<script>
     $(function () {
+        //init views
 
         //init datas
-        var id = App.Utils.UrlUtil.getUrlParameter('id');
-        $.get(App.Constants.API_BASE + '/counseling-article/' + id, function (result) {
-            if (result.header.success) {
-                var article = result.body;
-                $('#image').attr('src', article.fullImage);
-                $('#createTime').text(article.createTime);
-                $('#visited').text(article.visited);
-                $('#title').text(article.title);
-                $('#description').text(article.description);
-                $('#content').html(article.content);
-            }
-        });
+        loadPage(0);
+        var user = App.getCurrentLoginUser();
+        if (user) {
+            $('#formFeedback [name="name"]').val(user.name);
+            $('#formFeedback [name="mobile"]').val(user.mobile);
+        }
         //init events
+        $('#formFeedback').submit(function () {
+            var form = $(this);
+            var feedback = App.Utils.FormUtil.toJson(form);
+            if (!feedback.question) {
+                alert('请输入需要反馈的问题!');
+                return;
+            }
+            $.ajax({
+                url: App.Constants.API_BASE + '/feedback/',
+                contentType: "application/json",
+                method: 'POST',
+                data: JSON.stringify(feedback),
+                dataType: 'json',
+                success: function (result) {
+                    alert(result.header.message);
+                    if (result.header.success) {
+                        App.Utils.FormUtil.setData(form, {});
+                        loadPage(0);
+                    }
+                }
+            });
+        });
 
-        //fs
+        $('.blog-pagenat').on('click', '.go-page', function () {
+            var start = $(this).data('start');
+            loadPage(start);
+        });
 
+        $('.frist').click(function () {
+            loadPage(0);
+        });
+
+        $('.last').click(function () {
+            loadPage($('.go-page').length);
+        });
+        //state functions
+        function loadPage(start) {
+            $.get(App.Constants.API_BASE + '/feedback/page?orderBy=createTime&desc=true&length=5&pageIndex=' + start, function (result) {
+                if (result.header.success) {
+                    var pageInfo = result.body;
+                    var feedbacks = pageInfo.list;
+                    var list = $('#feedbacklist');
+                    list.empty();
+                    for (var i = 0; i < feedbacks.length; i++) {
+                        list.append(buildItem(feedbacks[i]));
+                    }
+
+                    var pages = $('#pages');
+                    pages.empty();
+                    for (var i = 0; i < pageInfo.amount; i++) {
+                        if (i == start) {
+                            pages.append('<li><a class="current-page" href="#start=' + i + '" >' + (i + 1) + '</a></li>');
+                        } else {
+                            pages.append('<li><a class="go-page" href="#start=' + i + '" data-start="' + i + '">' + (i + 1) + '</a></li>');
+                        }
+                    }
+
+                    window.scrollTo(0, 0)
+                }
+            });
+        }
+
+        function buildItem(feedback) {
+            var block = $('<div class="feedback-block">');
+            block.append(buildline(feedback.name, feedback.question, feedback.createTime, 'strator'));
+            if (feedback.answer) {
+                block.append(buildline('管理员', feedback.answer, feedback.lastModifyTime, 'strator1'));
+            }
+            return block;
+        }
+
+        function buildline(name, content, time, cssClass) {
+            if (!name) {
+                name = '游客';
+            }
+            return '      <div class="' + cssClass + '">'
+                    + '          <h5>' + name + '</h5>'
+                    + '          <p>' + time + '</p>'
+                    + '          <div class="strator-left">'
+                    + '              <img src="images/co.png" class="img-responsive" alt="">'
+                    + '          </div>'
+                    + '          <div class="strator-right">'
+                    + '              <p class="sin">' + content + '.</p>'
+                    + '          </div>'
+                    + '          <div class="clearfix"></div>'
+                    + '      </div>';
+        }
     });
 </script>
 </body>

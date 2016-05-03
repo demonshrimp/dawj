@@ -45,11 +45,11 @@ var App = {
         window.location.href = "#" + url;
     };
 
-    App.getCurrentLoginUser = function (compulsive) {
+    App.getCurrentLoginUser = function (required) {
         var s = window.sessionStorage.getItem(App.Constants.KEY_CURRENT_USER);
         if (s) {
             return JSON.parse(s);
-        } else if (compulsive) {
+        } else if (required) {
             var pageUrl = window.location.toString();
             pageUrl = encodeURI(pageUrl);
             window.location.href = 'login.html?page_url=' + pageUrl;

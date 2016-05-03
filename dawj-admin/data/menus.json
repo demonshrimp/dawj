@@ -71,6 +71,12 @@
         "name": "友情站点管理",
         "icon": "fa-sitemap",
         "url": "pages/sys/friendship-site-list.html"
+      },
+      {
+        "no": "23",
+        "name": "在线答疑",
+        "icon": "fa-sitemap",
+        "url": "pages/sys/feedback-list.html"
       }
     ]
   }

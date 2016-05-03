@@ -1,0 +1,168 @@
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">在线答疑列表</h3>
+                <div class="box-tools pull-right">
+                    <button id="btnRefreshTable" type="button" class="btn btn-box-tool" title="刷新">
+                        <i class="fa fa-refresh"></i>
+                        刷新
+                    </button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="tblFeedbackList" class="table table-bordered table-hover nowrap datatables">
+                    <thead>
+                    <tr>
+                        <th>时间</th>
+                        <th>问题</th>
+                        <th>提问人</th>
+                        <th>联系电话</th>
+                        <th>回答时间</th>
+                        <th>回答内容</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalFeedback">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">问题回复</h4>
+            </div>
+
+            <form id="formFeedback" action="javascript:void(0);">
+                <div class="modal-body">
+                    <input type="hidden" name="id"/>
+                    <div class="form-group">
+                        <label for="message-text" class="control-label">回复内容:</label>
+                        <textarea class="form-control" name="answer" id="message-text"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.box-body -->
+<!-- DataTables -->
+<link rel="stylesheet" href="plugins/datatables/media/css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css">
+<link rel="stylesheet" href="plugins/datatables/extensions/Responsive/css/responsive.bootstrap.min.css">
+<script src="plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables/media/js/dataTables.bootstrap.min.js"></script>
+<script src="plugins/datatables/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+<script src="plugins/datatables/extensions/Responsive/js/responsive.bootstrap.min.js"></script>
+<script src="plugins/datatables/extensions/Buttons/js/dataTables.buttons.min.js"></script>
+<script src="plugins/datatables/extensions/Buttons/js/buttons.bootstrap.min.js"></script>
+<script src="plugins/datatables/extensions/Select/js/dataTables.select.min.js"></script>
+<style>
+    table.dataTable tbody tr.selected {
+        background-color: #B0BED9;
+    }
+</style>
+<!-- page script -->
+<script>
+    $(function () {
+        App.Utils.DataTablesHelper.pipelineNoCache();
+        var table = $('#tblFeedbackList').DataTable({
+            ajax: $.fn.dataTable.pipelineNoCache({
+                url: App.Constants.API_BASE + '/feedback/page'
+            }),
+            columns: [
+                {data: 'createTime'},
+                {data: 'question'},
+                {data: 'name'},
+                {data: 'mobile'},
+                {data: 'lastModifyTime'},
+                {data: 'answer'},
+                {
+                    data: 'id',
+                    className: 'center',
+                    render: function (data, type, full, meta) {
+                        if (!full.answer) {
+                            return App.Utils.DataTablesHelper.buildOperationButtons([{
+                                text: '回复',
+                                operation: 'answer'
+                            }], full);
+                        }
+                        return '';
+                    }
+                }
+            ],
+            processing: true,
+            serverSide: true,
+            language: App.Utils.DataTablesHelper.language(),
+            select: true,
+            paging: true,
+            responsive: true
+        });
+
+        //init events
+        $('#btnRefreshTable').click(function () {
+            refreshTable()
+        });
+
+        App.Utils.DataTablesHelper.onOperationButtonClick('#tblFeedbackList', function (data) {
+            switch (data.operation) {
+                case  'answer':
+                    answer(data);
+                    break;
+            }
+        });
+
+        $('#formFeedback').submit(function () {
+            var feedback = App.Utils.FormUtil.toJson(this);
+            $.ajax({
+                url: App.Constants.API_BASE + '/feedback/' + feedback.id + '/answer',
+                method: 'PUT',
+                data: {answer: feedback.answer},
+                dataType: 'json',
+                success: function (result) {
+                    alert(result.header.message);
+                    if (result.header.success) {
+                        refreshTable(true);
+                        $('#modalFeedback').modal('hide');
+                    }
+                }
+            });
+        });
+
+
+        //state functions
+        function answer(data) {
+            $('#formFeedback [name="id"]').val(data.id);
+            $('#modalFeedback').modal({keyboard: false});
+        }
+
+
+        function refreshTable(retain) {
+            var page = table.page.info().page;
+            table.ajax.reload(function () {
+                console.log(table.page.info().pages, page);
+                if (retain) {
+                    if (table.page.info().pages <= page) {
+                        page--;
+                    }
+                    table.page(page).draw('page');
+                }
+            });
+        }
+
+    });
+</script>
+</body>
+</html>

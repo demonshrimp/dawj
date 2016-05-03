@@ -29,12 +29,19 @@ public abstract class BaseUserController extends BaseController {
 	private static ThreadLocal<Site> siteHolder = new ThreadLocal<Site>();
 
 	public User getCurrentUser() {
+		return getCurrentUser(true);
+	}
+
+	public User getCurrentUser(boolean required) {
 		User user = userHolder.get();
 		if (user == null) {
 			String token = getToken();
-			user = userService.getCurrentLoginUser(token);
+			if (required || StringUtil.notEmpty(token)) {
+				user = userService.getCurrentLoginUser(token);
+			}
 		}
 		return user;
+
 	}
 
 	public Site getCurrentSite() {
@@ -50,11 +57,11 @@ public abstract class BaseUserController extends BaseController {
 		HttpServletRequest request = getRequest();
 		return request.getHeader(KEY_TOKEN);
 	}
-	
+
 	protected String getSiteName() {
 		HttpServletRequest request = getRequest();
 		String name = request.getHeader(KEY_SITE_NAME);
-		if(StringUtil.isEmpty(name)){
+		if (StringUtil.isEmpty(name)) {
 			name = "root";
 		}
 		return name;
