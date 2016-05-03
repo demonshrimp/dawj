@@ -85,7 +85,7 @@
                     <li><a href="counselors.html">找咨询师 </a></li>
                     <li><a href="psychological-test.html">心理测评 </a></li>
                     <li><a href="counseling-articles.html">心理案例 </a></li>
-                    <li class="hidden"><a href="about.html">关于</a></li>
+                    <li><a href="about.html">关于</a></li>
                     <li class="hidden"><a href="contact.html">联系我们</a></li>
                     <div class="clearfix"></div>
                 </ul>
@@ -136,7 +136,7 @@
                         <div class="register-top-grid">
                             <h3>个人信息</h3>
                             <div class="wow fadeInLeft form-group" data-wow-delay="0.4s">
-                                <span>姓名<label>*</label></span>
+                                <span>昵称<label>*</label></span>
                                 <input name="name" type="text">
                             </div>
                             <div class="wow fadeInLeft form-group" data-wow-delay="0.4s">
@@ -430,15 +430,15 @@
             },
             fields: {
                 name: {
-                    message: '姓名格式不正确',
+                    message: '昵称格式不正确',
                     validators: {
                         notEmpty: {
-                            message: '姓名不能为空'
+                            message: '昵称不能为空'
                         },
                         stringLength: {
                             min: 3,
                             max: 10,
-                            message: '姓名必须为2~10位之间'
+                            message: '昵称必须为2~10位之间'
                         }
                     }
                 },

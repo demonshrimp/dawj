@@ -116,7 +116,7 @@ public class Order extends BaseSiteEntity {
 		this.contactMobile = contactMobile;
 	}
 
-	@Column(name = "contact_address", nullable = false)
+	@Column(name = "contact_address", nullable = true)
 	public String getContactAddress() {
 		return contactAddress;
 	}

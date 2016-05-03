@@ -2,8 +2,6 @@
 <html>
 <head>
     <title>心理咨询案例_心理学案例_心理案例分析_心里案例详情_大爱无疆心理网</title>
-    <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
-    <link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="keywords" content="心理咨询案例，心理学案例，心理案例分析"/>
@@ -11,12 +9,22 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
     <meta http-equiv="Pragma" content="no-cache"/>
     <meta http-equiv="Expires" content="0"/>
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
+    <link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>
     <link href='http://fonts.useso.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen"/>
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet"/>
     <script src="js/vendor/jquery.min.js"></script>
     <script src="js/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
-    <link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen"/>
-    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        .box-shadow-3 {
+            -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+            -moz-box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+            box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+        }
+    </style>
 </head>
 <body>
 <!-- header -->
@@ -58,7 +66,7 @@
                     <li><a href="counselors.html">找咨询师 </a></li>
                     <li><a href="psychological-test.html">心理测评 </a></li>
                     <li><a href="counseling-articles.html">心理案例 </a></li>
-                    <li class="hidden"><a href="about.html">关于</a></li>
+                    <li><a href="about.html">关于</a></li>
                     <li class="hidden"><a href="contact.html">联系我们</a></li>
                     <div class="clearfix"></div>
                 </ul>
@@ -265,6 +273,33 @@
     </div>
 </div>
 <!-- footer-bottom -->
+<!-- Modal -->
+<div class="modal fade" id="modalHongbao" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="background: #CD4F39;height: 500px;overflow: hidden">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="padding:10px;"><span
+                    aria-hidden="true">&times;</span></button>
+            <div id="hongbao">
+                <div class="box-shadow-3"
+                     style="background: #CD3333;width: 200%;height: 300px;border-bottom-left-radius: 100%;border-bottom-right-radius: 100%;margin-left: -100%;">
+                </div>
+                <div class="box-shadow-3" id="hongbao_open"
+                     style="cursor: pointer;width: 100px;height: 100px;border-radius: 100%;background: #FFB90F;line-height: 100px;text-align: center;color: #fff;font-family: '微软雅黑';font-size: 18px;margin: -60px auto 0 auto;">
+                    拆红包
+                </div>
+                <h3 style="text-align: center;color: #fff;font-family: '微软雅黑';">恭喜你获得一个红包</h3>
+            </div>
+            <div id="hongbao_result" class="animated slideInDown" style="display: none">
+                <div style="margin: 200px auto;text-align: center;color: #fff;font-family: '微软雅黑';">
+                    <h3>恭喜抽到金额：</h3>
+                    <h4 id="hongbao_amount">0
+                        <small style="color: darkred">yuan</small>
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
     $.get(App.Constants.API_BASE + '/wechat/jsapi-signature', function (data) {
@@ -291,16 +326,18 @@
                 dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
                 success: function () {
                     $.get(App.Constants.API_BASE + '/user/wechat-share-success', function (result) {
-                        alert(result.header.message);
-                        if (result.header.success) {
-                            var user = App.getCurrentLoginUser();
-                            user.points += result.body;
-                            App.setCurrentLoginSite(user);
+                        if (!result.header.success) {
+                            alert(result.header.message);
+                            return;
                         }
+                        var user = App.getCurrentLoginUser();
+                        user.points += result.body;
+                        App.setCurrentLoginSite(user);
+                        $('#hongbao_amount').text(result.body);
+                        $('#modalHongbao').modal({keyboard: false});
                     });
                 },
                 cancel: function () {
-                    alert(0);
                     // 用户取消分享后执行的回调函数
                 }
             };
@@ -380,7 +417,10 @@
             }
         });
         //init events
-
+        $('#hongbao_open').click(function () {
+            $('#hongbao').hide();
+            $('#hongbao_result').show();
+        });
         //fs
         function buildPageFooter(id, article) {
             var a = $('#' + id);

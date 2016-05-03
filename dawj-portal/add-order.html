@@ -56,7 +56,7 @@
                     <li><a href="counselors.html">找咨询师 </a></li>
                     <li><a href="psychological-test.html">心理测评 </a></li>
                     <li><a href="counseling-articles.html">心理案例 </a></li>
-                    <li class="hidden"><a href="about.html">关于</a></li>
+                    <li><a href="about.html">关于</a></li>
                     <li class="hidden"><a href="contact.html">联系我们</a></li>
                     <div class="clearfix"></div>
                 </ul>
@@ -96,7 +96,7 @@
                 <div class="register-top-grid">
                     <h3>联系人信息</h3>
                     <div class="wow fadeInLeft form-group" data-wow-delay="0.4s">
-                        <span>姓名<label>*</label></span>
+                        <span>联系人<label>*</label></span>
                         <input name="contactName" type="text">
                     </div>
                     <div class="wow fadeInLeft form-group" data-wow-delay="0.4s">
@@ -104,7 +104,7 @@
                         <input name="contactMobile" type="text">
                     </div>
                     <div class="wow fadeInLeft form-group" data-wow-delay="0.4s">
-                        <span>联系地址<label>*</label></span>
+                        <span>联系地址</span>
                         <input name="contactAddress" type="text">
                     </div>
                 </div>
@@ -363,13 +363,6 @@
                     validators: {
                         notEmpty: {
                             message: '联系电话不能为空'
-                        }
-                    }
-                },
-                contactAddress: {
-                    validators: {
-                        notEmpty: {
-                            message: '联系地址不能为空'
                         }
                     }
                 },
