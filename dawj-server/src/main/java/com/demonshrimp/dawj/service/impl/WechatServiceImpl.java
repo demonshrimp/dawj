@@ -79,6 +79,40 @@ public class WechatServiceImpl implements WechatService, WechatHandler {
 		}
 		return result;
 	}
+	
+	/**
+	 * 获取ACCESS_TOKEN
+	 * 
+	 * @return
+	 */
+	@Override
+	public String getAccessToken() {
+		if (null == accessToken || System.currentTimeMillis() - accessTokenTime >= accessTokenExpires) {
+			JsonObject jsonObject = fetchAccessToken();
+			if (null != jsonObject) {
+				accessToken = jsonObject.get("access_token").getAsString();
+				accessTokenExpires = jsonObject.get("expires_in").getAsInt();
+			}
+		}
+		return accessToken;
+	}
+
+	/**
+	 * 获取jsapi_ticket
+	 * 
+	 * @return
+	 */
+	@Override
+	public String getJsapiTicket() {
+		if (null == jsapiTicket || System.currentTimeMillis() - jsapiTicketTime >= jsapiTicketExpires) {
+			JsonObject jsonObject = fetchJsapiTicket();
+			if (null != jsonObject) {
+				jsapiTicket = jsonObject.get("ticket").getAsString();
+				jsapiTicketExpires = jsonObject.get("expires_in").getAsInt();
+			}
+		}
+		return jsapiTicket;
+	}
 
 	@Override
 	public WechartUserInfo getUserInfo(AccessToken accessToken) {
@@ -176,37 +210,7 @@ public class WechatServiceImpl implements WechatService, WechatHandler {
 		return result;
 	}
 
-	/**
-	 * 获取ACCESS_TOKEN
-	 * 
-	 * @return
-	 */
-	public String getAccessToken() {
-		if (null == accessToken || System.currentTimeMillis() - accessTokenTime >= accessTokenExpires) {
-			JsonObject jsonObject = fetchAccessToken();
-			if (null != jsonObject) {
-				accessToken = jsonObject.get("access_token").getAsString();
-				accessTokenExpires = jsonObject.get("expires_in").getAsInt();
-			}
-		}
-		return accessToken;
-	}
-
-	/**
-	 * 获取jsapi_ticket
-	 * 
-	 * @return
-	 */
-	public String getJsapiTicket() {
-		if (null == jsapiTicket || System.currentTimeMillis() - jsapiTicketTime >= jsapiTicketExpires) {
-			JsonObject jsonObject = fetchJsapiTicket();
-			if (null != jsonObject) {
-				jsapiTicket = jsonObject.get("ticket").getAsString();
-				jsapiTicketExpires = jsonObject.get("expires_in").getAsInt();
-			}
-		}
-		return jsapiTicket;
-	}
+	
 
 	/**
 	 * 从微信服务器获取ACCESS_TOKEN

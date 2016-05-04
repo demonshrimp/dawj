@@ -103,7 +103,7 @@
                         <span>手机<label>*</label></span>
                         <input name="contactMobile" type="text">
                     </div>
-                    <div class="wow fadeInLeft form-group" data-wow-delay="0.4s">
+                    <div class="wow fadeInLeft form-group hidden" data-wow-delay="0.4s">
                         <span>联系地址</span>
                         <input name="contactAddress" type="text">
                     </div>
@@ -291,54 +291,6 @@
 </div>
 
 <script src="js/vendor/jquery.qrcode.min.js"></script>
-<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-<script>
-    $.get(App.Constants.API_BASE + '/wechat/jsapi-signature', function (data) {
-        wx.config({
-            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-            appId: 'wxc086c323ecb8c170', // 必填，公众号的唯一标识
-            timestamp: data.timestamp, // 必填，生成签名的时间戳
-            nonceStr: data.nonceStr, // 必填，生成签名的随机串
-            signature: data.signature,// 必填，签名，见附录1
-            jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-        });
-        //jsApiList: ["menuItem:share:appMessage", "menuItem:share:timeline", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:facebook", "menuItem:share:QZone"] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-
-        wx.ready(function () {
-
-        });
-        wx.error(function (res) {
-            alert('初始化错误：' + res.toString());
-            // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
-        });
-
-    });
-
-    function jsWechatPay(data, success) {
-        wx.chooseWXPay({
-            timestamp: data.timestamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
-            nonceStr: data.nonceStr, // 支付签名随机串，不长于 32 位
-            package: data.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
-            signType: data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-            paySign: data.paySign, // 支付签名
-            success: success
-        });
-    }
-
-    function qrcodeWechat(orderId) {
-        $.get(App.Constants.API_BASE + '/order/' + orderId + '/create-wechat-payment', function (result) {
-            if (!result.header.success) {
-                alert(result.header.message);
-                return;
-            }
-            $('#imgWechatPayCode').empty();
-            $('#imgWechatPayCode').qrcode(result.body);
-            $('#weichatPayModal').modal({
-                keyboard: false
-            });
-        });
-    }
-</script>
 <script>
     $(function () {
 
@@ -490,13 +442,8 @@
                     break;
                 case 'wechat' :
                     if (App.Utils.BrowserUtil.isWechat()) {
-                        $.get(App.Constants.API_BASE + '/order/' + orderId + '/wechat-payment-signature', function (result) {
-                            if (!result.header.success) {
-                                alert(result.header.message);
-                                return;
-                            }
-                            jsWechatPay(result.body);
-                        })
+                        var paymentUrl =  'http://www.dawjxlzx.com/dawj-server/wechat/payRequest.jsp?orderId=' + payment.orderId;
+                        window.location.href = paymentUrl;
                     } else {
                         qrcodeWechat(payment.orderId);
                     }
@@ -520,6 +467,20 @@
 
         function generateCaptchaNum() {
             $('#captchaOperation').html([randomNumber(1, 10), '+', randomNumber(1, 20), '='].join(' '));
+        }
+
+        function qrcodeWechat(orderId) {
+            $.get(App.Constants.API_BASE + '/order/' + orderId + '/create-wechat-payment', function (result) {
+                if (!result.header.success) {
+                    alert(result.header.message);
+                    return;
+                }
+                $('#imgWechatPayCode').empty();
+                $('#imgWechatPayCode').qrcode(result.body);
+                $('#weichatPayModal').modal({
+                    keyboard: false
+                });
+            });
         }
 
     });

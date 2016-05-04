@@ -1,24 +1,17 @@
 package com.demonshrimp.dawj.service.impl;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.InetAddress;
-import java.net.URLEncoder;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -40,13 +33,15 @@ import com.demonshrimp.dawj.model.entity.Site;
 import com.demonshrimp.dawj.service.OrderService;
 
 import pers.ksy.common.MD5Util;
-import pers.ksy.common.StringUtil;
+import pers.ksy.common.wechat.WechatService;
 
 @Transactional
 @Service
 public class OrderServiceImpl extends BaseServiceImpl<Order, String> implements OrderService {
 	@Autowired
 	private OrderDao orderDao;
+	@Autowired
+	private WechatService wechatService;
 
 	/*
 	 * @Autowired private AlipayClient alipayClient;
@@ -202,7 +197,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, String> implements 
 			throw new ServiceException("微信交易创建失败:" + e.getMessage());
 		}
 	}
-	
+
 	@Override
 	public Map<String, String> getPaySignature(String orderId) {
 		Order order = orderDao.load(orderId);
@@ -212,56 +207,112 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, String> implements 
 		// 组装参数
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
 				.getRequest();
-		TreeMap<String, String> params = new TreeMap<>();
-		params.put("appid", "wxc086c323ecb8c170");
-		params.put("mch_id", "1315067001");
-		params.put("out_trade_no", order.getId());
-		params.put("device_info", order.getSite().getId());
-		params.put("body", "zixunshifuwu");
-		params.put("product_id", order.getCounselor().getId());
-		params.put("total_fee", (int) (order.getAmount() * 100) + "");
-		params.put("spbill_create_ip", request.getServerName());
-		params.put("notify_url",
+		TreeMap<String, String> contentMap = new TreeMap<>();
+		contentMap.put("appid", "wxc086c323ecb8c170");
+		contentMap.put("mch_id", "1315067001");
+		contentMap.put("nonce_str", UUID.randomUUID().toString().replaceAll("-", ""));
+		contentMap.put("body", "zixunshifuwu");
+		contentMap.put("out_trade_no", order.getId());
+		/*
+		 * params.put("device_info", order.getSite().getId());
+		 * params.put("product_id", order.getCounselor().getId());
+		 */
+		contentMap.put("total_fee", (int) (order.getAmount() * 100) + "");
+		contentMap.put("spbill_create_ip", request.getServerName());
+		contentMap.put("notify_url",
 				"http://" + request.getServerName() + "/dawj-server/api/admin/order/wechat-pay-callback");
-		params.put("trade_type", "JSAPI");
-		params.put("nonce_str", UUID.randomUUID().toString().replaceAll("-", ""));
-		params.put("openid", order.getUser().getWechatUserId());
-		
+		contentMap.put("trade_type", "JSAPI");
+		contentMap.put("openid", order.getUser().getWechatUserId());
+
 		// 计算sign
-		String pramStr = getUrl(params, "utf-8");
-		String sign = MD5Util.MD5(pramStr + "&key=u73qa4oj48trzgn00atrbztl2jradgqw").toUpperCase();
-		Map<String,String> signature = new HashMap<>();
-		signature.put("timestamp", String.valueOf(System.currentTimeMillis()));
-		signature.put("nonceStr", params.get("nonce_str"));
-		signature.put("signType", "MD5");
-		signature.put("paySign", sign);
-		signature.put("package", pramStr);
-		return signature;
+		String sign = wechatSign(contentMap);
+		// 构建xml参数
+		Document requestDocument = DocumentHelper.createDocument();
+		// 创建文档的 根元素节点
+		Element requestRoot = DocumentHelper.createElement("xml");
+		requestDocument.setRootElement(requestRoot);
+		for (String key : contentMap.keySet()) {
+			requestRoot.addElement(key).setText(contentMap.get(key));
+		}
+		requestRoot.addElement("sign").setText(sign);
+		HttpClient httpClient = new HttpClient();
+		PostMethod method = new PostMethod("https://api.mch.weixin.qq.com/pay/unifiedorder");
+		try {
+			method.setRequestBody(new String(requestRoot.asXML().getBytes(), "ISO8859-1"));
+			httpClient.executeMethod(method);
+			String responseStr = new String(method.getResponseBody(), "utf-8");
+			System.out.println(responseStr);
+			Document responseDocument = DocumentHelper.parseText(responseStr);
+			Element responseRoot = responseDocument.getRootElement();
+			String return_code = responseRoot.element("return_code").getText();
+			if (!return_code.equals("SUCCESS")) {
+				throw new ServiceException(
+						"微信交易创建失败:" + return_code + "," + responseRoot.element("return_msg").getText());
+			}
+			String prepayId = responseRoot.element("prepay_id").getText();
+
+			TreeMap<String, String> wxPayParamMap = new TreeMap<String, String>();
+			wxPayParamMap.put("appId", "wxc086c323ecb8c170");
+			wxPayParamMap.put("timeStamp", String.valueOf(System.currentTimeMillis()));
+			wxPayParamMap.put("nonceStr", contentMap.get("nonceStr"));
+			wxPayParamMap.put("package", "prepay_id=" + prepayId);
+			wxPayParamMap.put("signType", "MD5");
+
+			String paySign = wechatSign(wxPayParamMap);
+			wxPayParamMap.put("paySign", paySign);
+			return wxPayParamMap;
+		} catch (IOException | DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new ServiceException("微信交易创建失败:" + e.getMessage());
+		}
 	}
-	
-	
+
+	/*
+	 * public void test(){ HttpServletRequest request; RequestHandler reqHandler
+	 * = new RequestHandler(request, response); //初始化 RequestHandler
+	 * 类可以在微信的文档中找到.还有相关工具类 reqHandler.init(); reqHandler.init(GzhConfig.APPID,
+	 * GzhConfig.APPSECRET, GzhConfig.KEY, ""); //执行统一下单接口 获得预支付id
+	 * reqHandler.setParameter("appid",GzhConfig.APPID);
+	 * reqHandler.setParameter("mch_id", GzhConfig.MCHID); //商户号
+	 * reqHandler.setParameter("nonce_str", noncestr); //随机字符串
+	 * reqHandler.setParameter("body", product_name);
+	 * //商品描述(必填.如果不填.也会提示系统升级.正在维护我艹.) reqHandler.setParameter("out_trade_no",
+	 * out_trade_no); //商家订单号 reqHandler.setParameter("total_fee", order_price);
+	 * //商品金额,以分为单位
+	 * reqHandler.setParameter("spbill_create_ip",request.getRemoteAddr());
+	 * //用户的公网ip IpAddressUtil.getIpAddr(request)
+	 * //下面的notify_url是用户支付成功后为微信调用的action 异步回调.
+	 * reqHandler.setParameter("notify_url", GzhConfig.NOTIFY_URL);
+	 * reqHandler.setParameter("trade_type", "JSAPI");
+	 * //------------需要进行用户授权获取用户openid-------------
+	 * reqHandler.setParameter("openid", openid); //这个必填.
+	 * //这里只是在组装数据.还没到执行到统一下单接口.因为统一下单接口的数据传递格式是xml的.所以才需要组装. String requestUrl
+	 * = reqHandler.getRequestURL(); }
+	 */
 
 	/**
 	 * 
-	 * @param wechatResult 示例：
- 		<xml><appid><![CDATA[wxc086c323ecb8c170]]></appid>
-		<bank_type><![CDATA[CFT]]></bank_type>
-		<cash_fee><![CDATA[1]]></cash_fee>
-		<device_info><![CDATA[root_site]]></device_info>
-		<fee_type><![CDATA[CNY]]></fee_type>
-		<is_subscribe><![CDATA[Y]]></is_subscribe>
-		<mch_id><![CDATA[1315067001]]></mch_id>
-		<nonce_str><![CDATA[8e3b4545841348739dc3764bf8bdcf1c]]></nonce_str>
-		<openid><![CDATA[of_lRwp74TYQX-BGs8wPFYMd6ZNU]]></openid>
-		<out_trade_no><![CDATA[e5499fb55423ab19015423ad21690000]]></out_trade_no>
-		<result_code><![CDATA[SUCCESS]]></result_code>
-		<return_code><![CDATA[SUCCESS]]></return_code>
-		<sign><![CDATA[199E9EE0054953DE96AC10952CB2794C]]></sign>
-		<time_end><![CDATA[20160417180405]]></time_end>
-		<total_fee>1</total_fee>
-		<trade_type><![CDATA[NATIVE]]></trade_type>
-		<transaction_id><![CDATA[4006082001201604174935897990]]></transaction_id>
-		</xml>
+	 * @param wechatResult
+	 *            示例： <xml><appid><![CDATA[wxc086c323ecb8c170]]></appid>
+	 *            <bank_type><![CDATA[CFT]]></bank_type>
+	 *            <cash_fee><![CDATA[1]]></cash_fee>
+	 *            <device_info><![CDATA[root_site]]></device_info>
+	 *            <fee_type><![CDATA[CNY]]></fee_type>
+	 *            <is_subscribe><![CDATA[Y]]></is_subscribe>
+	 *            <mch_id><![CDATA[1315067001]]></mch_id>
+	 *            <nonce_str><![CDATA[8e3b4545841348739dc3764bf8bdcf1c]]>
+	 *            </nonce_str>
+	 *            <openid><![CDATA[of_lRwp74TYQX-BGs8wPFYMd6ZNU]]></openid>
+	 *            <out_trade_no><![CDATA[e5499fb55423ab19015423ad21690000]]>
+	 *            </out_trade_no> <result_code><![CDATA[SUCCESS]]></result_code>
+	 *            <return_code><![CDATA[SUCCESS]]></return_code>
+	 *            <sign><![CDATA[199E9EE0054953DE96AC10952CB2794C]]></sign>
+	 *            <time_end><![CDATA[20160417180405]]></time_end>
+	 *            <total_fee>1</total_fee>
+	 *            <trade_type><![CDATA[NATIVE]]></trade_type>
+	 *            <transaction_id><![CDATA[4006082001201604174935897990]]>
+	 *            </transaction_id> </xml>
 	 */
 	@Override
 	public void wechatPayComplete(String wechatResult) {
@@ -325,48 +376,51 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, String> implements 
 	 * e.printStackTrace(); throw new ServiceException("支付宝退款失败：" +
 	 * e.getMessage()); } }
 	 */
-	
-	private String wechatSign(TreeMap<String, String> params){
+
+	private String wechatSign(TreeMap<String, String> params) {
 		// 计算sign
 		String pramStr = getUrl(params, "utf-8");
 		pramStr += "&key=u73qa4oj48trzgn00atrbztl2jradgqw";
 		String sign = MD5Util.MD5(pramStr).toUpperCase();
 		return sign;
 	}
-	
-	/** 
-     * 据Map生成URL字符串 
-     * @param map Map 
-     * @param valueEnc  URL编码 
-     * @return  URL 
-     */  
+
+	/**
+	 * 据Map生成URL字符串
+	 * 
+	 * @param map
+	 *            Map
+	 * @param valueEnc
+	 *            URL编码
+	 * @return URL
+	 */
 	private final static String EMPTY = "";
-    private static final String URL_PARAM_CONNECT_FLAG = "&";  
-    private static String getUrl(Map<String, String> map, String valueEnc) {  
-        if (null == map || map.keySet().size() == 0) {  
-            return (EMPTY);  
-        }  
-        StringBuffer url = new StringBuffer();  
-        Set<String> keys = map.keySet();  
-        for (Iterator<String> it = keys.iterator(); it.hasNext();) {  
-            String key = it.next();  
-            if (map.containsKey(key)) {  
-                String val = map.get(key);  
-                String str = val != null ? val : EMPTY;  
-                /*try {  
-                    str = URLEncoder.encode(str, valueEnc);  
-                } catch (UnsupportedEncodingException e) {  
-                    e.printStackTrace();  
-                }*/
-                url.append(key).append("=").append(str).append(URL_PARAM_CONNECT_FLAG);  
-            }  
-        }  
-        String strURL = EMPTY;  
-        strURL = url.toString();  
-        if (URL_PARAM_CONNECT_FLAG.equals(EMPTY + strURL.charAt(strURL.length() - 1))) {  
-            strURL = strURL.substring(0, strURL.length() - 1);  
-        }  
-        return (strURL);  
-    }
-	
+	private static final String URL_PARAM_CONNECT_FLAG = "&";
+
+	private static String getUrl(Map<String, String> map, String valueEnc) {
+		if (null == map || map.keySet().size() == 0) {
+			return (EMPTY);
+		}
+		StringBuffer url = new StringBuffer();
+		Set<String> keys = map.keySet();
+		for (Iterator<String> it = keys.iterator(); it.hasNext();) {
+			String key = it.next();
+			if (map.containsKey(key)) {
+				String val = map.get(key);
+				String str = val != null ? val : EMPTY;
+				/*
+				 * try { str = URLEncoder.encode(str, valueEnc); } catch
+				 * (UnsupportedEncodingException e) { e.printStackTrace(); }
+				 */
+				url.append(key).append("=").append(str).append(URL_PARAM_CONNECT_FLAG);
+			}
+		}
+		String strURL = EMPTY;
+		strURL = url.toString();
+		if (URL_PARAM_CONNECT_FLAG.equals(EMPTY + strURL.charAt(strURL.length() - 1))) {
+			strURL = strURL.substring(0, strURL.length() - 1);
+		}
+		return (strURL);
+	}
+
 }
