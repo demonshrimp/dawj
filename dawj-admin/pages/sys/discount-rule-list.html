@@ -1,0 +1,144 @@
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">订单积分减免优惠规则列表</h3>
+                <div class="box-tools pull-right">
+                    <button id="btnAddDiscountRule" type="button" class="btn btn-box-tool" title="新增">
+                        <i class="fa fa-plus"></i>
+                        新增
+                    </button>
+                    <button id="btnRefreshTable" type="button" class="btn btn-box-tool" title="刷新">
+                        <i class="fa fa-refresh"></i>
+                        刷新
+                    </button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="tblDiscountRuleList" class="table table-bordered table-hover nowrap datatables">
+                    <thead>
+                    <tr>
+                        <th>时间</th>
+                        <th>条件金额</th>
+                        <th>减免金额</th>
+                        <th>最后修改时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.box-body -->
+<!-- DataTables -->
+<link rel="stylesheet" href="plugins/datatables/media/css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css">
+<link rel="stylesheet" href="plugins/datatables/extensions/Responsive/css/responsive.bootstrap.min.css">
+<script src="plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables/media/js/dataTables.bootstrap.min.js"></script>
+<script src="plugins/datatables/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+<script src="plugins/datatables/extensions/Responsive/js/responsive.bootstrap.min.js"></script>
+<script src="plugins/datatables/extensions/Buttons/js/dataTables.buttons.min.js"></script>
+<script src="plugins/datatables/extensions/Buttons/js/buttons.bootstrap.min.js"></script>
+<script src="plugins/datatables/extensions/Select/js/dataTables.select.min.js"></script>
+<style>
+    table.dataTable tbody tr.selected {
+        background-color: #B0BED9;
+    }
+</style>
+<!-- page script -->
+<script>
+    $(function () {
+        App.Utils.DataTablesHelper.pipelineNoCache();
+        var table = $('#tblDiscountRuleList').DataTable({
+            'ajax': {
+                url: App.Constants.API_BASE + '/discount-rule/list',
+                "dataSrc": "body"
+            },
+            columns: [
+                {data: 'createTime'},
+                {data: 'conditionAmount'},
+                {data: 'discountAmount'},
+                {data: 'lastModifyTime'},
+                {
+                    data: 'id',
+                    className: 'center',
+                    render: function (data, type, full, meta) {
+                        return App.Utils.DataTablesHelper.buildOperationButtons([{
+                            text: '编辑',
+                            operation: 'edit'
+                        }, {
+                            text: '删除',
+                            operation: 'remove'
+                        }], full);
+                    }
+                }
+            ],
+            processing: true,
+            serverSide: true,
+            language: App.Utils.DataTablesHelper.language(),
+            select: true,
+            paging: true,
+            responsive: true
+        });
+
+        //init events
+        $('#btnRefreshTable').click(function () {
+            refreshTable()
+        });
+
+        $('#btnAddDiscountRule').click(function () {
+            App.loadPage('pages/sys/discount-rule.html');
+        });
+
+        App.Utils.DataTablesHelper.onOperationButtonClick('#tblDiscountRuleList', function (data) {
+            switch (data.operation) {
+                case  'edit':
+                    edit(data);
+                    break;
+                case  'remove':
+                    remove(data);
+                    break;
+            }
+        });
+
+
+        //state functions
+        function edit(data) {
+            App.loadPage('pages/sys/discount-rule.html?id=' + data.id);
+        }
+
+        function remove(data) {
+            if (confirm('确定要删除这条规则吗？')) {
+                $.ajax({
+                    url: App.Constants.API_BASE + '/discount-rule/' + data.id,
+                    type: 'DELETE',
+                    success: function (result) {
+                        alert(result.header.message);
+                        if (result.header.success) {
+                            refreshTable(true);
+                        }
+                    }
+                });
+            }
+        }
+
+        function refreshTable(retain) {
+            var page = table.page.info().page;
+            table.ajax.reload(function () {
+                console.log(table.page.info().pages, page);
+                if (retain) {
+                    if (table.page.info().pages <= page) {
+                        page--;
+                    }
+                    table.page(page).draw('page');
+                }
+            });
+        }
+
+    });
+</script>
+</body>
+</html>

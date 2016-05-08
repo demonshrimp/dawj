@@ -75,8 +75,14 @@
       {
         "no": "23",
         "name": "在线答疑",
-        "icon": "fa-sitemap",
+        "icon": "fa-commenting-o",
         "url": "pages/sys/feedback-list.html"
+      },
+      {
+        "no": "24",
+        "name": "订单优惠规则",
+        "icon": "fa-gift",
+        "url": "pages/sys/discount-rule.html?id=1"
       }
     ]
   }

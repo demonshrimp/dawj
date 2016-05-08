@@ -1,3 +1,5 @@
+<%@page import="com.demonshrimp.dawj.service.OrderService"%>
+<%@page import="com.demonshrimp.dawj.exception.ServiceException"%>
 <%@page import="pers.ksy.common.wechat.api.WechatJsapiSdkSignUtil"%>
 <%@page import="java.util.TreeMap"%>
 <%@page import="java.util.SortedMap"%>
@@ -7,7 +9,6 @@
 <%@page import="com.demonshrimp.dawj.model.entity.Order"%>
 <%@page import="pers.ksy.common.wechat.WechatService"%>
 <%@page import="pers.ksy.common.spring4.SpringUtil"%>
-<%@page import="com.demonshrimp.dawj.service.OrderService"%>
 <%@page import="java.util.Map"%>
 <%@page import="com.google.gson.Gson"%>
 <%@page import="com.wechat.GzhConfig"%>
@@ -19,8 +20,7 @@
 <%@page import="java.io.IOException"%>
 <%@page import="java.net.HttpURLConnection"%>
 <%@page import="java.util.Date"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%!
 public static String getOut(HttpURLConnection conn) throws IOException{
@@ -83,94 +83,111 @@ public static String SendGET(String url,String param){
  }
 %>
 <%
-	String orderId = request.getParameter("orderId");
-	OrderService orderService = SpringUtil.getBean(OrderService.class);
-	WechatService wechatService = SpringUtil.getBean(WechatService.class);
-	Order order = orderService.get(orderId);
-	Gson gson = new Gson();
-	
-	
-	
-	String noncestr = Sha1Util.getNonceStr();//生成随机字符串
-	String timestamp = Sha1Util.getTimeStamp();//生成1970年到现在的秒数.
-	//state 可以传递你的订单号.然后根据订单号 查询付款金额.我就不详细写了.
-	                                 
-	String out_trade_no = order.getId();//订单号
-	String order_price = String.valueOf((int) (order.getAmount() * 100));//订单金额
-	//微信金额 以分为单位.这是第二坑.如果不注意.页面的报错.你基本看不出来.因为他提示系统升级,正在维护.扯淡.....
-	String product_name = out_trade_no;//订单名称
-	
-	String openid = order.getUser().getWechatUserId();
-	RequestHandler reqHandler = new RequestHandler(request, response);
-	 //初始化     RequestHandler  类可以在微信的文档中找到.还有相关工具类    
-	reqHandler.init();
-	reqHandler.init(GzhConfig.APPID, GzhConfig.APPSECRET, GzhConfig.KEY, "");
-	//执行统一下单接口 获得预支付id
-	reqHandler.setParameter("appid",GzhConfig.APPID);
-	reqHandler.setParameter("mch_id", GzhConfig.MCHID);                //商户号
-	reqHandler.setParameter("nonce_str", noncestr);            //随机字符串
-	reqHandler.setParameter("body", product_name);                        //商品描述(必填.如果不填.也会提示系统升级.正在维护我艹.)
-	reqHandler.setParameter("out_trade_no", out_trade_no);        //商家订单号
-	reqHandler.setParameter("total_fee", order_price);                    //商品金额,以分为单位
-	reqHandler.setParameter("spbill_create_ip",request.getRemoteAddr());   //用户的公网ip  IpAddressUtil.getIpAddr(request)
-	//下面的notify_url是用户支付成功后为微信调用的action  异步回调.
-	reqHandler.setParameter("notify_url", GzhConfig.NOTIFY_URL);
-	reqHandler.setParameter("trade_type", "JSAPI");
-	//------------需要进行用户授权获取用户openid-------------
-	reqHandler.setParameter("openid", openid);   //这个必填.
-	//这里只是在组装数据.还没到执行到统一下单接口.因为统一下单接口的数据传递格式是xml的.所以才需要组装.
-	String requestUrl = reqHandler.getRequestURL();
-	                                //requestUrl 例子:
-	 /*
-	<xml><appid>wx2421b1c4370ec43b</appid><attach>支付测试</attach><body>JSAPI支付测试</body><mch_id>10000100</mch_id><nonce_str>1add1a30ac87aa2db72f57a2375d8fec</nonce_str><notify_url>http://wxpay.weixin.qq.com/pub_v2/pay/notify.v2.php</notify_url><openid>oUpF8uMuAJO_M2pxb1Q9zNjWeS6o</openid><out_trade_no>1415659990</out_trade_no><spbill_create_ip>14.23.150.211</spbill_create_ip><total_fee>1</total_fee><trade_type>JSAPI</trade_type><sign>0CB01533B8C1EF103065174F50BCA001</sign></xml>
-	*/
-	                                 
-	System.out.println("requestUrl==================="+requestUrl);
-	//统一下单接口提交  xml格式
-	URL orderUrl = new URL("https://api.mch.weixin.qq.com/pay/unifiedorder");
-	HttpURLConnection conn = (HttpURLConnection) orderUrl.openConnection();
-	conn.setConnectTimeout(30000); // 设置连接主机超时（单位：毫秒)
-	conn.setReadTimeout(30000); // 设置从主机读取数据超时（单位：毫秒)
-	conn.setDoOutput(true); // post请求参数要放在http正文内，顾设置成true，默认是false
-	conn.setDoInput(true); // 设置是否从httpUrlConnection读入，默认情况下是true
-	conn.setUseCaches(false); // Post 请求不能使用缓存
-	// 设定传送的内容类型是可序列化的java对象(如果不设此项,在传送序列化对象时,当WEB服务默认的不是这种类型时可能抛java.io.EOFException)
-	conn.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
-	conn.setRequestMethod("POST");// 设定请求的方法为"POST"，默认是GET
-	conn.setRequestProperty("Content-Length",requestUrl.length()+"");
-	String encode = "utf-8";
-	OutputStreamWriter os = new OutputStreamWriter(conn.getOutputStream(), encode);
-	os.write(requestUrl.toString());
-	os.flush();
-	os.close();
-	String result = getOut(conn);
-	System.out.println("result=========返回的xml============="+result);
-	Map<String, String> orderMap = XMLUtil.doXMLParse(result);
-	System.out.println("orderMap==========================="+orderMap);
-	//得到的预支付id
-	String prepay_id = orderMap.get("prepay_id");
-	SortedMap<String,String> params = new TreeMap<String,String>();
-	params.put("appId", GzhConfig.APPID);
-	params.put("timeStamp",timestamp);
-	params.put("nonceStr", noncestr);
-	params.put("package", "prepay_id="+prepay_id);
-	params.put("signType", "MD5");
-	         
-	//生成支付签名,这个签名 给 微信支付的调用使用
-	String paySign =  reqHandler.createSign(params);        
-	request.setAttribute("paySign", paySign);
-	request.setAttribute("appId", GzhConfig.APPID);
-	request.setAttribute("timeStamp", timestamp);        //时间戳
-	request.setAttribute("nonceStr", noncestr);            //随机字符串
-	request.setAttribute("signType", "MD5");        //加密格式
-	request.setAttribute("out_trade_no", out_trade_no);          //订单号
-	request.setAttribute("packageValue", "prepay_id="+prepay_id);//预支付id ,就这样的格式.
-	
-	//生成js api签名
-	String url = "http://www.dawjxlzx.com/dawj-server/wechat/payRequest.jsp";
-	String ticket = wechatService.getJsapiTicket();
-	String signature = WechatJsapiSdkSignUtil.sign(ticket, url).get("signature");
-	request.setAttribute("signature", signature);
+	try{
+		String orderId = request.getParameter("orderId");
+		OrderService orderService =  SpringUtil.getBean(OrderService.class);
+		WechatService wechatService = SpringUtil.getBean(WechatService.class);
+		Order order = orderService.get(orderId);
+		if(order==null){
+			throw new ServiceException("订单不存在");
+		}
+		if (order.getStatus() != Order.Status.NEW) {
+			throw new ServiceException("不能对该状态的订单进行付款操作");
+		}
+		Gson gson = new Gson();
+		RequestHandler reqHandler = new RequestHandler(request, response);
+		
+		String noncestr = Sha1Util.getNonceStr();//生成随机字符串
+		String timestamp = Sha1Util.getTimeStamp();//生成1970年到现在的秒数.
+		//state 可以传递你的订单号.然后根据订单号 查询付款金额.我就不详细写了.
+		                                 
+		String out_trade_no = order.getId();//订单号
+		String order_price = String.valueOf((int) (order.getAmount() * 100));//订单金额
+		//微信金额 以分为单位.这是第二坑.如果不注意.页面的报错.你基本看不出来.因为他提示系统升级,正在维护.扯淡.....
+		String product_name = out_trade_no;//订单名称
+		
+		String prepayId = order.getThirdOrderId();
+		if(null==prepayId){
+			String openid = order.getUser().getWechatUserId();
+			 //初始化     RequestHandler  类可以在微信的文档中找到.还有相关工具类    
+			reqHandler.init();
+			reqHandler.init(GzhConfig.APPID, GzhConfig.APPSECRET, GzhConfig.KEY, "");
+			//执行统一下单接口 获得预支付id
+			reqHandler.setParameter("appid",GzhConfig.APPID);
+			reqHandler.setParameter("mch_id", GzhConfig.MCHID);                //商户号
+			reqHandler.setParameter("nonce_str", noncestr);            //随机字符串
+			reqHandler.setParameter("body", product_name);                        //商品描述(必填.如果不填.也会提示系统升级.正在维护我艹.)
+			reqHandler.setParameter("out_trade_no", out_trade_no);        //商家订单号
+			reqHandler.setParameter("total_fee", order_price);                    //商品金额,以分为单位
+			reqHandler.setParameter("spbill_create_ip",request.getRemoteAddr());   //用户的公网ip  IpAddressUtil.getIpAddr(request)
+			//下面的notify_url是用户支付成功后为微信调用的action  异步回调.
+			reqHandler.setParameter("notify_url", GzhConfig.NOTIFY_URL);
+			reqHandler.setParameter("trade_type", "JSAPI");
+			//------------需要进行用户授权获取用户openid-------------
+			reqHandler.setParameter("openid", openid);   //这个必填.
+			//这里只是在组装数据.还没到执行到统一下单接口.因为统一下单接口的数据传递格式是xml的.所以才需要组装.
+			String requestUrl = reqHandler.getRequestURL();
+			                                //requestUrl 例子:
+			 /*
+			<xml><appid>wx2421b1c4370ec43b</appid><attach>支付测试</attach><body>JSAPI支付测试</body><mch_id>10000100</mch_id><nonce_str>1add1a30ac87aa2db72f57a2375d8fec</nonce_str><notify_url>http://wxpay.weixin.qq.com/pub_v2/pay/notify.v2.php</notify_url><openid>oUpF8uMuAJO_M2pxb1Q9zNjWeS6o</openid><out_trade_no>1415659990</out_trade_no><spbill_create_ip>14.23.150.211</spbill_create_ip><total_fee>1</total_fee><trade_type>JSAPI</trade_type><sign>0CB01533B8C1EF103065174F50BCA001</sign></xml>
+			*/
+			                                 
+			System.out.println("requestUrl==================="+requestUrl);
+			//统一下单接口提交  xml格式
+			URL orderUrl = new URL("https://api.mch.weixin.qq.com/pay/unifiedorder");
+			HttpURLConnection conn = (HttpURLConnection) orderUrl.openConnection();
+			conn.setConnectTimeout(30000); // 设置连接主机超时（单位：毫秒)
+			conn.setReadTimeout(30000); // 设置从主机读取数据超时（单位：毫秒)
+			conn.setDoOutput(true); // post请求参数要放在http正文内，顾设置成true，默认是false
+			conn.setDoInput(true); // 设置是否从httpUrlConnection读入，默认情况下是true
+			conn.setUseCaches(false); // Post 请求不能使用缓存
+			// 设定传送的内容类型是可序列化的java对象(如果不设此项,在传送序列化对象时,当WEB服务默认的不是这种类型时可能抛java.io.EOFException)
+			conn.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+			conn.setRequestMethod("POST");// 设定请求的方法为"POST"，默认是GET
+			conn.setRequestProperty("Content-Length",requestUrl.length()+"");
+			String encode = "utf-8";
+			OutputStreamWriter os = new OutputStreamWriter(conn.getOutputStream(), encode);
+			os.write(requestUrl.toString());
+			os.flush();
+			os.close();
+			String result = getOut(conn);
+			System.out.println("result=========返回的xml============="+result);
+			Map<String, String> orderMap = XMLUtil.doXMLParse(result);
+			System.out.println("orderMap==========================="+orderMap);
+			//得到的预支付id
+			if(!orderMap.containsKey("prepay_id")){
+				throw new ServiceException("微信交易创建失败!");
+			}
+			prepayId = orderMap.get("prepay_id");
+			order.setThirdOrderId(prepayId);
+			orderService.update(order);
+		}
+		SortedMap<String,String> params = new TreeMap<String,String>();
+		params.put("appId", GzhConfig.APPID);
+		params.put("timeStamp",timestamp);
+		params.put("nonceStr", noncestr);
+		params.put("package", "prepay_id="+prepayId);
+		params.put("signType", "MD5");
+		         
+		//生成支付签名,这个签名 给 微信支付的调用使用
+		String paySign =  reqHandler.createSign(params);        
+		request.setAttribute("paySign", paySign);
+		request.setAttribute("appId", GzhConfig.APPID);
+		request.setAttribute("timeStamp", timestamp);        //时间戳
+		request.setAttribute("nonceStr", noncestr);            //随机字符串
+		request.setAttribute("signType", "MD5");        //加密格式
+		request.setAttribute("out_trade_no", out_trade_no);          //订单号
+		request.setAttribute("packageValue", "prepay_id="+prepayId);//预支付id ,就这样的格式.
+		
+		//生成js api签名
+		String url = "http://www.dawjxlzx.com/dawj-server/wechat/payRequest.jsp";
+		String ticket = wechatService.getJsapiTicket();
+		String signature = WechatJsapiSdkSignUtil.sign(ticket, url).get("signature");
+		request.setAttribute("signature", signature);
+	}catch(Exception e){
+		e.printStackTrace();
+		out.print("<script>alert('"+e.getMessage()+"');window.history.go(-1);</script>");
+	}
 %>
 
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>

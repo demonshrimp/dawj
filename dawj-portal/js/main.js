@@ -5,7 +5,7 @@ var App = {
 (function ($, App) {
     "use strict";
 
-    App.Constants.API_BASE = "http://www.dawjxlzx.com/dawj-server/api/usr";
+    App.Constants.API_BASE = "http://127.0.0.1:8080/dawj-server/api/usr";
 
     App.Constants.KEY_CURRENT_USER = "_ASDdawjuu";
 
@@ -26,6 +26,9 @@ var App = {
                 window.sessionStorage.removeItem(App.Constants.KEY_CURRENT_USER);
                 window.location.reload();
             });
+            if (App.Utils.BrowserUtil.isWechat()) {
+                $('#btnLogoff').hide();
+            }
         } else {
             var code = App.Utils.UrlUtil.getUrlParameter('code');
             if (code) {
@@ -86,7 +89,7 @@ var App = {
                 this.traverseTree(tree[i][params.childrenKey], handle, (level + 1), params);
             }
         }
-    }
+    };
 
     App.Utils.ObjectUtil = {
         getValue: function (data, key) {
@@ -136,7 +139,7 @@ var App = {
                 data[k] = value;
             }
         }
-    }
+    };
 
     App.Utils.FormUtil = {
         toJson: function (form) {
@@ -196,6 +199,7 @@ var App = {
             return null;
         }
     };
+
     App.Utils.StringUtil = {
         md5: function (string) {
             return md5(string);
@@ -212,7 +216,8 @@ var App = {
             var uuid = s.join("");
             return uuid;
         }
-    }
+    };
+
     App.Utils.BrowserUtil = {
         isMT: function () {
             var userAgentInfo = navigator.userAgent;
@@ -236,7 +241,8 @@ var App = {
                 return false;
             }
         }
-    }
+    };
+
     function md5(string) {
         function md5_RotateLeft(lValue, iShiftBits) {
             return (lValue << iShiftBits) | (lValue >>> (32 - iShiftBits));

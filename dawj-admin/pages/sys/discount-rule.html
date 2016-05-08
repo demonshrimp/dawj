@@ -1,0 +1,59 @@
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">订单积分减免优惠规则信息</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <form role="form" id="formDiscountRule" action="javascript:void(0);">
+            <div class="form-group">
+                <label>减免条件金额</label>
+                <input name="conditionAmount" type="number" class="form-control" placeholder="请输入减免条件金额 ...">
+            </div>
+            <div class="form-group">
+                <label>减免金额</label>
+                <input name="discountAmount" type="number" class="form-control" placeholder="请输入减免金额 ...">
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+                <a type="button" href="javascript:history.go(-1);" class="btn btn-default hidden">返回</a>
+                <button type="submit" class="btn btn-info pull-right">保存</button>
+            </div>
+        </form>
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- page script -->
+<script>
+    $(function () {
+        var discountRuleId = $.getUrlVar('id');
+        //if siteId!=null update else new
+        if (discountRuleId) {
+            $.get(App.Constants.API_BASE + '/discount-rule/' + discountRuleId, function (result) {
+                if (!result.header.success) {
+                    alert(result.header.message);
+                    return;
+                }
+                App.Utils.FormUtil.setData('#formDiscountRule', result.body);
+            });
+        }
+
+
+        $('#formDiscountRule').submit(function () {
+            var discountRule = App.Utils.FormUtil.toJson(this);
+            discountRule.id = discountRuleId;
+            $.ajax({
+                url: App.Constants.API_BASE + '/discount-rule/' + (discountRuleId ? discountRuleId : ''),
+                contentType: "application/json",
+                method: discountRuleId ? 'PUT' : 'POST',
+                data: JSON.stringify(discountRule),
+                dataType: 'json',
+                success: function (result) {
+                    alert(result.header.message);
+                    if (result.header.success) {
+                        //App.loadPage('pages/sys/discount-rule-list.html');
+                    }
+                }
+            });
+        });
+    });
+</script>

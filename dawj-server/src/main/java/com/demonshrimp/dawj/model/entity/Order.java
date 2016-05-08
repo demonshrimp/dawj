@@ -20,9 +20,12 @@ public class Order extends BaseSiteEntity {
 	private User user;
 	private Counselor counselor;
 	private CounselingType counselingType;
+	private DiscountRule discountRule;
 	private String consultingContent;
 	private Integer consultingDuration;
-	private Double amount;
+	private Double totalAmount; // 订单总金额
+	private Integer discountAmount; // 订单减免金额
+	private Double amount; // 订单实付金额
 	private String contactName;
 	private String contactMobile;
 	private String contactAddress;
@@ -71,6 +74,16 @@ public class Order extends BaseSiteEntity {
 		this.counselingType = counselingType;
 	}
 
+	@ManyToOne(cascade = CascadeType.REFRESH)
+	@JoinColumn(name = "discount_rule_id", nullable = false)
+	public DiscountRule getDiscountRule() {
+		return discountRule;
+	}
+
+	public void setDiscountRule(DiscountRule discountRule) {
+		this.discountRule = discountRule;
+	}
+
 	@Column(name = "consulting_content", nullable = false)
 	public String getConsultingContent() {
 		return consultingContent;
@@ -87,6 +100,24 @@ public class Order extends BaseSiteEntity {
 
 	public void setConsultingDuration(Integer consultingDuration) {
 		this.consultingDuration = consultingDuration;
+	}
+
+	@Column(name = "total_amount", scale = 2, nullable = false)
+	public Double getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(Double totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	@Column(name = "discount_amount")
+	public Integer getDiscountAmount() {
+		return discountAmount;
+	}
+
+	public void setDiscountAmount(Integer discountAmount) {
+		this.discountAmount = discountAmount;
 	}
 
 	@Column(nullable = false, scale = 2)
@@ -162,7 +193,7 @@ public class Order extends BaseSiteEntity {
 	public void setFulfillmentTime(Date fulfillmentTime) {
 		this.fulfillmentTime = fulfillmentTime;
 	}
-	
+
 	@Column(name = "refund_apply_time", length = 19)
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date getRefundApplyTime() {
@@ -172,7 +203,7 @@ public class Order extends BaseSiteEntity {
 	public void setRefundApplyTime(Date refundApplyTime) {
 		this.refundApplyTime = refundApplyTime;
 	}
-	
+
 	@Column(name = "close_time", length = 19)
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date getCloseTime() {

@@ -77,7 +77,7 @@
                 </ul>
                 <p id="unLoginPanel" class="hidden">欢迎，
                     <a id="userName" href="user-center.html">用户</a>　
-                    <a href="user-center.html">[个人中心]</a><a href="#login.html">[注销]</a>
+                    <a href="user-center.html">[个人中心]</a><a id="btnLogoff" href="#login.html">[注销]</a>
                 </p>
             </div>
             <div class="header-right1">
@@ -145,9 +145,24 @@
                 <div class="register-top-grid">
                     <h3>金额</h3>
                     <div class="wow fadeInLeft form-group" data-wow-delay="0.4s">
-                        <span>总额（￥）<label>*</label></span>
+                        <span>总额<label>（￥）</label></span>
+                        <input name="totalAmount" readonly type="text" value="0.00">
+                    </div>
+                    <div class="wow fadeInLeft form-group" data-wow-delay="0.4s">
+                        <span>积分减免<label>*</label></span>
+                        <select name="discountRule.id">
+                            <option value="">请选择减免规则...</option>
+                        </select>
+                    </div>
+                    <div id="wrapperDiscountAmount" class="wow fadeInLeft form-group hidden" data-wow-delay="0.4s">
+                        <span>使用抵扣金额<label>(当前剩余：<label id="points">0</label>)</label></span>
+                        <input name="discountAmount" type="number" value="0" min="0">
+                    </div>
+                    <div class="wow fadeInLeft form-group" data-wow-delay="0.4s">
+                        <span>实际金额<label>（￥）</label></span>
                         <input name="amount" readonly type="text" value="0.00">
                     </div>
+
                 </div>
             </form>
             <div class="clearfix"></div>
@@ -386,11 +401,13 @@
             }
         });
 
+
         var user = App.getCurrentLoginUser(true);
         form.find('[name="contactName"]').val(user.name);
         form.find('[name="contactMobile"]').val(user.mobile);
         form.find('[name="contactAddress"]').val(user.address);
         form.find('[name="scheduledDate"]').val(new Date().Format('yyyy-MM-dd'));
+        $('#points').text(user.points);
 
 
         //init evens
@@ -409,6 +426,8 @@
                     success: function (result) {
                         alert(result.header.message);
                         if (result.header.success) {
+                            user = App.getCurrentLoginUser(true);
+                            user.points = user.points - order.discountAmount;
                             $('#hiddenOrderId').val(result.body);
                             $('#myModal').modal({keyboard: false});
                         }
@@ -418,11 +437,64 @@
         });
 
         form.find('[name="consultingDuration"]').change(function () {
-            var amount = counselor.fees * $(this).val() + '';
-            if (amount.indexOf('.') < 0) {
-                amount += '.00';
+            var number = counselor.fees * $(this).val();
+            var totalAmount = number + '';
+            if (totalAmount.indexOf('.') < 0) {
+                totalAmount += '.00';
             }
-            form.find('[name="amount"]').val(amount);
+            form.find('[name="totalAmount"]').val(totalAmount);
+            $.get(App.Constants.API_BASE + '/discount-rule/list', function (result) {
+                if (result.header.success) {
+                    var discountRoles = result.body;
+                    form.find('[name="consultorName"]').val(counselor.name);
+                    var selectType = form.find('[name="discountRule.id"]');
+                    var usabilityRules = []
+                    for (var i = 0; i < discountRoles.length; i++) {
+                        var rule = discountRoles[i];
+                        if (number >= rule.conditionAmount) {
+                            usabilityRules.push(rule);
+                        }
+                    }
+                    selectType.empty();
+                    if (usabilityRules.length > 0) {
+                        selectType.append('<option value="">请选择减免规则...</option>');
+                        var max;
+                        for (var i = 0; i < usabilityRules.length; i++) {
+                            var rule = usabilityRules[i];
+                            var text = '满' + rule.conditionAmount + '最高可用抵扣金额减' + rule.discountAmount;
+                            selectType.append('<option value="' + rule.id + '" data-amount="' + rule.discountAmount + '">' + text + '</option>');
+                            if (!max || rule.discountAmount > max.discountAmount) {
+                                max = rule;
+                            }
+                        }
+                        selectType.val(max.id);
+                    } else {
+                        selectType.append('<option value="">没有可用的优惠</option>');
+                    }
+                    selectType.change();
+                }
+            });
+        });
+
+        form.find('[name="discountRule.id"]').change(function () {
+            var inputDiscountAmount = $(form.find('[name="discountAmount"]')[0]);
+            if ($(this).val() != '') {
+                $('#wrapperDiscountAmount').removeClass('hidden');
+                var discountAmount = $(this).find('option:selected').data('amount');
+                var max = user.points > discountAmount ? discountAmount : user.points;
+                inputDiscountAmount.attr('max', max);
+                inputDiscountAmount.val(max);
+            } else {
+                $('#wrapperDiscountAmount').addClass('hidden');
+                inputDiscountAmount.val(0);
+            }
+            inputDiscountAmount.change();
+        });
+
+        form.find('[name="discountAmount"]').change(function () {
+            var totalAmount = form.find('[name="totalAmount"]').val();
+            var discountAmount = $(this).val();
+            form.find('[name="amount"]').val(totalAmount - discountAmount);
         });
 
 
@@ -442,7 +514,7 @@
                     break;
                 case 'wechat' :
                     if (App.Utils.BrowserUtil.isWechat()) {
-                        var paymentUrl =  'http://www.dawjxlzx.com/dawj-server/wechat/payRequest.jsp?orderId=' + payment.orderId;
+                        var paymentUrl = 'http://www.dawjxlzx.com/dawj-server/wechat/payRequest.jsp?orderId=' + payment.orderId;
                         window.location.href = paymentUrl;
                     } else {
                         qrcodeWechat(payment.orderId);

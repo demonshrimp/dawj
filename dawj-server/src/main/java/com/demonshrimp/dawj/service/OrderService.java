@@ -1,7 +1,9 @@
 package com.demonshrimp.dawj.service;
 
+import java.util.List;
 import java.util.Map;
 
+import com.demonshrimp.dawj.model.entity.DiscountRule;
 import com.demonshrimp.dawj.model.entity.Order;
 
 public interface OrderService extends BaseService<Order,String>{
@@ -95,5 +97,20 @@ public interface OrderService extends BaseService<Order,String>{
 	 * @return
 	 */
 	Map<String, String> getPaySignature(String orderId);
+
+
+	List<DiscountRule> discountRuleList();
+
+
+	void addDiscountRule(DiscountRule discountRule);
+
+
+	void updateDiscountRule(DiscountRule discountRule);
+
+
+	void delDiscountRule(String discountRuleId);
+
+
+	public Object getDiscountRule(String discountRuleId);
 
 }

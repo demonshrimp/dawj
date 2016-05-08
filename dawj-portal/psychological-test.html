@@ -94,7 +94,7 @@
                 </ul>
                 <p id="unLoginPanel" class="hidden">欢迎，
                     <a id="userName" href="user-center.html">用户</a>　
-                    <a href="user-center.html">[个人中心]</a><a href="#login.html">[注销]</a>
+                    <a href="user-center.html">[个人中心]</a><a id="btnLogoff" href="#login.html">[注销]</a>
                 </p>
             </div>
             <div class="header-right1">
@@ -148,9 +148,9 @@
                 </div>
                 <nav>
                     <ul class="pager">
+                        <li><a id="btnPrevious" href="#">上一题</a></li>
+                        <li><a id="btnNext" href="#">下一题</a></li>
                         <li><a id="btnSubmit" href="javascript:void(0);">提交</a></li>
-                        <!--<li><a href="#">上一题</a></li>
-                        <li><a href="#">下一题</a></li>-->
                     </ul>
                 </nav>
             </form>
@@ -239,7 +239,7 @@
             for (var i = 0; i < subjects.length; i++) {
                 var subject = subjects[i];
                 var num = i + 1;
-                list.append('<div class="question">'
+                list.append('<div class="question hidden" data-index="' + i + '">'
                         + '     <h4>[' + num + ']' + subject.Q + '</h4>'
                         + '     <div class="radio">'
                         + '         <label>[A]</label>'
@@ -271,6 +271,15 @@
                         + '    </div>'
                         + ' </div>');
             }
+            $('.question').removeClass('hidden');
+            gotoQuestion(0);
+        });
+
+        $('#questions').on('click', '.radio', function () {
+            var index = $(this).parent('.question').data('index');
+            if (index < $('.question').length - 1) {
+                gotoQuestion(++index);
+            }
         });
 
         $('#btnSubmit').click(function () {
@@ -281,7 +290,7 @@
                 var value = answer['subject' + i];
                 if (!value) {
                     alert("第" + i + '道题尚未作答');
-                    window.scrollTo(0, (i * 165 + 55));
+                    gotoQuestion(--i);
                     return;
                 }
                 if (i <= 15) {
@@ -311,6 +320,28 @@
             }
         });
 
+        function gotoQuestion(index) {
+            $('.question').hide();
+            $('.question:eq(' + index + ')').show();
+        }
+
+        $('#btnPrevious').click(function () {
+            var index = $('.question:visible').data('index');
+            if (index < 1) {
+                alert('已经是第一题了');
+                return;
+            }
+            gotoQuestion(--index);
+        });
+
+        $('#btnNext').click(function () {
+            var index = $('.question:visible').data('index');
+            if (index >= $('.question').length - 1) {
+                alert('已经是最后一题了');
+                return;
+            }
+            gotoQuestion(++index);
+        });
 
         if (App.Utils.BrowserUtil.isWechat()) {
             var user = App.getCurrentLoginUser();

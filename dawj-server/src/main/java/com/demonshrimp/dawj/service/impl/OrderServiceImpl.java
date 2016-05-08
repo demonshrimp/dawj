@@ -25,11 +25,17 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.demonshrimp.dawj.exception.ServiceException;
 import com.demonshrimp.dawj.model.dao.BaseDao;
+import com.demonshrimp.dawj.model.dao.CounselorDao;
+import com.demonshrimp.dawj.model.dao.DiscountRuleDao;
 import com.demonshrimp.dawj.model.dao.OrderDao;
+import com.demonshrimp.dawj.model.dao.UserDao;
+import com.demonshrimp.dawj.model.entity.Counselor;
+import com.demonshrimp.dawj.model.entity.DiscountRule;
 import com.demonshrimp.dawj.model.entity.Order;
 import com.demonshrimp.dawj.model.entity.Order.PaymentPlatform;
 import com.demonshrimp.dawj.model.entity.Order.Status;
 import com.demonshrimp.dawj.model.entity.Site;
+import com.demonshrimp.dawj.model.entity.User;
 import com.demonshrimp.dawj.service.OrderService;
 
 import pers.ksy.common.MD5Util;
@@ -41,6 +47,12 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, String> implements 
 	@Autowired
 	private OrderDao orderDao;
 	@Autowired
+	private DiscountRuleDao discountRuleDao;
+	@Autowired
+	private CounselorDao counselorDao;
+	@Autowired
+	private UserDao userDao;
+	@Autowired
 	private WechatService wechatService;
 
 	/*
@@ -49,9 +61,22 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, String> implements 
 
 	@Override
 	public Order addOrder(Order order, String siteId) {
+		User user = order.getUser();
 		order.setSite(new Site(siteId));
 		order.setStatus(Status.NEW);
-		return save(order);
+		Counselor counselor = counselorDao.load(order.getCounselor().getId());
+		order.setTotalAmount(counselor.getFees() * order.getConsultingDuration());
+		DiscountRule rule = discountRuleDao.load(order.getDiscountRule().getId());
+		if (order.getDiscountAmount() > rule.getDiscountAmount()) {
+			throw new ServiceException("减免金额异常，请稍后重试");
+		}
+		if (order.getDiscountAmount().doubleValue() > user.getPoints()) {
+			throw new ServiceException("用户减免金额不足，请重新登录后下单重试");
+		}
+		save(order);
+		user.setPoints(user.getPoints() - order.getDiscountAmount());
+		userDao.update(user);
+		return order;
 	}
 
 	@Override
@@ -190,9 +215,11 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, String> implements 
 				throw new ServiceException(
 						"微信交易创建失败:" + return_code + "," + responseRoot.element("return_msg").getText());
 			}
+			String prepayId = responseRoot.element("prepay_id").getText();
+			order.setThirdOrderId(prepayId);
+			orderDao.update(order);
 			return responseRoot.element("code_url").getText();
 		} catch (IOException | DocumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new ServiceException("微信交易创建失败:" + e.getMessage());
 		}
@@ -266,6 +293,36 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, String> implements 
 			e.printStackTrace();
 			throw new ServiceException("微信交易创建失败:" + e.getMessage());
 		}
+	}
+
+	@Override
+	public List<DiscountRule> discountRuleList() {
+		return discountRuleDao.findAll();
+	}
+
+	@Override
+	public void addDiscountRule(DiscountRule discountRule) {
+		discountRule.setCreateTime(new Date());
+		discountRuleDao.save(discountRule);
+	}
+
+	@Override
+	public void updateDiscountRule(DiscountRule discountRule) {
+		DiscountRule rule = discountRuleDao.load(discountRule.getId());
+		rule.setConditionAmount(discountRule.getConditionAmount());
+		rule.setDiscountAmount(discountRule.getDiscountAmount());
+		rule.setLastModifyTime(new Date());
+		discountRuleDao.update(rule);
+	}
+
+	@Override
+	public Object getDiscountRule(String discountRuleId) {
+		return discountRuleDao.get(discountRuleId);
+	}
+
+	@Override
+	public void delDiscountRule(String discountRuleId) {
+		discountRuleDao.deleteById(discountRuleId);
 	}
 
 	/*
