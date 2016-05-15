@@ -14,12 +14,17 @@
     <link href='http://fonts.useso.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
     <link href="css/animate.min.css" rel="stylesheet"/>
     <script src="js/vendor/jquery.min.js"></script>
+    <script src="js/vendor/jquery.scrollTo.min.js"></script>
     <script src="js/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
     <link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen"/>
     <style>
         .question {
             margin: 40px 10px;
+        }
+
+        .clickable {
+            cursor: pointer;;
         }
 
         .blog-content {
@@ -108,8 +113,13 @@
 <!-- 404 -->
 <div class="content-top">
     <div class="container">
+        <select id="selectTestType" style="float: right;z-index: 999">
+            <option value="1">人格测试</option>
+            <option value="2">高考报考指导</option>
+        </select>
+        <div class="clear"></div>
         <div class="portfolio-top animated slideInDown">
-            <h3>心理评测</h3>
+            <h3 id="title">心理评测</h3>
         </div>
         <div class="blog-content">
             <form id="form">
@@ -148,8 +158,8 @@
                 </div>
                 <nav>
                     <ul class="pager">
-                        <li><a id="btnPrevious" href="#">上一题</a></li>
-                        <li><a id="btnNext" href="#">下一题</a></li>
+                        <li><a class="hidden" id="btnPrevious" href="#">上一题</a></li>
+                        <li><a class="hidden" id="btnNext" href="#">下一题</a></li>
                         <li><a id="btnSubmit" href="javascript:void(0);">提交</a></li>
                     </ul>
                 </nav>
@@ -231,73 +241,63 @@
 
 <script>
     $(function () {
+        var qindex = App.Utils.UrlUtil.getUrlParameter('qindex');
+        if (!qindex) {
+            qindex = 1;
+        }
+        var questionData;
         var subjects = [];
-        $.get('data/questions/q1/subjects.json', function (data) {
-            subjects = data;
+        $.get('data/questions/q' + qindex + '/question.json', function (data) {
+            questionData = data;
+            subjects = data.subjects;
+            if (App.Utils.BrowserUtil.isWechat()) {
+                var user = App.getCurrentLoginUser();
+                if (user.points < data.points) {
+                    alert('测试需金额：' + data.points + ',当前余额不足:' + user.points + ';通过分享咨询文章到朋友圈可以获得随机赠送金额哦(打开菜单心理案例->人选一篇文章->分享到朋友圈).');
+                    $('#form').hide();
+                }
+            }
+
+            $('#title').text(data.title);
+
             var list = $('#questions');
             list.empty();
             for (var i = 0; i < subjects.length; i++) {
                 var subject = subjects[i];
-                var num = i + 1;
-                list.append('<div class="question hidden" data-index="' + i + '">'
-                        + '     <h4>[' + num + ']' + subject.Q + '</h4>'
-                        + '     <div class="radio">'
-                        + '         <label>[A]</label>'
-                        + '          <label>'
-                        + '             <input type="radio" name="subject' + num + '" value="0">'
-                        + '                   ' + subject.A + ''
-                        + '            </label>'
-                        + '       </div>'
-                        + '      <div class="radio">'
-                        + '          <label>[B]</label>'
-                        + '           <label>'
-                        + '              <input type="radio" name="subject' + num + '" value="1">'
-                        + '                   ' + subject.B + ''
-                        + '          </label>'
-                        + '     </div>'
-                        + '      <div class="radio">'
-                        + '          <label>[C]</label>'
-                        + '          <label>'
-                        + '              <input type="radio" name="subject' + num + '" value="2">'
-                        + '                   ' + subject.C + ''
-                        + '        </label>'
-                        + '    </div>'
-                        + '    <div class="radio">'
-                        + '        <label>[D]</label>'
-                        + '        <label>'
-                        + '            <input type="radio" name="subject' + num + '" value="3">'
-                        + '                   ' + subject.D + ''
-                        + '        </label>'
-                        + '    </div>'
-                        + ' </div>');
+                list.append(buildItem(subject, i, data.mode));
             }
             $('.question').removeClass('hidden');
-            gotoQuestion(0);
-        });
-
-        $('#questions').on('click', '.radio', function () {
-            var index = $(this).parent('.question').data('index');
-            if (index < $('.question').length - 1) {
-                gotoQuestion(++index);
+            if (data.paging) {
+                gotoQuestion(0);
+                $('#btnPrevious').removeClass('hidden');
+                $('#btnNext').removeClass('hidden');
+                $('#questions').on('click', '.radio', function () {
+                    var index = $(this).parent('.question').data('index');
+                    if (index < $('.question').length - 1) {
+                        gotoQuestion(++index);
+                    }
+                });
             }
         });
-
+        $('#selectTestType').val(qindex);
+        // init events
         $('#btnSubmit').click(function () {
             var answer = App.Utils.FormUtil.toJson('#form');
+            var answeredLength = Object.getOwnPropertyNames(answer).length;
+            if (answeredLength == 0) {
+                alert('请先作答！');
+                return;
+            }
             var result = [0, 0, 0, 0];
-            var map = ['red', 'blue', 'yellow', 'green'];
+            var map = questionData.map;
             for (var i = 1; i <= subjects.length; i++) {
                 var value = answer['subject' + i];
-                if (!value) {
+                if (questionData.required && !value) {
                     alert("第" + i + '道题尚未作答');
                     gotoQuestion(--i);
                     return;
                 }
-                if (i <= 15) {
-                    result[value] += 1;
-                } else {
-                    result[3 - value] += 1;
-                }
+                result[value] += 1;
             }
             var max = result[0];
             for (var i = 1; i < result.length; i++) {
@@ -313,17 +313,16 @@
                     var user = App.getCurrentLoginUser();
                     user.points = user.points - 10;
                     App.setCurrentLoginSite(user);
-                    window.location.href = 'psychological-test-result.html?result=' + map[index];
+                    window.location.href = 'psychological-test-result.html?qindex=' + qindex + '&result=' + map[index];
                 });
             } else {
-                window.location.href = 'psychological-test-result.html?result=' + map[index];
+                window.location.href = 'psychological-test-result.html?qindex=' + qindex + '&result=' + map[index];
             }
         });
 
-        function gotoQuestion(index) {
-            $('.question').hide();
-            $('.question:eq(' + index + ')').show();
-        }
+        $('#selectTestType').change(function () {
+            window.location.href = 'psychological-test.html?qindex=' + $(this).val();
+        });
 
         $('#btnPrevious').click(function () {
             var index = $('.question:visible').data('index');
@@ -343,11 +342,86 @@
             gotoQuestion(++index);
         });
 
-        if (App.Utils.BrowserUtil.isWechat()) {
-            var user = App.getCurrentLoginUser();
-            if (user.points < 10) {
-                alert('当前余额不足:' + user.points + ';通过分享咨询文章到朋友圈可以获得随机赠送金额哦(打开菜单心理案例->人选一篇文章->分享到朋友圈).');
-                $('#form').hide();
+        $('#questions').on('click', '.clickable h4', function () {
+            var checkbox = $(this).parent().find('input[type="checkbox"]:eq(0)')[0];
+            checkbox.checked = !checkbox.checked;
+        });
+
+        //state functions
+        function buildItem(subject, index, mode) {
+            switch (mode) {
+                case 'SingleChoice':
+                    return buildSingleChoiceItem(subject, index);
+                case 'TrueOrFalse':
+                    return buildTrueOrFalseItem(subject, index);
+            }
+        }
+
+        function buildSingleChoiceItem(subject, i) {
+            var num = i + 1;
+            var resultA = subject.resultA;
+            var resultB = subject.resultB;
+            var resultC = subject.resultC;
+            var resultD = subject.resultD;
+            if (resultA) {
+                resultA = 0;
+            }
+            if (resultB) {
+                resultA = 1;
+            }
+            if (resultC) {
+                resultA = 2;
+            }
+            if (resultD) {
+                resultA = 3;
+            }
+            return '<div class="question hidden" data-index="' + i + '">'
+                    + '     <h4>[' + num + ']' + subject.Q + '</h4>'
+                    + '     <div class="radio">'
+                    + '         <label>[A]</label>'
+                    + '          <label>'
+                    + '             <input type="radio" name="subject' + num + '" value="' + resultA + '">'
+                    + '                   ' + subject.A + ''
+                    + '            </label>'
+                    + '       </div>'
+                    + '      <div class="radio">'
+                    + '          <label>[B]</label>'
+                    + '           <label>'
+                    + '              <input type="radio" name="subject' + num + '" value="' + resultB + '">'
+                    + '                   ' + subject.B + ''
+                    + '          </label>'
+                    + '     </div>'
+                    + '      <div class="radio">'
+                    + '          <label>[C]</label>'
+                    + '          <label>'
+                    + '              <input type="radio" name="subject' + num + '" value="' + resultC + '">'
+                    + '                   ' + subject.C + ''
+                    + '        </label>'
+                    + '    </div>'
+                    + '    <div class="radio">'
+                    + '        <label>[D]</label>'
+                    + '        <label>'
+                    + '            <input type="radio" name="subject' + num + '" value="' + resultD + '">'
+                    + '                   ' + subject.D + ''
+                    + '        </label>'
+                    + '    </div>'
+                    + ' </div>';
+        }
+
+        function buildTrueOrFalseItem(subject, i) {
+            var num = i + 1;
+            return '<div class="question hidden clickable" data-index="' + i + '">'
+                    + '     <input style="float: left;width:20px;height: 20px;margin: 0 5px;" type="checkbox" name="subject' + num + '" value="' + subject.result + '">'
+                    + '     <h4>[' + num + ']' + subject.Q + '</h4>'
+                    + ' </div>';
+        }
+
+        function gotoQuestion(index) {
+            if (questionData.paging) {
+                $('.question').hide();
+                $('.question:eq(' + index + ')').show();
+            } else {
+                $('body').scrollTo('.question:eq(' + index + ')', 500);
             }
         }
     });

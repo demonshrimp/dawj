@@ -155,6 +155,8 @@ public class CounselingServiceImpl extends BaseServiceImpl<Site, String> impleme
 		c.setAbout(counselor.getAbout());
 		c.setConsultingCase(counselor.getConsultingCase());
 		c.setImage(counselor.getImage());
+		c.setCertificated(counselor.getCertificated());
+		c.setFees(counselor.getFees());
 		c.setLastModifyTime(new Date());
 		c.setCounselingTypes(counselor.getCounselingTypes());
 		counselorDao.update(c);

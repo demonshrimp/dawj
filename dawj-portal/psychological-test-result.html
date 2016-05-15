@@ -16,7 +16,8 @@
     <link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen"/>
     <style>
         .blog-content {
-            line-height: 30px;;
+            line-height: 30px;
+            padding-left: 50px;
         }
 
         .result-title {
@@ -39,6 +40,11 @@
             color: #99ff09;
         }
 
+        @media (max-width: 756px) {
+            .blog-content {
+                padding-left: 0px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -119,9 +125,9 @@
         <div class="portfolio-top animated slideInDown">
             <h3>评测结果</h3>
         </div>
-        <div class="blog-content" style="padding-left: 50px;">
+        <div class="blog-content">
             <h3 class="result-title">您的性格类型是：经典的<span id="color"></span>性格</h3>
-            <ul class="nav nav-tabs" role="tablist">
+            <ul class="nav nav-tabs" role="tablist" id="tabList">
                 <li role="presentation" class="active">
                     <a href="#result1" aria-controls="result1" role="tab" data-toggle="tab">概括</a>
                 </li>
@@ -151,7 +157,7 @@
                 </li>
             </ul>
             <!-- Tab panes -->
-            <div class="tab-content">
+            <div class="tab-content" id="tabContentList">
                 <div role="tabpanel" class="tab-pane in fade active" id="result1">
                     <div></div>
                 </div>
@@ -256,37 +262,35 @@
 <!-- footer-bottom -->
 <script>
     $(function () {
+        var qindex = App.Utils.UrlUtil.getUrlParameter('qindex');
         var result = App.Utils.UrlUtil.getUrlParameter('result');
-        var map = {
-            red: {
-                n: 1,
-                text: '红色'
-            },
-            blue: {
-                n: 2,
-                text: '蓝色'
-            },
-            yellow: {
-                n: 3,
-                text: '黄色'
-            },
-            green: {
-                n: 4,
-                text: '绿色'
+        $.get('data/questions/q' + qindex + '/result.json', function (data) {
+            var map = data.resultMap;
+            var type = map[result];
+            $('.result-title').addClass(result);
+            $('#color').text(type.text);
+            var tabList = $('#tabList');
+            var tabContentList = $('#tabContentList');
+
+            tabList.empty();
+            tabContentList.empty();
+            for (var i = 1; i <= data.items.length; i++) {
+                var tabId = 'result' + i;
+                var active = i == 1 ? 'active' : '';
+                tabList.append('<li role="presentation" class="' + active + '">'
+                        + '     <a href="#' + tabId + '" aria-controls="' + tabId + '" role="tab" data-toggle="tab">' + data.items[i - 1] + '</a>'
+                        + ' </li>')
+
+                tabContentList.append('<div role="tabpanel" class="tab-pane in fade ' + active + '" id="' + tabId + '"><div></div></div>')
+                var n = type.n;
+                (function (i) {
+                    $.get('data/questions/q' + qindex + '/' + result + '/' + n + i + '.txt', function (data) {
+                        data = replaceAll(data, '\n', '<br>');
+                        $('#result' + i + ' div').html(data);
+                    });
+                })(i);
             }
-        };
-        var color = map[result];
-        $('.result-title').addClass(result);
-        $('#color').text(color.text);
-        for (var i = 1; i <= 9; i++) {
-            var n = color.n;
-            (function (i) {
-                $.get('data/questions/q1/' + result + '/' + n + i + '.txt', function (data) {
-                    data = replaceAll(data, '\n', '<br>');
-                    $('#result' + i + ' div').html(data);
-                });
-            })(i);
-        }
+        });
 
 
         function replaceAll(str, sptr, sptr1) {

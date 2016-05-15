@@ -83,10 +83,7 @@
                     className: 'center',
                     render: function (data, type, full, meta) {
                         var order = full;
-                        var items = [{
-                            text: '查看',
-                            operation: 'view'
-                        }];
+                        var items = [];
                         if (order.status == 'NEW') {
                             items.push({
                                 text: '关闭',

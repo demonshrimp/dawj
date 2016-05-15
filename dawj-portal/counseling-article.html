@@ -105,6 +105,13 @@
             <div class="col-md-8 single-top">
                 <div class="col-md-12 single-title">
                     <h2 id="title"></h2>
+                    <div style="margin-bottom: 10px">
+                        <p style="text-align: left">
+                            <span class="createTime">2016-01-01</span>
+                            <a href="http://mp.weixin.qq.com/s?__biz=MzI2MDE1MjE5MQ==&mid=402330429&idx=1&sn=9d37b2db4e3b6f2a92b61ca3db36204e#rd" style="color:#269abc">大爱无疆</a>
+                        </p>
+                        <img class="img-responsive" src="images/dianjiguanzhu.gif" />
+                    </div>
                     <img id="image" class="img-responsive" alt="">
                     <p class="sin" id="description"></p>
                 </div>
@@ -112,7 +119,7 @@
                     <div id="content"></div>
                     <div class="sucss-bottom">
                         <ul>
-                            <li><i class="fa fa-calendar-check-o"></i><span id="createTime"></span></li>
+                            <li><i class="fa fa-calendar-check-o"></i><span class="createTime"></span></li>
                         </ul>
                     </div>
                     <nav>
@@ -365,7 +372,7 @@
             if (result.header.success) {
                 var article = result.body;
                 $('#image').attr('src', article.fullImage);
-                $('#createTime').text(article.createTime);
+                $('.createTime').text(article.createTime);
                 $('#visited').text(article.visited);
                 $('#title').text(article.title);
                 $('#description').text(article.description);
