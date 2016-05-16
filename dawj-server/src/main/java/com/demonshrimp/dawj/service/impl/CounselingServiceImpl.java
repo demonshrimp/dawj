@@ -18,6 +18,7 @@ import com.demonshrimp.dawj.model.entity.Counselor;
 import com.demonshrimp.dawj.model.entity.Site;
 import com.demonshrimp.dawj.service.CounselingService;
 
+import pers.ksy.common.StringUtil;
 import pers.ksy.common.model.Page;
 import pers.ksy.common.orm.Conditions;
 import pers.ksy.common.orm.QueryCondition;
@@ -51,7 +52,7 @@ public class CounselingServiceImpl extends BaseServiceImpl<Site, String> impleme
 	public CounselingType getCounselingType(String counselingTypeId) {
 		return counselingTypeDao.get(counselingTypeId);
 	}
-	
+
 	@Override
 	public CounselingType addCounselingType(CounselingType counselingType) {
 		counselingType.setCreateTime(new Date());
@@ -75,11 +76,10 @@ public class CounselingServiceImpl extends BaseServiceImpl<Site, String> impleme
 		counselingTypeDao.deleteById(counselingTypeId);
 	}
 
-
 	@Override
 	public CounselingArticle addCounselingArticle(CounselingArticle counselingArticle) {
 		counselingArticle.setCreateTime(new Date());
-		counselingArticle.setVisited((long)0);
+		counselingArticle.setVisited((long) 0);
 		counselingArticleDao.save(counselingArticle);
 		return counselingArticle;
 	}
@@ -102,11 +102,11 @@ public class CounselingServiceImpl extends BaseServiceImpl<Site, String> impleme
 	public void deleteCounselingArticle(String counselingArticleId) {
 		counselingArticleDao.deleteById(counselingArticleId);
 	}
-	
+
 	@Override
-	public void visitCounselingArticle(String counselingArticleId){
+	public void visitCounselingArticle(String counselingArticleId) {
 		CounselingArticle counselingArticle = counselingArticleDao.get(counselingArticleId);
-		counselingArticle.setVisited(counselingArticle.getVisited()+1);
+		counselingArticle.setVisited(counselingArticle.getVisited() + 1);
 		counselingArticleDao.update(counselingArticle);
 	}
 
@@ -117,21 +117,22 @@ public class CounselingServiceImpl extends BaseServiceImpl<Site, String> impleme
 		return counselingArticleDao.findByPage(qc, pageIndex, pageSize);
 	}
 
-	
 	@Override
 	public CounselingArticle getCounselingArticle(String counselingArticleId) {
 		return counselingArticleDao.get(counselingArticleId);
 	}
-	
+
 	@Override
-	public CounselingArticle[] findBeforeAndAfterArticle(String counselingArticleId){
+	public CounselingArticle[] findBeforeAndAfterArticle(String counselingArticleId) {
 		return counselingArticleDao.findBeforeAndAfter(counselingArticleId);
 	}
-	
+
 	@Override
 	public List<Counselor> counselorList(String siteId) {
 		QueryCondition qc = counselorDao.getQC();
-		qc.add(Conditions.eq("site.id", siteId));
+		if (StringUtil.notEmpty(siteId)) {
+			qc.add(Conditions.eq("site.id", siteId));
+		}
 		return counselorDao.listByQC(qc);
 	}
 
@@ -139,7 +140,7 @@ public class CounselingServiceImpl extends BaseServiceImpl<Site, String> impleme
 	public Counselor getCounselor(String counselorId) {
 		return counselorDao.get(counselorId);
 	}
-	
+
 	@Override
 	public Counselor addCounselor(Counselor counselor) {
 		counselor.setCreateTime(new Date());
@@ -173,5 +174,5 @@ public class CounselingServiceImpl extends BaseServiceImpl<Site, String> impleme
 		qc.eq("site.id", siteId);
 		return counselorDao.findByPage(qc, pageIndex, pageSize);
 	}
-	
+
 }

@@ -62,8 +62,8 @@
                     <li><a href="counselors.html">找咨询师 </a></li>
                     <li><a href="psychological-test.html">心理测评 </a></li>
                     <li><a href="counseling-articles.html">心理案例 </a></li>
-                    <li><a href="about.html">关于</a></li>
                     <li><a href="feedback.html">在线答疑</a></li>
+                    <li><a href="about.html">关于</a></li>
                     <div class="clearfix"></div>
                 </ul>
                 <!-- script-for-nav -->
@@ -104,7 +104,6 @@
         <div class="single">
             <div class="respon">
                 <div id="feedbacklist">
-
                 </div>
                 <div class="comment">
                     <h2>我要提问</h2>
@@ -279,7 +278,23 @@
             });
         }
 
+
         function buildItem(feedback) {
+            var wrapper = $('<a href="feedback-detail.html?id=' + feedback.id + '"></a>');
+            var block = $('<blockquote class="feedback-block">');
+            block.append('<p>' + feedback.question + '</p>');
+            if (feedback.answer) {
+                var name = '管理员';
+                if (feedback.counselor) {
+                    name = feedback.counselor.name;
+                }
+                block.append('<footer>本案例由心理咨询师<strong>' + name + '</strong> 提供解答</footer>');
+            }
+            wrapper.append(block);
+            return wrapper;
+        }
+
+        function buildItem_old(feedback) {
             var block = $('<div class="feedback-block">');
             block.append(buildline(feedback.name, feedback.question, feedback.createTime, 'strator'));
             if (feedback.answer) {
@@ -288,7 +303,8 @@
             return block;
         }
 
-        function buildline(name, content, time, cssClass) {
+
+        function buildline_old(name, content, time, cssClass) {
             if (!name) {
                 name = '游客';
             }

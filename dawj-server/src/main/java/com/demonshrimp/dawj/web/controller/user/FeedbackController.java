@@ -1,12 +1,14 @@
 package com.demonshrimp.dawj.web.controller.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.demonshrimp.dawj.model.entity.Counselor;
 import com.demonshrimp.dawj.model.entity.Feedback;
 import com.demonshrimp.dawj.service.FeedbackService;
 
@@ -23,7 +25,7 @@ public class FeedbackController extends BaseUserController {
 	private FeedbackService feedbackService;
 
 	@RequestMapping(path = "/page", method = RequestMethod.GET)
-	@SerializationFilter
+	@SerializationFilter(target = Counselor.class, exclusive = false, fields = { "id", "name" })
 	public Object page(@RequestParam(name = "pageIndex") int pageIndex, @RequestParam(name = "length") int pageSize) {
 		QueryCondition qc = new QueryConditionImpl(Feedback.class);
 		qc.addOrder(Order.desc("createTime"));
@@ -37,4 +39,9 @@ public class FeedbackController extends BaseUserController {
 		return Result.successResult("新增成功");
 	}
 
+	@RequestMapping(path = "/{id}", method = RequestMethod.GET)
+	@SerializationFilter(target = Counselor.class, exclusive = false, fields = { "id", "name" })
+	public Object get(@PathVariable String id) {
+		return Result.successResult(feedbackService.get(id), null);
+	}
 }

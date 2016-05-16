@@ -46,6 +46,12 @@
                         <label for="message-text" class="control-label">回复内容:</label>
                         <textarea class="form-control" name="answer" id="message-text"></textarea>
                     </div>
+                    <div class="form-group">
+                        <label for="selectCounselor" class="control-label">提供回答咨询师:</label>
+                        <select class="form-control" name="counselorId" id="selectCounselor">
+                            <option value="">请选择..</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">取消</button>
@@ -77,6 +83,8 @@
 <!-- page script -->
 <script>
     $(function () {
+
+        //init views
         App.Utils.DataTablesHelper.pipelineNoCache();
         var table = $('#tblFeedbackList').DataTable({
             ajax: $.fn.dataTable.pipelineNoCache({
@@ -111,6 +119,19 @@
             responsive: true
         });
 
+        //init datas
+        $.get(App.Constants.API_BASE + '/counselor/all-list', function (result) {
+            if (!result.header.success) {
+                alert(result.header.success);
+                return;
+            }
+            var list = $('#selectCounselor');
+            var counselors = result.body;
+            for (var i = 0; i < counselors.length; i++) {
+                $('#selectCounselor').append('<option value="' + counselors[i].id + '">' + counselors[i].name + '</option>');
+            }
+        });
+
         //init events
         $('#btnRefreshTable').click(function () {
             refreshTable()
@@ -129,7 +150,7 @@
             $.ajax({
                 url: App.Constants.API_BASE + '/feedback/' + feedback.id + '/answer',
                 method: 'PUT',
-                data: {answer: feedback.answer},
+                data: feedback,
                 dataType: 'json',
                 success: function (result) {
                     alert(result.header.message);

@@ -5,7 +5,7 @@ var App = {
 (function ($, App) {
     "use strict";
 
-    App.Constants.API_BASE = "http://www.dawjxlzx.com/dawj-server/api/usr";
+    App.Constants.API_BASE = "http://localhost:8080/dawj-server/api/usr";
 
     App.Constants.KEY_CURRENT_USER = "_ASDdawjuu";
 

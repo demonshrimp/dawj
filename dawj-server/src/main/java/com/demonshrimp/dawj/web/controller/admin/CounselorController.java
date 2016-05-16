@@ -24,8 +24,13 @@ public class CounselorController extends BaseAdminController {
 	@RequestMapping(path = "/list", method = RequestMethod.GET)
 	@SerializationFilter(target = Counselor.class, fields = { "site", "about" })
 	public Object list() {
-		QueryCondition qc = new QueryConditionImpl(Counselor.class);
 		return Result.successResult(counselingService.counselorList(getCurrentSite().getId()), null);
+	}
+
+	@RequestMapping(path = "/all-list", method = RequestMethod.GET)
+	@SerializationFilter(target = Counselor.class, fields = { "site", "about" })
+	public Object allList() {
+		return Result.successResult(counselingService.counselorList(null), null);
 	}
 
 	@RequestMapping(path = "/{counselorId}", method = RequestMethod.GET)

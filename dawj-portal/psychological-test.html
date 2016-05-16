@@ -78,8 +78,8 @@
                     <li><a href="counselors.html">找咨询师 </a></li>
                     <li><a href="psychological-test.html">心理测评 </a></li>
                     <li><a href="counseling-articles.html">心理案例 </a></li>
-                    <li><a href="about.html">关于</a></li>
                     <li><a href="feedback.html">在线答疑</a></li>
+                    <li><a href="about.html">关于</a></li>
                     <div class="clearfix"></div>
                 </ul>
                 <!-- script-for-nav -->
@@ -113,10 +113,8 @@
 <!-- 404 -->
 <div class="content-top">
     <div class="container">
-        <select id="selectTestType" style="float: right;z-index: 999">
-            <option value="1">人格测试</option>
-            <option value="2">高考报考指导</option>
-        </select>
+        <a href="psychological-test.html?qindex=1" style="float: left;" class="btn btn-primary">人格测试</a>
+        <a href="psychological-test.html?qindex=2" style="float: right;" class="btn btn-primary">高考报考指导</a>
         <div class="clear"></div>
         <div class="portfolio-top animated slideInDown">
             <h3 id="title">心理评测</h3>
@@ -318,10 +316,6 @@
             } else {
                 window.location.href = 'psychological-test-result.html?qindex=' + qindex + '&result=' + map[index];
             }
-        });
-
-        $('#selectTestType').change(function () {
-            window.location.href = 'psychological-test.html?qindex=' + $(this).val();
         });
 
         $('#btnPrevious').click(function () {

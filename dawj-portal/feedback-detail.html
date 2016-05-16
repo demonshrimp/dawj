@@ -1,26 +1,25 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>选择站点-大爱无疆</title>
+    <title>问题反馈_大爱无疆心理网</title>
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
     <link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="keywords" content="心理咨询,咨询,心理,大爱无疆"/>
+    <meta name="keywords" content="心理测试,心理压力测试,心理健康测试,心理测试题"/>
+    <meta name="description" content="大爱无疆心理网,国内第一家专业心理测试网站，我们有最全的心理测试题，可在线进行心理测试、心理压力测试和心理健康测试。"/>
     <link href='http://fonts.useso.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href="css/animate.min.css" rel="stylesheet"/>
     <script src="js/vendor/jquery.min.js"></script>
     <script src="js/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
     <link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen"/>
     <style>
-        .site-group {
-            width: 100%;
+        .feedback-block {
+            padding: 20px 0;
+            border-bottom: 1px #999 dashed;
         }
 
-        .site-group .btn {
-            margin: 15px 4%;
-            border-radius: 0px;
-        }
     </style>
 </head>
 <body>
@@ -96,12 +95,19 @@
 </div>
 <!-- header -->
 <!-- 404 -->
-<div class="main">
+<div class="content-top">
     <div class="container">
-        <h3>选择站点</h3>
-        <div class="btn-group btn-group-lg site-group" role="group" aria-label="..." >
-            <a type="button" class="btn btn-default">总站</a>
+
+        <div class="portfolio-top animated slideInDown">
+            <h3> 在线答疑详情 </h3>
         </div>
+        <div class="single">
+            <div class="respon">
+                <div id="feedbacklist">
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
     </div>
 </div>
 <!-- 404 -->
@@ -177,23 +183,51 @@
 <!-- footer-bottom -->
 <script>
     $(function () {
-        initSites();
-        function initSites() {
-            $.get(App.Constants.API_BASE + '/site/list', function (result) {
+        //init views
+
+        //init datas
+        var id = App.Utils.UrlUtil.getUrlParameter("id");
+        if (id) {
+            $.get(App.Constants.API_BASE + '/feedback/' + id, function (result) {
                 if (!result.header.success) {
-                    alert(result.header.message);
+                    alert(result.header.success);
                     return;
                 }
-                $('.site-group').empty();
-                var sites = result.body;
-                for (var i = 0; i < sites.length; i++) {
-                    $('.site-group').prepend('<a href="#" data-site="' + sites[i].name + '" type="button" class="btn btn-default">' + sites[i].city + '</a>');
+                $('#feedbacklist').append(buildItem(result.body));
+            });
+        }
+        //init events
+
+        //state functions
+        function buildItem(feedback) {
+            var block = $('<div class="feedback-block">');
+            block.append(buildline(feedback.name, feedback.question, feedback.createTime, 'strator'));
+            if (feedback.answer) {
+                var name = '管理员';
+                if (feedback.counselor) {
+                    name = feedback.counselor.name;
                 }
-            });
-            $('.site-group').on('click', '.btn', function () {
-                sessionStorage.removeItem(App.Constants.KEY_HEADER_SITE);
-                location.href = 'counselors.html?site=' + $(this).data('site');
-            });
+                block.append(buildline(name, feedback.answer, feedback.lastModifyTime, 'strator1'));
+            }
+            return block;
+        }
+
+
+        function buildline(name, content, time, cssClass) {
+            if (!name) {
+                name = '游客';
+            }
+            return '      <div class="' + cssClass + '">'
+                    + '          <h5>' + name + '</h5>'
+                    + '          <p>' + time + '</p>'
+                    + '          <div class="strator-left">'
+                    + '              <img src="images/co.png" class="img-responsive" alt="">'
+                    + '          </div>'
+                    + '          <div class="strator-right">'
+                    + '              <p class="sin">' + content + '.</p>'
+                    + '          </div>'
+                    + '          <div class="clearfix"></div>'
+                    + '      </div>';
         }
     });
 </script>

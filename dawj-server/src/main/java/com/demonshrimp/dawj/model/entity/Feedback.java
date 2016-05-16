@@ -6,13 +6,12 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "feedback")
 public class Feedback extends BaseEntity {
 	private User user;
+	private Counselor counselor;
 	private String name;
 	private String mobile;
 	private String question;
@@ -26,6 +25,16 @@ public class Feedback extends BaseEntity {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+	
+	@ManyToOne(cascade = CascadeType.REFRESH)
+	@JoinColumn(name = "counselor_id")
+	public Counselor getCounselor() {
+		return counselor;
+	}
+
+	public void setCounselor(Counselor counselor) {
+		this.counselor = counselor;
 	}
 
 	@Column

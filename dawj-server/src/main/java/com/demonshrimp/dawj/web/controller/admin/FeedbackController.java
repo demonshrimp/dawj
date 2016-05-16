@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.demonshrimp.dawj.model.entity.CounselingArticle;
+import com.demonshrimp.dawj.model.entity.Counselor;
 import com.demonshrimp.dawj.model.entity.Feedback;
 import com.demonshrimp.dawj.service.FeedbackService;
 
@@ -24,7 +24,7 @@ public class FeedbackController extends BaseAdminController {
 	private FeedbackService feedbackService;
 
 	@RequestMapping(path = "/page", method = RequestMethod.GET)
-	@SerializationFilter
+	@SerializationFilter(target = Counselor.class, exclusive = false, fields = { "id", "name" })
 	public Object page(@RequestParam(name = "pageIndex") int pageIndex, @RequestParam(name = "length") int pageSize) {
 		QueryCondition qc = new QueryConditionImpl(Feedback.class);
 		qc.addOrder(Order.desc("createTime"));
@@ -32,8 +32,8 @@ public class FeedbackController extends BaseAdminController {
 	}
 
 	@RequestMapping(path = "/{id}/answer", method = RequestMethod.PUT)
-	public Object answer(@PathVariable String id, String answer) {
-		feedbackService.answerFeedback(id, answer);
+	public Object answer(@PathVariable String id, String answer, String counselorId) {
+		feedbackService.answerFeedback(id, answer, counselorId);
 		return Result.successResult("回复成功");
 	}
 
