@@ -264,6 +264,8 @@
     $(function () {
         var qindex = App.Utils.UrlUtil.getUrlParameter('qindex');
         var result = App.Utils.UrlUtil.getUrlParameter('result');
+        var subject = App.Utils.UrlUtil.getUrlParameter('subject');
+
         $.get('data/questions/q' + qindex + '/result.json', function (data) {
             var map = data.resultMap;
             var type = map[result];
@@ -286,6 +288,8 @@
                 (function (i) {
                     $.get('data/questions/q' + qindex + '/' + result + '/' + n + i + '.txt', function (data) {
                         data = replaceAll(data, '\n', '<br>');
+                        if (i == 2)
+                            data = subjectFilter(data);
                         $('#result' + i + ' div').html(data);
                     });
                 })(i);
@@ -298,6 +302,22 @@
                 str = str.replace(sptr, sptr1);
             }
             return str;
+        }
+
+        function subjectFilter(text) {
+            if (!subject) {
+                return text;
+            }
+            var tmp = '';
+            var index1 = text.indexOf('文史类专业');
+            var index2 = text.indexOf('理工类专业');
+            var index3 = text.indexOf('文理兼收专业');
+            if (subject == 1) {
+                tmp = text.substr(0, index2 - 1) + text.substr(index3 - 5);
+            } else if (subject == 2) {
+                tmp = text.substr(0, index1 - 1) + text.substr(index2);
+            }
+            return tmp;
         }
     });
 </script>

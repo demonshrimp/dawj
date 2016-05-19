@@ -12,8 +12,6 @@ import com.demonshrimp.dawj.service.CounselingService;
 
 import pers.ksy.common.annotation.SerializationFilter;
 import pers.ksy.common.model.Result;
-import pers.ksy.common.orm.QueryCondition;
-import pers.ksy.common.orm.QueryConditionImpl;
 
 @RestController(value = "counselorAdminController")
 @RequestMapping(value = "/admin/counselor")
