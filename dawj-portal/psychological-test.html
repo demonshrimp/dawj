@@ -360,13 +360,13 @@
             var index = result.indexOf(max);
             var resultUrl = 'psychological-test-result.html?qindex=' + qindex + '&result=' + map[index] + '&subject=' + answer.subject;
             if (App.Utils.BrowserUtil.isWechat()) {
-                $.get(App.Constants.API_BASE + '/user/psychological-test', function (result) {
+                $.get(App.Constants.API_BASE + '/user/psychological-test?points=' + questionData.points, function (result) {
                     if (!result.header.success) {
                         alert(result.header.message);
                         return;
                     }
                     var user = App.getCurrentLoginUser();
-                    user.points = user.points - 10;
+                    user.points = user.points - questionData.points;
                     App.setCurrentLoginSite(user);
                     window.location.href = resultUrl;
                 });

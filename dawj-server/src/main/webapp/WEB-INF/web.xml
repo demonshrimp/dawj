@@ -1,86 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
-	id="WebApp_ID" version="3.1">
-	<display-name>dcim-modeling-server</display-name>
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:META-INF/application-context.xml  classpath:META-INF/application-quartz.xml</param-value>
-	</context-param>
-	<!-- listeners -->
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
-	<!-- filters -->
-	<filter>
-		<filter-name>cors</filter-name>
-		<filter-class>pers.ksy.common.cors.filter.SimpleCORSFilter</filter-class>
-		<init-param>
-			<param-name>allowHeaders</param-name>
-			<param-value>Content-Type,Cache-Control,Pragma,_stoken,_sname,_utoken,_psname</param-value>
-		</init-param>
-	</filter>
-	<filter>
-		<filter-name>HttpMethodFilter</filter-name>
-		<filter-class>org.springframework.web.filter.HttpPutFormContentFilter</filter-class>
-	</filter>
-	<!-- <filter>
-		<filter-name>springSecurityFilterChain</filter-name>
-		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-	</filter> -->
-	<!-- servlets -->
-	<servlet>
-		<servlet-name>dispatcher</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<init-param>
-			<param-name>contextConfigLocation</param-name>
-			<param-value>classpath:META-INF/application-context.xml</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	<servlet>
-		<servlet-name>fileServlet</servlet-name>
-		<servlet-class>com.demonshrimp.dawj.web.servlet.FileServlet</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>wechatServlet</servlet-name>
-		<servlet-class>pers.ksy.common.wechat.servlet.WechatServlet</servlet-class>
-		<init-param>
-			<param-name>handlerClass</param-name>
-			<param-value>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
+  <display-name>dcim-modeling-server</display-name>
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:META-INF/application-context.xml  classpath:META-INF/application-quartz.xml</param-value>
+  </context-param>
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <filter>
+    <filter-name>cors</filter-name>
+    <filter-class>pers.ksy.common.cors.filter.SimpleCORSFilter</filter-class>
+    <init-param>
+      <param-name>allowHeaders</param-name>
+      <param-value>Content-Type,Cache-Control,Pragma,_stoken,_sname,_utoken,_psname</param-value>
+    </init-param>
+  </filter>
+  <filter>
+    <filter-name>HttpMethodFilter</filter-name>
+    <filter-class>org.springframework.web.filter.HttpPutFormContentFilter</filter-class>
+  </filter>
+  <filter>
+    <filter-name>licenseFilter</filter-name>
+    <filter-class>com.demonshrimp.dawj.web.filter.LicenseFilter</filter-class>
+  </filter>
+  <servlet>
+    <servlet-name>dispatcher</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:META-INF/application-context.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>fileServlet</servlet-name>
+    <servlet-class>com.demonshrimp.dawj.web.servlet.FileServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>wechatServlet</servlet-name>
+    <servlet-class>pers.ksy.common.wechat.servlet.WechatServlet</servlet-class>
+    <init-param>
+      <param-name>handlerClass</param-name>
+      <param-value>
 				com.rdgy.fruitstore.server.service.impl.WechatServiceImpl
 			</param-value>
-		</init-param>
-		<init-param>
-			<param-name>instanceType</param-name>
-			<param-value>SPRING</param-value>
-		</init-param>
-	</servlet>
-	<!-- filter mappings -->
-	<filter-mapping>
-		<filter-name>cors</filter-name>
-		<url-pattern>/api/*</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>HttpMethodFilter</filter-name>
-		<url-pattern>/api/*</url-pattern>
-	</filter-mapping>
-	<!-- <filter-mapping>
-		<filter-name>springSecurityFilterChain</filter-name>
-		<url-pattern>/api/*</url-pattern>
-	</filter-mapping> -->
-	<!-- servlet mappings -->
-	<servlet-mapping>
-		<servlet-name>dispatcher</servlet-name>
-		<url-pattern>/api/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>fileServlet</servlet-name>
-		<url-pattern>/upload/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>wechatServlet</servlet-name>
-		<url-pattern>/wechat.do</url-pattern>
-	</servlet-mapping>
+    </init-param>
+    <init-param>
+      <param-name>instanceType</param-name>
+      <param-value>SPRING</param-value>
+    </init-param>
+  </servlet>
+  
+  <filter-mapping>
+    <filter-name>cors</filter-name>
+    <url-pattern>/api/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>HttpMethodFilter</filter-name>
+    <url-pattern>/api/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>licenseFilter</filter-name>
+    <url-pattern>*</url-pattern>
+  </filter-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>dispatcher</servlet-name>
+    <url-pattern>/api/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>fileServlet</servlet-name>
+    <url-pattern>/upload/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>wechatServlet</servlet-name>
+    <url-pattern>/wechat.do</url-pattern>
+  </servlet-mapping>
 </web-app>

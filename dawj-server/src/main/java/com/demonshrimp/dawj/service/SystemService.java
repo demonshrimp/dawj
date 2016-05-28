@@ -87,7 +87,23 @@ public interface SystemService extends BaseService<Site,String>{
 	 */
 	public void batchSaveFriendshipSites(List<FriendshipSite> friendshipSites);
 
+	/**
+	 * 根据名字获取站点信息
+	 * @return
+	 */
 	public Site getSiteByName(String name);
+
+	/**
+	 * 检查license
+	 * @return
+	 */
+	boolean checkLicense();
+
+	/**
+	 * 设置license
+	 * @param license
+	 */
+	void setLicense(String license);
 
 	
 }

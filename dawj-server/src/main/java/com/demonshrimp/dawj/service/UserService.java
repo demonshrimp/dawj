@@ -87,8 +87,17 @@ public interface UserService extends BaseService<User,String>{
 	/**
 	 * 使用积分进行测评
 	 * @param userId
+	 * @param points 
 	 */
-	public void psychologicalTest(String userId);
+	public void psychologicalTest(String userId, int points);
+
+
+	/**
+	 * 密码重置
+	 * @param mobile
+	 * @param captcha
+	 */
+	public String passwordReset(String mobile, int captcha);
 
 
 }

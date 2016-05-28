@@ -85,8 +85,14 @@ public class UserController extends BaseUserController {
 	}
 	
 	@RequestMapping(path = "/psychological-test", method = RequestMethod.GET)
-	public Object psychologicalTest(){
-		userService.psychologicalTest(getCurrentUser().getId());
+	public Object psychologicalTest(int points){
+		userService.psychologicalTest(getCurrentUser().getId(), points);
 		return Result.successResult();
+	}
+	
+	@RequestMapping(path = "/password-reset", method = RequestMethod.POST)
+	public Object passwordReset(String mobile, int captcha) {
+		String password = userService.passwordReset(mobile, captcha);
+		return Result.successResult(password, "密码重置成功!");
 	}
 }

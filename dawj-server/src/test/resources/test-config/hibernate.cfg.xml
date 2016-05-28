@@ -32,6 +32,7 @@
 		<mapping class="com.demonshrimp.dawj.model.entity.FriendshipSite" />
 		<mapping class="com.demonshrimp.dawj.model.entity.Feedback" />
 		<mapping class="com.demonshrimp.dawj.model.entity.DiscountRule" />
+		<mapping class="com.demonshrimp.dawj.model.entity.SystemConfig" />
 
 	</session-factory>
 

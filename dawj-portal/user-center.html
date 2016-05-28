@@ -170,7 +170,8 @@
                             <h3>账户信息</h3>
                             <div class="wow fadeInLeft form-group" data-wow-delay="0.4s">
                                 <span>赠送金额</span>
-                                <label class="control-label" id="points" style="margin-top: 5px"></label><label style="color: #999">　yuan</label>
+                                <label class="control-label" id="points" style="margin-top: 5px"></label><label
+                                    style="color: #999">　yuan</label>
                             </div>
                         </div>
                     </form>
@@ -395,9 +396,9 @@
                             message: '昵称不能为空'
                         },
                         stringLength: {
-                            min: 3,
-                            max: 10,
-                            message: '昵称必须为2~10位之间'
+                            min: 2,
+                            max: 20,
+                            message: '昵称必须为2~20位之间'
                         }
                     }
                 },
@@ -483,16 +484,13 @@
                 user.birthday = user.birthday + ' 00:00:00';
                 user.password = App.Utils.StringUtil.md5(user.password);
                 $.ajax({
-                    url: App.Constants.API_BASE + '/user/',
+                    url: App.Constants.API_BASE + '/user/' + App.getCurrentLoginUser(true).id,
                     contentType: "application/json",
-                    method: 'POST',
+                    method: 'PUT',
                     data: JSON.stringify(user),
                     dataType: 'json',
                     success: function (result) {
                         alert(result.header.message);
-                        if (result.header.success) {
-                            window.location.href = 'login.html';
-                        }
                     }
                 });
             }

@@ -14,12 +14,14 @@ import com.demonshrimp.dawj.exception.ServiceException;
 import com.demonshrimp.dawj.model.dao.BaseDao;
 import com.demonshrimp.dawj.model.dao.FriendshipSiteDao;
 import com.demonshrimp.dawj.model.dao.SiteDao;
+import com.demonshrimp.dawj.model.dao.SystemConfigDao;
 import com.demonshrimp.dawj.model.dao.UserDao;
 import com.demonshrimp.dawj.model.entity.FriendshipSite;
 import com.demonshrimp.dawj.model.entity.Site;
 import com.demonshrimp.dawj.model.entity.Site.Status;
 import com.demonshrimp.dawj.service.SystemService;
 
+import pers.ksy.common.MD5Util;
 import pers.ksy.common.StringUtil;
 import pers.ksy.common.model.Page;
 import pers.ksy.common.orm.Conditions;
@@ -34,8 +36,12 @@ public class SystemServiceImpl extends BaseServiceImpl<Site, String> implements 
 	@Autowired
 	private SiteDao siteDao;
 	@Autowired
+	private SystemConfigDao systemConfigDao;
+	@Autowired
 	private FriendshipSiteDao friendshipSiteDao;
 
+	private static final String LICENSE = "ksy8888!";
+	
 	@Override
 	public BaseDao<Site, String> getDao() {
 		return siteDao;
@@ -163,6 +169,15 @@ public class SystemServiceImpl extends BaseServiceImpl<Site, String> implements 
 		return site;
 	}
 	
+	@Override
+	public boolean checkLicense(){
+		String license = systemConfigDao.getLicense();
+		return license!=null&&MD5Util.MD5(LICENSE).equals(license);
+	}
 	
-
+	@Override
+	public void setLicense(String license){
+		systemConfigDao.setLicense(MD5Util.MD5(license));
+	}
+	
 }
