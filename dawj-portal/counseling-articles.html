@@ -166,6 +166,10 @@
                 width: 100%;
                 height: auto;
             }
+
+            .list .meccaddress {
+                margin-bottom: 5px;
+            }
         }
     </style>
 </head>
@@ -250,7 +254,8 @@
 
         <div class="b-tag-weight visible-xs" style="margin-left: 15px;margin-right: 15px;margin-bottom: 10px">
             <h3 style="display: inline-block">搜索</h3>
-            <a style="float: right" class="btn btn-link" role="button" data-toggle="collapse" href="#collapse" aria-expanded="false"
+            <a style="float: right" class="btn btn-link" role="button" data-toggle="collapse" href="#collapse"
+               aria-expanded="false"
                aria-controls="collapse">
                 <i class="fa fa-bars"></i>
             </a>
@@ -572,8 +577,8 @@
                     + '      </h2>'
                     + '     <address class="meccaddress">'
                     + '             <time>' + counselingArticle.createTime.substr(5, 10) + '</time> '
-                    + '             - <a href="#" rel="category tag">' + counselingArticle.counselingType.name + '</a>'
-                    + '             - 阅  ' + counselingArticle.visited
+                        /*     + '             - <a href="#" rel="category tag">' + counselingArticle.counselingType.name + '</a>'
+                         + '             - 阅  ' + counselingArticle.visited*/
                     + '     </address>'
                     + '    </div>'
                     + '    <span class="titleimg">'

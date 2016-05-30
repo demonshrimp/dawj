@@ -310,7 +310,7 @@
             if (!keywords) {
                 keywords = '';
             }
-            if (!counselingTypeId) {
+            if (!counselingTypeId && counselingTypeId == 'null') {
                 counselingTypeId = '';
             }
             $.get(App.Constants.API_BASE + '/counselor/page?orderBy=createTime&desc=true&length=6&pageIndex=' + start + '&keywords=' + keywords + '&counselingTypeId=' + counselingTypeId, function (result) {

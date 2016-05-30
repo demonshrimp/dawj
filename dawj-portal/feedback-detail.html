@@ -201,32 +201,40 @@
         //state functions
         function buildItem(feedback) {
             var block = $('<div class="feedback-block">');
-            block.append(buildline(feedback.name, feedback.question, feedback.createTime, 'strator'));
+            block.append(buildline(feedback.name, '', null, feedback.question, feedback.createTime, 'strator'));
             if (feedback.answer) {
                 var name = '管理员';
+                var title = '';
                 if (feedback.counselor) {
                     name = feedback.counselor.name;
+                    title = '推荐直接与' + name + '通话<strong>0371-55601221</strong>更快捷有效且保护隐私';
                 }
-                block.append(buildline(name, feedback.answer, feedback.lastModifyTime, 'strator1'));
+                name = name + '咨询师　回复：'
+
+                block.append(buildline(name, title, feedback.counselor.fullImage, feedback.answer, feedback.lastModifyTime, 'strator1'));
             }
             return block;
         }
 
 
-        function buildline(name, content, time, cssClass) {
+        function buildline(name, title, img, content, time, cssClass) {
             if (!name) {
                 name = '游客';
             }
+            if (!img) {
+                img = 'images/co.png';
+            }
             return '      <div class="' + cssClass + '">'
                     + '          <h5>' + name + '</h5>'
-                    + '          <p>' + time + '</p>'
+                    + '          <p style="margin-bottom: 10px;">' + title + '</p>'
                     + '          <div class="strator-left">'
-                    + '              <img src="images/co.png" class="img-responsive" alt="">'
+                    + '              <img src="' + img + '" class="img-responsive" alt="">'
                     + '          </div>'
                     + '          <div class="strator-right">'
                     + '              <p class="sin">' + content + '.</p>'
                     + '          </div>'
                     + '          <div class="clearfix"></div>'
+                    + '          <p style="margin-top: 10px">' + time + '</p>'
                     + '      </div>';
         }
     });

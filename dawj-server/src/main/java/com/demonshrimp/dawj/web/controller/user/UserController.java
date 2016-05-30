@@ -91,8 +91,8 @@ public class UserController extends BaseUserController {
 	}
 	
 	@RequestMapping(path = "/password-reset", method = RequestMethod.POST)
-	public Object passwordReset(String mobile, int captcha) {
-		String password = userService.passwordReset(mobile, captcha);
-		return Result.successResult(password, "密码重置成功!");
+	public Object passwordReset(String mobile, String password, int captcha) {
+		userService.passwordReset(mobile, password, captcha);
+		return Result.successResult("密码重置成功!");
 	}
 }

@@ -97,7 +97,7 @@ public interface UserService extends BaseService<User,String>{
 	 * @param mobile
 	 * @param captcha
 	 */
-	public String passwordReset(String mobile, int captcha);
+	public void passwordReset(String mobile, String password, int captcha);
 
 
 }

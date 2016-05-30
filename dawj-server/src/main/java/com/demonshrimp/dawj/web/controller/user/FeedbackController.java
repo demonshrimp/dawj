@@ -25,7 +25,7 @@ public class FeedbackController extends BaseUserController {
 	private FeedbackService feedbackService;
 
 	@RequestMapping(path = "/page", method = RequestMethod.GET)
-	@SerializationFilter(target = Counselor.class, exclusive = false, fields = { "id", "name" })
+	@SerializationFilter(target = Counselor.class, exclusive = false, fields = { "id", "name", "image", "fullImage" })
 	public Object page(@RequestParam(name = "pageIndex") int pageIndex, @RequestParam(name = "length") int pageSize) {
 		QueryCondition qc = new QueryConditionImpl(Feedback.class);
 		qc.addOrder(Order.desc("createTime"));
@@ -40,7 +40,7 @@ public class FeedbackController extends BaseUserController {
 	}
 
 	@RequestMapping(path = "/{id}", method = RequestMethod.GET)
-	@SerializationFilter(target = Counselor.class, exclusive = false, fields = { "id", "name" })
+	@SerializationFilter(target = Counselor.class, exclusive = false, fields = { "id", "name", "image", "fullImage" })
 	public Object get(@PathVariable String id) {
 		return Result.successResult(feedbackService.get(id), null);
 	}

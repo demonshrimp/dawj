@@ -24,6 +24,18 @@
             -moz-box-shadow: 0 0 10px rgba(0, 0, 0, .5);
             box-shadow: 0 0 10px rgba(0, 0, 0, .5);
         }
+        @media (max-width: 765px) {
+            .pager .next > a, .pager .next > span{
+                float: left;
+            }
+            .pager .next > a, .pager .next > span,.pager .previous > a, .pager .previous > span{
+                margin: 10px 0;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                max-width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -108,16 +120,17 @@
                     <div style="margin-bottom: 10px">
                         <p style="text-align: left">
                             <span class="createTime">2016-01-01</span>
-                            <a href="http://mp.weixin.qq.com/s?__biz=MzI2MDE1MjE5MQ==&mid=402330429&idx=1&sn=9d37b2db4e3b6f2a92b61ca3db36204e#rd" style="color:#269abc">大爱无疆</a>
+                            <a href="http://mp.weixin.qq.com/s?__biz=MzI2MDE1MjE5MQ==&mid=402330429&idx=1&sn=9d37b2db4e3b6f2a92b61ca3db36204e#rd"
+                               style="color:#269abc">大爱无疆</a>
                         </p>
-                        <img class="img-responsive" src="images/dianjiguanzhu.gif" />
+                        <img class="img-responsive" src="images/dianjiguanzhu.gif"/>
                     </div>
                     <img id="image" class="img-responsive" alt="">
                     <p class="sin" id="description"></p>
                 </div>
                 <div class="respon">
                     <div id="content"></div>
-                    <div class="sucss-bottom">
+                    <div class="sucss-bottom hidden">
                         <ul>
                             <li><i class="fa fa-calendar-check-o"></i><span class="createTime"></span></li>
                         </ul>
@@ -372,7 +385,7 @@
             if (result.header.success) {
                 var article = result.body;
                 $('#image').attr('src', article.fullImage);
-                $('.createTime').text(article.createTime);
+                $('.createTime').text(article.createTime.substr(0, 10));
                 $('#visited').text(article.visited);
                 $('#title').text(article.title);
                 $('#description').text(article.description);

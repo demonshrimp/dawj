@@ -113,8 +113,11 @@
 <!-- 404 -->
 <div class="content-top">
     <div class="container">
-        <a href="psychological-test.html?qindex=1" style="float: left;margin: 20px" class="btn btn-primary">人格测试</a>
-        <a href="psychological-test.html?qindex=2" style="float: right;margin: 20px" class="btn btn-primary">高考报考指导</a>
+        <div id="btnWrapper" class="hidden">
+            <a href="psychological-test.html?qindex=1" style="float: left;margin: 20px" class="btn btn-primary">人格测试</a>
+            <a href="psychological-test.html?qindex=2" style="float: right;margin: 20px"
+               class="btn btn-primary">高考报考指导</a>
+        </div>
         <div class="clear"></div>
         <div class="portfolio-top animated slideInDown">
             <h3 id="title">心理评测</h3>
@@ -244,6 +247,28 @@
     </div>
 </div>
 <!-- footer-bottom -->
+<div class="modal fade" id="modalNoPointsTips">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center">
+                    <img src="images/cry.gif"/>
+                </p>
+                <p style="text-align: center">当前金额：<span id="currentPoints"></span></p>
+                <p>亲，测试需金额：<span id="testPoints"></span>，当前余额不足：可以通过分享心理美文、传播大爱文化赚取积分</p>
+                <p>具体步骤（选择一篇心理美文--->分享到朋友圈）</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">立即前往</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
 <div class="modal fade" id="modalHongbao" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content" style="background: #CD4F39;height: 500px;overflow: hidden">
@@ -257,7 +282,7 @@
                      style="cursor: pointer;width: 100px;height: 100px;border-radius: 100%;background: #FFB90F;line-height: 100px;text-align: center;color: #fff;font-family: '微软雅黑';font-size: 18px;margin: -60px auto 0 auto;">
                     拆红包
                 </div>
-                <h3 style="text-align: center;color: #fff;font-family: '微软雅黑';">微信用户首次光临,恭喜你获得一个红包</h3>
+                <h3 style="text-align: center;color: #fff;font-family: '微软雅黑';">微信用户首次光临,恭喜你获得一个红包1</h3>
             </div>
             <div id="hongbao_result" class="animated slideInDown" style="display: none">
                 <div style="margin: 200px auto;text-align: center;color: #fff;font-family: '微软雅黑';">
@@ -270,7 +295,6 @@
         </div>
     </div>
 </div>
-
 <script>
     $(function () {
         var qindex = App.Utils.UrlUtil.getUrlParameter('qindex');
@@ -280,18 +304,17 @@
         var questionData;
         var subjects = [];
 
-
-        if (App.getCurrentLoginUser() && App.Utils.BrowserUtil.isWechat() && localStorage.getItem('ALREADY_OPEN_HONG_BAO') != 'true') {
-            showHongBaoDialog();
-        }
         $.get('data/questions/q' + qindex + '/question.json', function (data) {
             questionData = data;
             subjects = data.subjects;
             if (App.Utils.BrowserUtil.isWechat()) {
                 var user = App.getCurrentLoginUser();
                 if (user.points < data.points) {
-                    alert('测试需金额：' + data.points + ',当前余额不足:' + user.points + ';通过分享咨询文章到朋友圈可以获得随机赠送金额哦(打开菜单心理案例->人选一篇文章->分享到朋友圈).');
+                    showTipsDialog(data.points, user.points);
                     $('#form').hide();
+                }
+                if (localStorage.getItem('ALREADY_OPEN_HONG_BAO') != 'true') {
+                    showHongBaoDialog();
                 }
             }
 
@@ -398,6 +421,10 @@
             checkbox.checked = !checkbox.checked;
         });
 
+        $('#modalNoPointsTips').on('hidden.bs.modal', function (e) {
+            window.location.href = 'counseling-articles.html';
+        });
+
         //state functions
         function buildItem(subject, index, mode) {
             switch (mode) {
@@ -479,6 +506,14 @@
         function showHongBaoDialog() {
             $('#hongbao_amount').text(5);
             $('#modalHongbao').modal({keyboard: false});
+        }
+
+        function showTipsDialog(testPoints, userPoints) {
+            $('#testPoints').text(testPoints);
+            $('#currentPoints').text(userPoints);
+            $('#modalNoPointsTips').modal({
+                keyboard: false
+            });
         }
     });
 

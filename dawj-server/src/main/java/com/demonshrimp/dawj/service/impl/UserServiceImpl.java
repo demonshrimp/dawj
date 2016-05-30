@@ -17,7 +17,6 @@ import com.demonshrimp.dawj.model.dao.SiteDao;
 import com.demonshrimp.dawj.model.dao.UserDao;
 import com.demonshrimp.dawj.model.entity.Site;
 import com.demonshrimp.dawj.model.entity.User;
-import com.demonshrimp.dawj.model.entity.User.Sex;
 import com.demonshrimp.dawj.service.CaptchaService;
 import com.demonshrimp.dawj.service.MessageService;
 import com.demonshrimp.dawj.service.MessageService.Type;
@@ -207,7 +206,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements Us
 	
 
 	@Override
-	public String passwordReset(String mobile, int captcha) {
+	public void passwordReset(String mobile, String password, int captcha) {
 		if(!checkCaptcha(mobile, captcha)){
 			throw new ServiceException("验证码错误！");
 		}
@@ -217,11 +216,8 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements Us
 		if (null == user) {
 			throw new ServiceException("用户不存在");
 		}
-		String password = UUID.randomUUID().toString().replaceAll("-", "");
-		password = password.substring(password.length() - 8);
-		user.setPassword(MD5Util.MD5(password));
+		user.setPassword(password);
 		userDao.update(user);
-		return password;
 	}
 
 	private User loginHandle(User user) {
