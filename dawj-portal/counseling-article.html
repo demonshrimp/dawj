@@ -24,11 +24,13 @@
             -moz-box-shadow: 0 0 10px rgba(0, 0, 0, .5);
             box-shadow: 0 0 10px rgba(0, 0, 0, .5);
         }
+
         @media (max-width: 765px) {
-            .pager .next > a, .pager .next > span{
+            .pager .next > a, .pager .next > span {
                 float: left;
             }
-            .pager .next > a, .pager .next > span,.pager .previous > a, .pager .previous > span{
+
+            .pager .next > a, .pager .next > span, .pager .previous > a, .pager .previous > span {
                 margin: 10px 0;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -322,60 +324,60 @@
 </div>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
-    $.get(App.Constants.API_BASE + '/wechat/jsapi-signature', function (data) {
-        wx.config({
-            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-            appId: 'wxc086c323ecb8c170', // 必填，公众号的唯一标识
-            timestamp: data.timestamp, // 必填，生成签名的时间戳
-            nonceStr: data.nonceStr, // 必填，生成签名的随机串
-            signature: data.signature,// 必填，签名，见附录1
-            jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+    function initWechatShare(article) {
+        $.get(App.Constants.API_BASE + '/wechat/jsapi-signature', function (data) {
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: 'wxc086c323ecb8c170', // 必填，公众号的唯一标识
+                timestamp: data.timestamp, // 必填，生成签名的时间戳
+                nonceStr: data.nonceStr, // 必填，生成签名的随机串
+                signature: data.signature,// 必填，签名，见附录1
+                jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+            //jsApiList: ["menuItem:share:appMessage", "menuItem:share:timeline", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:facebook", "menuItem:share:QZone"] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+
+            wx.ready(function () {
+                // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+                var id = App.Utils.UrlUtil.getUrlParameter('id');
+                var shareData = {
+                    title: '这个太重要啦，您值得一看，否则....', // 分享标题
+                    desc: article.title, // 分享描述
+                    link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc086c323ecb8c170&redirect_uri=http%3A%2F%2Fwww.dawjxlzx.com%2Fcounseling-article.html%3Fid%3D' + id +
+                    '&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect', // 分享链接
+                    imgUrl: article.fullImage, // 分享图标
+                    type: '', // 分享类型,music、video或link，不填默认为link
+                    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                    success: function () {
+                        $.get(App.Constants.API_BASE + '/user/wechat-share-success', function (result) {
+                            if (!result.header.success) {
+                                alert(result.header.message);
+                                return;
+                            }
+                            var user = App.getCurrentLoginUser();
+                            user.points += result.body;
+                            App.setCurrentLoginSite(user);
+                            $('#hongbao_amount').text(result.body);
+                            $('#modalHongbao').modal({keyboard: false});
+                        });
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    }
+                };
+
+                wx.onMenuShareTimeline(shareData);
+                wx.onMenuShareAppMessage(shareData);
+                wx.onMenuShareQQ(shareData);
+                wx.onMenuShareWeibo(shareData);
+                wx.onMenuShareQZone(shareData);
+            });
+            wx.error(function (res) {
+                alert('初始化错误：' + res.toString());
+                // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+            });
+
         });
-        //jsApiList: ["menuItem:share:appMessage", "menuItem:share:timeline", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:facebook", "menuItem:share:QZone"] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-
-        wx.ready(function () {
-            // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
-            var id = App.Utils.UrlUtil.getUrlParameter('id');
-            var shareData = {
-                title: '大爱无疆心理评测', // 分享标题
-                desc: '大爱无疆心理评测', // 分享描述
-                link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc086c323ecb8c170&redirect_uri=http%3A%2F%2Fwww.dawjxlzx.com%2Fcounseling-article.html%3Fid%3D' + id +
-                '&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect', // 分享链接
-                imgUrl: '', // 分享图标
-                type: '', // 分享类型,music、video或link，不填默认为link
-                dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-                success: function () {
-                    $.get(App.Constants.API_BASE + '/user/wechat-share-success', function (result) {
-                        if (!result.header.success) {
-                            alert(result.header.message);
-                            return;
-                        }
-                        var user = App.getCurrentLoginUser();
-                        user.points += result.body;
-                        App.setCurrentLoginSite(user);
-                        $('#hongbao_amount').text(result.body);
-                        $('#modalHongbao').modal({keyboard: false});
-                    });
-                },
-                cancel: function () {
-                    // 用户取消分享后执行的回调函数
-                }
-            };
-
-            wx.onMenuShareTimeline(shareData);
-            wx.onMenuShareAppMessage(shareData);
-            wx.onMenuShareQQ(shareData);
-            wx.onMenuShareWeibo(shareData);
-            wx.onMenuShareQZone(shareData);
-        });
-        wx.error(function (res) {
-            alert('初始化错误：' + res.toString());
-            // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
-        });
-
-    });
-
-
+    }
 </script>
 <script type="text/javascript">
     $(function () {
@@ -390,6 +392,7 @@
                 $('#title').text(article.title);
                 $('#description').text(article.description);
                 $('#content').html(article.content);
+                initWechatShare(article);
             }
         });
 
