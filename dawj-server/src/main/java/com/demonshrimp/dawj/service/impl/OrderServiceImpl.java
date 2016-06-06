@@ -39,6 +39,7 @@ import com.demonshrimp.dawj.model.entity.User;
 import com.demonshrimp.dawj.service.OrderService;
 
 import pers.ksy.common.MD5Util;
+import pers.ksy.common.StringUtil;
 import pers.ksy.common.wechat.WechatService;
 
 @Transactional
@@ -66,12 +67,14 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, String> implements 
 		order.setStatus(Status.NEW);
 		Counselor counselor = counselorDao.load(order.getCounselor().getId());
 		order.setTotalAmount(counselor.getFees() * order.getConsultingDuration());
-		DiscountRule rule = discountRuleDao.load(order.getDiscountRule().getId());
-		if (order.getDiscountAmount() > rule.getDiscountAmount()) {
-			throw new ServiceException("减免金额异常，请稍后重试");
-		}
-		if (order.getDiscountAmount().doubleValue() > user.getPoints()) {
-			throw new ServiceException("用户减免金额不足，请重新登录后下单重试");
+		if(null!=order.getDiscountRule()&&StringUtil.notEmpty(order.getDiscountRule().getId())){
+			DiscountRule rule = discountRuleDao.load(order.getDiscountRule().getId());
+			if (order.getDiscountAmount() > rule.getDiscountAmount()) {
+				throw new ServiceException("减免金额异常，请稍后重试");
+			}
+			if (order.getDiscountAmount().doubleValue() > user.getPoints()) {
+				throw new ServiceException("用户减免金额不足，请重新登录后下单重试");
+			}
 		}
 		save(order);
 		user.setPoints(user.getPoints() - order.getDiscountAmount());

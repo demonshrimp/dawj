@@ -75,7 +75,7 @@ public class Order extends BaseSiteEntity {
 	}
 
 	@ManyToOne(cascade = CascadeType.REFRESH)
-	@JoinColumn(name = "discount_rule_id", nullable = false)
+	@JoinColumn(name = "discount_rule_id", nullable = true)
 	public DiscountRule getDiscountRule() {
 		return discountRule;
 	}

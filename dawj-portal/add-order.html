@@ -417,6 +417,9 @@
                 var order = App.Utils.FormUtil.toJson(form);
                 order.counselor = {id: counselorId};
                 order.scheduledDate = order.scheduledDate + ' 00:00:00';
+                if (order.discountRule.id == "") {
+                    order.discountRule = null;
+                }
                 $.ajax({
                     url: App.Constants.API_BASE + '/order/',
                     contentType: "application/json",
